@@ -16,28 +16,41 @@ TESTED = automated tests ran and passed here. BUILT = written, never run against
 | Render workflow contract | `render-factory.yml` parsed and contract-tested; typed `RENDER` + approved job file |
 
 ## Verified by the Muse agent on 2026-10-27 (relayed output)
-`npm ci` ok (259 packages); 60/63 tests pass on Muse (ffmpeg 8.1.2); doctor: 17 verified, 0 failed, 1 unverified; YouTube Data API ok via query auth; Gemini key valid and TTS model listed; `voices --search Koda` returned one voice (`en-us-koda`). Earlier run (2026-10-26) findings below are superseded except the GitHub token host problem.
+`npm ci` ok (259 packages); 63/63 tests pass on Muse (ffmpeg 8.1.2) after the v2 rebuild; doctor: 18 verified, 0 failed, 1 unverified, `gemini-3.8-flash-tts` listed with both alternatives. First live TTS sample generated and verified (3 style variants, 24 kHz mono WAV, non-silent, hashes recorded) — see Voice section below.
 
-### Earlier run
-Node 24.22.1, ffmpeg 8.1.2, Python 3.12.3, git 2.43; the three secrets are set (validity of YouTube/GitHub tokens separate); the Gemini key is valid (60 models listed) and `gemini-3.1-flash-tts-preview` is in the list; github.com and npm reachable; `www.googleapis.com` and `generativelanguage.googleapis.com` HEAD probes timed out; the YouTube Data API call from the factory's header method timed out (a query-param call returned 200); the unfiltered voice list (50) did not contain Koda; **a git push was refused because the GitHub token is registered for api.github.com only**.
+**Repo hosting resolved.** GitHub push: the GitHub App's MCP integration (`push-files`) kept returning `403 Resource not accessible by integration` on tree-create even after the app's Contents permission was confirmed read-write, repository access set to all repos, and the OAuth token refreshed — the installation token itself wasn't carrying write access for this repo, root cause unconfirmed. Worked around by using the Git Data API directly with the separately-registered GitHub token (which does have push/admin on the repo) to push a 75-file snapshot commit (`c26f02a3`, parent `b856aa27`, the repo's auto-created empty `README.md` overwritten, 4 generated `.pyc` files omitted). Verified by a recursive tree read matching all 75 blob SHAs. This is a **single snapshot commit, not the local bundle's 3-commit history** (`087d145` etc.) — the local clone has no upstream and will diverge from GitHub; that's expected and not a blocker. The MCP `push-files` route is still broken and would likely fail again if used for a future push — use the Git Data API / token route instead.
 
-## Voice tool (built from Google's documented call; tested against a fake client only)
-`factory/tools/synthesize.py`: single-speaker Interactions API call (`speech_metadata` style, `speech_config` voice id, WAV 24 kHz), text rules (no stage directions, only `<short pause>`/`<long pause>`), retries, silent/short-clip rejection, per-scene WAVs + schema-valid manifest, and a 3-way style audition (`empty` / owner's style / short). **Never run against the live service**: whether the Koda id is accepted in `speech_config`, and how it sounds, is unknown until the first sample. Model default is now `gemini-3.8-flash-tts` (documented as the current studio model); its ID still has to be confirmed as listed for this key.
+**YouTube auth mode switched to query.** A live re-test (2026-10-27, header mode only, no `YOUTUBE_AUTH_MODE` override) returned `youtube_data_api: FAILED, HTTP 400` via header auth, while a query-mode control run with the same key in the same window returned `VERIFIED`. The 400 doesn't by itself distinguish "Google rejects the header form" from "the Secure Vault surrogate wasn't swapped into the header" — not investigated further. `config/pipeline.json` → `secrets.youtubeAuthMode` is now `"query"` (was `"header"`); code default in `youtube.mjs` is unchanged at `"header"` and is overridden by this config value. Reversible in one line.
+
+### Earlier run (2026-10-26, superseded except where noted above)
+Node 24.22.1, ffmpeg 8.1.2, Python 3.12.3, git 2.43; the Gemini key is valid (60 models listed) and `gemini-3.1-flash-tts-preview` is in the list; github.com and npm reachable; `www.googleapis.com` and `generativelanguage.googleapis.com` HEAD probes timed out; the unfiltered voice list (50) did not contain Koda.
+
+## Voice tool — first live sample generated (2026-10-27)
+`factory/tools/synthesize.py`: single-speaker Interactions API call (`speech_metadata` style, `speech_config` voice id, WAV 24 kHz), text rules (no stage directions, only `<short pause>`/`<long pause>`), retries, silent/short-clip rejection, per-scene WAVs + schema-valid manifest, and a 3-way style audition (`empty` / owner's style / short). Model `gemini-3.8-flash-tts`, voice `en-us-koda`.
+
+Live result: `pip install` needed a temp venv (externally-managed-environment error) and `NO_PROXY` needed its bracketed IPv6 entries stripped before the SDK would initialize. Three 8-9s samples generated and independently verified (24 kHz mono 16-bit, matching SHA-256, non-silent):
+- `sample_empty` (no style) — 7960ms
+- `sample_user` (owner's exact style line) — 8000ms
+- `sample_short` ("calm, authoritative, measured pace") — 9120ms
+
+**Resolved 2026-10-27:** owner picked `sample_user` (the full style line) by ear — it reads as the intended authoritative calm financial-advisor delivery despite the library's own Inland-Southern/young-influencer description. Recorded in `config/voice.json`: `voice.status` and `model.status` now `CONFIRMED_*`, `request.chosenVariant: "user"`. `make_episode()` already defaults to `cfg["style"]` (the top-level style string, which equals the "user" variant), so no code change was needed — production synthesis calls will already use the confirmed voice/style with no extra flag.
 
 ## Built, not exercised
 Skills end to end; `ffx voices` (request shape unverified); `render-factory.yml` on GitHub; Remotion `SystemCheck` composition and `npm ci` with the carried-over lockfile (never run here).
 
 ## Pending (in order)
-1. Koda is FOUND (`en-us-koda`, prebuilt library voice, male, low pitch). Still to do: write the TTS client from Google's exact request example, synthesize a 20 s sample, and have the owner listen (accent listed as Inland Southern, persona young influencer).
-2. YouTube works from Muse via query-param auth (doctor 2026-10-27). Header auth still untested there; a real `discover` run on the 7 channels is the next proof.
-3. Motion components for every mode in `config/visual_modes.json` (charts, KPI card, A/B cards, flows, kinetic type), each inspected frame by frame, plus a showcase composition.
-4. Transcript tool (captions chain + audio transcription fallback); needs Muse network.
-5. Run the first voice sample (Muse), pick the style variant by ear. Then word-level timing for frame-accurate sync (the TTS API returns audio only, so timing needs alignment, e.g. transcribing our own narration).
-6. Scene-plan generator, sound-effect library and music source (license-tracked).
-7. Thumbnail composer (character reference image still needs to be placed in the project) and title/description/tags/chapters generator.
-8. Run-state tool that records gates in code, not only in the skills.
-9. Weekly schedule in Muse, cost tracking.
-10. One supervised dry run, then the first production week. Not started.
+1. Run a real `discover` on all 7 channels now that query-mode auth is verified.
+2. Motion components for every mode in `config/visual_modes.json` (charts, KPI card, A/B cards, flows, kinetic type), each inspected frame by frame, plus a showcase composition.
+3. Transcript tool (captions chain + audio transcription fallback); needs Muse network.
+4. Word-level timing for frame-accurate sync (the TTS API returns audio only, so timing needs alignment, e.g. transcribing our own narration).
+5. Scene-plan generator, sound-effect library and music source (license-tracked).
+6. Thumbnail composer (character reference image still needs to be placed in the project) and title/description/tags/chapters generator.
+7. Run-state tool that records gates in code, not only in the skills.
+8. Weekly schedule in Muse, cost tracking.
+9. One supervised dry run, then the first production week. Not started.
 
 ## Decisions waiting on the owner
-Where the project lives on GitHub (new repo recommended); GitHub token host fix or OAuth; channel name, logo and end-card text (stay configurable); final visual identity (current colours are sampled from the reference sheets and marked WORKING_DEFAULT_NOT_FINAL).
+Channel name, logo and end-card text (stay configurable); final visual identity (current colours are sampled from the reference sheets and marked WORKING_DEFAULT_NOT_FINAL).
+
+## Resolved
+Repo hosting: live at `github.com/wastor453-ux/FINANCE_VIDEO_FACTORY`, pushed via Git Data API (snapshot commit `c26f02a3`). YouTube auth mode: query (verified working; header mode fails live, root cause not investigated further since a working alternative exists). Voice: Koda, `en-us-koda`, model `gemini-3.8-flash-tts`, style = the full "user" variant — owner-confirmed 2026-10-27.

@@ -6,7 +6,7 @@
     "name": "Koda",
     "id": "en-us-koda",
     "type": "prebuilt (voice library)",
-    "status": "FOUND_IN_LIBRARY_NOT_YET_HEARD",
+    "status": "CONFIRMED_BY_OWNER_2026-10-27",
     "libraryFacts": {
       "language": "en-US",
       "accent": "Inland Southern",
@@ -15,16 +15,16 @@
       "persona": "Advertising Pitch & Commerce / Commercial Voiceover (Influencer)",
       "description": "21-year-old Influencer from the Inland South. Tone is objective, direct, and helpful"
     },
-    "note": "Found by `ffx voices --search Koda` on 2026-10-27 (Muse). Two things to judge by ear at gate G2: the library lists an Inland Southern accent and a young influencer persona, while the channel wants a neutral American, authoritative, calm financial-advisor delivery. If the sample does not fit, pick another library voice; do not stretch the style prompt to force it. The request field that carries this id is UNVERIFIED until the first real synthesis call."
+    "note": "Found by `ffx voices --search Koda` on 2026-10-27 (Muse). The library's own description (Inland Southern accent, young-influencer persona) did not match what the owner heard in the `sample_user` take, which they approved by ear on 2026-10-27 as fitting the authoritative calm financial-advisor read. The 'en-us-koda' id was accepted by the live Interactions API (speech_config) in that same sample run."
   },
   "model": {
     "id": "gemini-3.8-flash-tts",
-    "status": "UNVERIFIED",
+    "status": "CONFIRMED_LIVE_2026-10-27",
     "alternatives": [
       "gemini-3.8-flash-lite-tts",
       "gemini-3.1-flash-tts-preview"
     ],
-    "note": "Google's TTS page (read via Muse, 2026-10-27) documents the Gemini 3.8 models as the current ones: 3.8 Flash for studio-grade narration and stable long-form voice, 3.8 Flash-Lite as the cheap high-volume option, and 3.1 Flash Preview as the older model. The 3.1 ID was confirmed as listed on 2026-10-27; run `ffx doctor --live` to confirm that the 3.8 IDs are listed for this key before the first sample. Request shape differs from 3.1 (speech_metadata annotations), so the tool targets 3.8."
+    "note": "Google's TTS page (read via Muse, 2026-10-27) documents the Gemini 3.8 models as the current ones: 3.8 Flash for studio-grade narration and stable long-form voice, 3.8 Flash-Lite as the cheap high-volume option, and 3.1 Flash Preview as the older model. Confirmed live on 2026-10-27: `gemini-3.8-flash-tts` is listed for this key (doctor --online --live) and successfully produced all three audition samples via the Interactions API."
   },
   "temperature": 1,
   "style": "Authoritative, calm financial advisor delivery with a warm, confident tone, steady downward inflections, and clear, measured pacing.",
@@ -60,7 +60,8 @@
       "user": "Authoritative, calm financial advisor delivery with a warm, confident tone, steady downward inflections, and clear, measured pacing.",
       "short": "calm, authoritative, measured pace"
     },
-    "variantNote": "Google advises an empty or short, constant style and warns long style text increases drift. Audition all three on the same sentence and keep one.",
+    "chosenVariant": "user",
+    "variantNote": "Owner picked 'user' (the exact style line above) on 2026-10-27 after hearing all three on the same sentence. Google's own guidance was to prefer empty/short over a long style string since longer style text is documented to increase drift; the owner's choice overrides that default, so every production TTS call for this channel uses the full 'user' style string, not 'empty' or 'short'. Re-audition if drift becomes visible across a full episode.",
     "inlineTags": [
       "<short pause>",
       "<long pause>"

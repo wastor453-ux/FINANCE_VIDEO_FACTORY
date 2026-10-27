@@ -16,7 +16,7 @@
   "secrets": {
     "_comment": "Names of environment variables / Secure Vault entries. Values are never stored in the repo.",
     "youtubeApiKeyEnv": "YOUTUBE_API_KEY",
-    "youtubeAuthMode": "header",
+    "youtubeAuthMode": "query",
     "geminiApiKeyEnv": "GEMINI_API_KEY",
     "githubTokenEnv": "GITHUB_TOKEN"
   },

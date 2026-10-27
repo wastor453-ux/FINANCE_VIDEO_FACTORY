@@ -45,7 +45,7 @@ test("all schemas are valid JSON with schema_version and a title", () => {
   }
 });
 
-test("config: 7 channels, no hard-coded brand, unverified voice stays flagged", () => {
+test("config: 7 channels, no hard-coded brand, voice/model status reflects live confirmation", () => {
   const ch = rj("config/channels.json").channels;
   assert.equal(ch.length, 7);
   assert.ok(ch.every((c) => /^@[A-Za-z0-9_.-]+$/.test(c.handle)));
@@ -54,13 +54,17 @@ test("config: 7 channels, no hard-coded brand, unverified voice stays flagged", 
   assert.equal(brand.thumbnail.character.aiGenerated, true);
   assert.deepEqual(brand.thumbnail.character.neverIn, ["video"]);
   const voice = rj("config/voice.json");
-  assert.equal(voice.voice.status, "FOUND_IN_LIBRARY_NOT_YET_HEARD"); // id found by search; never heard yet
+  assert.equal(voice.voice.status, "CONFIRMED_BY_OWNER_2026-10-27"); // owner picked sample_user by ear
   assert.equal(voice.voice.id, "en-us-koda");
   assert.equal(voice.model.id, "gemini-3.8-flash-tts");
-  assert.equal(voice.model.status, "UNVERIFIED"); // 3.8 IDs not yet listed-checked for this key
+  assert.equal(voice.model.status, "CONFIRMED_LIVE_2026-10-27"); // 3.8 id listed + used live by Muse
+  assert.equal(voice.request.styleVariants.chosenVariant === undefined, true); // chosenVariant lives one level up, not inside styleVariants
+  assert.equal(voice.request.chosenVariant, "user");
+  assert.equal(voice.style, voice.request.styleVariants.user); // production style must match the owner's chosen variant
   const p = rj("config/pipeline.json");
   assert.ok(p.forbidden_without_explicit_approval.includes("production_render"));
   assert.ok(p.forbidden_without_explicit_approval.includes("publish_or_upload"));
+  assert.equal(p.secrets.youtubeAuthMode, "query"); // header mode failed live (HTTP 400); query verified
 });
 
 // ---------- chunks (fixes the legacy truncation risk) ----------
