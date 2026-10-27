@@ -1,0 +1,74 @@
+{
+  "_comment": "Voice identity for every episode. status fields are honest: nothing here is verified until `ffx doctor --live` confirms it with a real key.",
+  "provider": "gemini-tts",
+  "projectVoiceName": "Koda",
+  "voice": {
+    "name": "Koda",
+    "id": "en-us-koda",
+    "type": "prebuilt (voice library)",
+    "status": "FOUND_IN_LIBRARY_NOT_YET_HEARD",
+    "libraryFacts": {
+      "language": "en-US",
+      "accent": "Inland Southern",
+      "gender": "male",
+      "pitch": "low",
+      "persona": "Advertising Pitch & Commerce / Commercial Voiceover (Influencer)",
+      "description": "21-year-old Influencer from the Inland South. Tone is objective, direct, and helpful"
+    },
+    "note": "Found by `ffx voices --search Koda` on 2026-10-27 (Muse). Two things to judge by ear at gate G2: the library lists an Inland Southern accent and a young influencer persona, while the channel wants a neutral American, authoritative, calm financial-advisor delivery. If the sample does not fit, pick another library voice; do not stretch the style prompt to force it. The request field that carries this id is UNVERIFIED until the first real synthesis call."
+  },
+  "model": {
+    "id": "gemini-3.8-flash-tts",
+    "status": "UNVERIFIED",
+    "alternatives": [
+      "gemini-3.8-flash-lite-tts",
+      "gemini-3.1-flash-tts-preview"
+    ],
+    "note": "Google's TTS page (read via Muse, 2026-10-27) documents the Gemini 3.8 models as the current ones: 3.8 Flash for studio-grade narration and stable long-form voice, 3.8 Flash-Lite as the cheap high-volume option, and 3.1 Flash Preview as the older model. The 3.1 ID was confirmed as listed on 2026-10-27; run `ffx doctor --live` to confirm that the 3.8 IDs are listed for this key before the first sample. Request shape differs from 3.1 (speech_metadata annotations), so the tool targets 3.8."
+  },
+  "temperature": 1,
+  "style": "Authoritative, calm financial advisor delivery with a warm, confident tone, steady downward inflections, and clear, measured pacing.",
+  "styleRules": [
+    "Keep the style string identical for every request of an episode (and across episodes).",
+    "The text field is spoken verbatim: no stage directions in it.",
+    "Only <short pause> and <long pause> inline tags; sound effects come from the sound plan, not the voice.",
+    "Never ask the model to 'keep the voice steady' (documented to increase drift).",
+    "Do not put age, gender or accent changes in style; choose a different library voice instead."
+  ],
+  "output": {
+    "format": "wav",
+    "sampleRateHz": 24000,
+    "channels": 1,
+    "bitDepth": 16,
+    "upsampleTo": 48000
+  },
+  "chunking": {
+    "unit": "scene",
+    "maxCharsPerRequest": 1800,
+    "retries": 2
+  },
+  "accent": "American English",
+  "request": {
+    "api": "interactions",
+    "unaryFormat": {
+      "type": "audio",
+      "mime_type": "audio/wav",
+      "sample_rate": 24000
+    },
+    "styleVariants": {
+      "empty": "",
+      "user": "Authoritative, calm financial advisor delivery with a warm, confident tone, steady downward inflections, and clear, measured pacing.",
+      "short": "calm, authoritative, measured pace"
+    },
+    "variantNote": "Google advises an empty or short, constant style and warns long style text increases drift. Audition all three on the same sentence and keep one.",
+    "inlineTags": [
+      "<short pause>",
+      "<long pause>"
+    ],
+    "emphasis": "capitalise a word for vocal stress",
+    "neverInText": [
+      "bracketed stage directions",
+      "sound-effect tags"
+    ]
+  }
+}

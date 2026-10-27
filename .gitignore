@@ -1,0 +1,10 @@
+node_modules/
+out/
+.env
+.env.*
+# per-run data and third-party transcripts never go in git
+factory/runs/
+runs/
+*.transcript.json
+# LFS-style heavy media is delivered by the render job, not committed by default
+*.mp4

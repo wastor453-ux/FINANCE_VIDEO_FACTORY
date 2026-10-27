@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Sound plan",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "musicBedDb",
+    "events",
+    "ducking"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "musicBedDb": {
+      "type": "number",
+      "maximum": -18
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "frame",
+          "sfx",
+          "pool",
+          "gainDb"
+        ],
+        "properties": {
+          "frame": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sfx": {
+            "type": "string"
+          },
+          "pool": {
+            "type": "string"
+          },
+          "gainDb": {
+            "type": "number",
+            "maximum": 0
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 3
+          }
+        }
+      }
+    },
+    "ducking": {
+      "type": "object",
+      "required": [
+        "depthDb",
+        "rampSec"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

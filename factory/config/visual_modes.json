@@ -1,0 +1,406 @@
+{
+  "schema_version": "1.0",
+  "_comment": "Authored for this project from the owner's reference sheets. Every mode must have a Remotion component before it can be used in a real plan; see docs/STATUS.md for which exist.",
+  "modes": [
+    {
+      "id": "hook_question",
+      "family": "narrative",
+      "verbs": [
+        "pose",
+        "reveal",
+        "emphasize"
+      ],
+      "best_for": [
+        "opening hook",
+        "big question + one large number"
+      ],
+      "requires_source": false,
+      "timing_sec": [
+        0.6,
+        1.0
+      ],
+      "reference": "Story system 01"
+    },
+    {
+      "id": "hero_number",
+      "family": "narrative",
+      "verbs": [
+        "count_up",
+        "reveal",
+        "emphasize"
+      ],
+      "best_for": [
+        "single key figure",
+        "punchline number"
+      ],
+      "requires_source": true,
+      "timing_sec": [
+        0.6,
+        1.0
+      ],
+      "reference": "Motion grammar B3 / KPI card"
+    },
+    {
+      "id": "line_chart",
+      "family": "chart",
+      "verbs": [
+        "draw_on",
+        "annotate",
+        "compare"
+      ],
+      "best_for": [
+        "trend over time",
+        "portfolio value over time",
+        "savings rate vs inflation"
+      ],
+      "requires_source": true,
+      "timing_sec": [
+        0.5,
+        1.0
+      ],
+      "reference": "Graph atlas 1, 8"
+    },
+    {
+      "id": "bar_chart",
+      "family": "chart",
+      "verbs": [
+        "rise",
+        "rank",
+        "highlight"
+      ],
+      "best_for": [
+        "category comparison",
+        "monthly spending"
+      ],
+      "requires_source": true,
+      "timing_sec": [
+        0.5,
+        0.8
+      ],
+      "reference": "Graph atlas 2"
+    },
+    {
+      "id": "donut_allocation",
+      "family": "chart",
+      "verbs": [
+        "segment_reveal",
+        "highlight"
+      ],
+      "best_for": [
+        "allocation",
+        "budget split"
+      ],
+      "requires_source": true,
+      "timing_sec": [
+        0.6,
+        1.0
+      ],
+      "reference": "Graph atlas 3"
+    },
+    {
+      "id": "cashflow_waterfall",
+      "family": "chart",
+      "verbs": [
+        "step",
+        "reveal"
+      ],
+      "best_for": [
+        "income to savings flow",
+        "where money goes"
+      ],
+      "requires_source": true,
+      "timing_sec": [
+        0.5,
+        0.8
+      ],
+      "reference": "Graph atlas 4"
+    },
+    {
+      "id": "compound_growth",
+      "family": "chart",
+      "verbs": [
+        "draw_on",
+        "diverge",
+        "annotate"
+      ],
+      "best_for": [
+        "compounding vs principal only",
+        "time in the market"
+      ],
+      "requires_source": true,
+      "timing_sec": [
+        0.5,
+        1.0
+      ],
+      "reference": "Graph atlas 5"
+    },
+    {
+      "id": "stacked_breakdown",
+      "family": "chart",
+      "verbs": [
+        "rise",
+        "re-stack"
+      ],
+      "best_for": [
+        "payment composition over time",
+        "principal vs interest"
+      ],
+      "requires_source": true,
+      "timing_sec": [
+        0.5,
+        0.8
+      ],
+      "reference": "Graph atlas 6"
+    },
+    {
+      "id": "debt_payoff",
+      "family": "chart",
+      "verbs": [
+        "draw_on",
+        "compare"
+      ],
+      "best_for": [
+        "two payoff strategies",
+        "remaining balance"
+      ],
+      "requires_source": true,
+      "timing_sec": [
+        0.5,
+        1.0
+      ],
+      "reference": "Graph atlas 7 / debt progress"
+    },
+    {
+      "id": "inflation_power",
+      "family": "chart",
+      "verbs": [
+        "draw_on",
+        "decay"
+      ],
+      "best_for": [
+        "purchasing power erosion"
+      ],
+      "requires_source": true,
+      "timing_sec": [
+        0.5,
+        1.0
+      ],
+      "reference": "Graph atlas 8"
+    },
+    {
+      "id": "scenario_comparison",
+      "family": "chart",
+      "verbs": [
+        "rise",
+        "contrast"
+      ],
+      "best_for": [
+        "conservative vs base vs optimistic",
+        "same assumptions, different outcomes"
+      ],
+      "requires_source": true,
+      "timing_sec": [
+        0.5,
+        0.8
+      ],
+      "reference": "Graph atlas 9"
+    },
+    {
+      "id": "kpi_card",
+      "family": "component",
+      "verbs": [
+        "count_up",
+        "spark"
+      ],
+      "best_for": [
+        "balance or return with trend"
+      ],
+      "requires_source": true,
+      "timing_sec": [
+        0.6,
+        1.0
+      ],
+      "reference": "Motion grammar A1"
+    },
+    {
+      "id": "compare_ab",
+      "family": "component",
+      "verbs": [
+        "split",
+        "highlight_winner"
+      ],
+      "best_for": [
+        "option A vs option B under the same assumptions"
+      ],
+      "requires_source": true,
+      "timing_sec": [
+        0.4,
+        0.8
+      ],
+      "reference": "Motion grammar A5 / Story 07"
+    },
+    {
+      "id": "annotation_callout",
+      "family": "component",
+      "verbs": [
+        "pop_in",
+        "point"
+      ],
+      "best_for": [
+        "explain one point on a chart"
+      ],
+      "requires_source": false,
+      "timing_sec": [
+        0.4,
+        0.8
+      ],
+      "reference": "Motion grammar A4"
+    },
+    {
+      "id": "worked_example",
+      "family": "narrative",
+      "verbs": [
+        "fill_inputs",
+        "calculate",
+        "reveal_result"
+      ],
+      "best_for": [
+        "U.S. worked example with editable values"
+      ],
+      "requires_source": true,
+      "timing_sec": [
+        0.8,
+        1.2
+      ],
+      "reference": "Story system 05"
+    },
+    {
+      "id": "process_flow",
+      "family": "diagram",
+      "verbs": [
+        "morph",
+        "flow",
+        "connect"
+      ],
+      "best_for": [
+        "how money moves",
+        "step by step mechanism"
+      ],
+      "requires_source": false,
+      "timing_sec": [
+        0.8,
+        1.2
+      ],
+      "reference": "Motion grammar C1 / D / Story 04"
+    },
+    {
+      "id": "timeline",
+      "family": "diagram",
+      "verbs": [
+        "travel",
+        "mark"
+      ],
+      "best_for": [
+        "history or schedule"
+      ],
+      "requires_source": true,
+      "timing_sec": [
+        0.6,
+        1.0
+      ],
+      "reference": "Motion grammar B7"
+    },
+    {
+      "id": "causal_diagram",
+      "family": "diagram",
+      "verbs": [
+        "connect",
+        "highlight",
+        "reveal"
+      ],
+      "best_for": [
+        "cause and effect",
+        "why a concept matters"
+      ],
+      "requires_source": false,
+      "timing_sec": [
+        0.8,
+        1.2
+      ],
+      "reference": "Story system 03"
+    },
+    {
+      "id": "risks_grid",
+      "family": "narrative",
+      "verbs": [
+        "reveal_cards",
+        "calm_emphasis"
+      ],
+      "best_for": [
+        "fees, rates, taxes, inflation caveats"
+      ],
+      "requires_source": false,
+      "timing_sec": [
+        0.6,
+        1.0
+      ],
+      "reference": "Story system 08"
+    },
+    {
+      "id": "action_checklist",
+      "family": "narrative",
+      "verbs": [
+        "check_off",
+        "reveal"
+      ],
+      "best_for": [
+        "next steps",
+        "key takeaways"
+      ],
+      "requires_source": false,
+      "timing_sec": [
+        0.6,
+        1.0
+      ],
+      "reference": "Story system 09 / Motion grammar A8"
+    },
+    {
+      "id": "closing_composition",
+      "family": "narrative",
+      "verbs": [
+        "settle",
+        "cta"
+      ],
+      "best_for": [
+        "recap and end card"
+      ],
+      "requires_source": false,
+      "timing_sec": [
+        0.8,
+        1.2
+      ],
+      "reference": "Story system 10"
+    }
+  ],
+  "overlays": [
+    "source_date_label",
+    "chart_legend",
+    "assumption_tag",
+    "lower_third",
+    "disclaimer_strip"
+  ],
+  "scene_grammar": [
+    "question",
+    "explain",
+    "visualize",
+    "verify",
+    "act"
+  ],
+  "trust_rules": [
+    "label data as illustrative or verified",
+    "cite source and as-of date",
+    "show assumptions",
+    "no guaranteed outcomes",
+    "keep text readable on mobile"
+  ]
+}

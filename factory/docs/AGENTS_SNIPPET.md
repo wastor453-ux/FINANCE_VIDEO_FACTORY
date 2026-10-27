@@ -1,0 +1,1 @@
+Finance Video Factory: for any request to make/resume a weekly finance video, load `ffx-orchestrator` first and follow it. Never run a production render, upload/publish, or merge without the user's explicit yes in the current chat. Keep transcripts and per-run files in `~/workspace/finance-video-factory/runs/`, never in git; never print or store API keys.

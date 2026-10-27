@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Voice manifest",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "provider",
+    "model",
+    "voice",
+    "style",
+    "scenes",
+    "totalMs",
+    "approved"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "provider": {
+      "type": "string"
+    },
+    "model": {
+      "type": "string"
+    },
+    "voice": {
+      "type": "string"
+    },
+    "style": {
+      "type": "string"
+    },
+    "temperature": {
+      "type": "number"
+    },
+    "sampleRateHz": {
+      "type": "integer"
+    },
+    "scenes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "sceneId",
+          "file",
+          "durationMs",
+          "sha256"
+        ],
+        "properties": {
+          "sceneId": {
+            "type": "string"
+          },
+          "file": {
+            "type": "string"
+          },
+          "durationMs": {
+            "type": "integer",
+            "minimum": 500
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "startMs": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "totalMs": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "approved": {
+      "type": "boolean"
+    }
+  },
+  "additionalProperties": true
+}

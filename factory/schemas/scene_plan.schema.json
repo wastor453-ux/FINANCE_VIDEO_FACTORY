@@ -1,0 +1,169 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Scene plan",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "fps",
+    "width",
+    "height",
+    "totalFrames",
+    "scenes"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "fps": {
+      "const": 30
+    },
+    "width": {
+      "const": 1920
+    },
+    "height": {
+      "const": 1080
+    },
+    "totalFrames": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "scenes": {
+      "type": "array",
+      "minItems": 5,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "startFrame",
+          "endFrame",
+          "mode",
+          "purpose",
+          "onScreenText",
+          "data",
+          "events"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "startFrame": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "endFrame": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "mode": {
+            "type": "string",
+            "description": "must be an id in factory/config/visual_modes.json"
+          },
+          "purpose": {
+            "type": "string",
+            "minLength": 10
+          },
+          "onScreenText": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/dataPoint"
+            }
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "frame",
+                "type"
+              ],
+              "properties": {
+                "frame": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "type": {
+                  "type": "string"
+                },
+                "anchorWord": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "usesCharacter": {
+            "const": false
+          },
+          "transitionIn": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": true,
+  "definitions": {
+    "dataPoint": {
+      "type": "object",
+      "required": [
+        "label",
+        "value",
+        "unit"
+      ],
+      "properties": {
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "value": {
+          "type": [
+            "number",
+            "string"
+          ]
+        },
+        "unit": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "type": "string",
+          "minLength": 3
+        },
+        "sourceUrl": {
+          "type": "string"
+        },
+        "asOf": {
+          "type": "string",
+          "pattern": "^\\d{4}(-\\d{2}(-\\d{2})?)?$"
+        },
+        "illustrative": {
+          "const": true
+        },
+        "assumptions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "source",
+            "asOf"
+          ]
+        },
+        {
+          "required": [
+            "illustrative"
+          ]
+        }
+      ]
+    }
+  }
+}

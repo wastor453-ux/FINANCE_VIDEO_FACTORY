@@ -1,0 +1,65 @@
+{
+  "_comment": "Working defaults sampled from the owner's reference sheets (graph atlas). Not a final brand: channel name/logo stay in brand.json.",
+  "status": "WORKING_DEFAULT_NOT_FINAL",
+  "color": {
+    "canvas": "#eaf3fd",
+    "surface": "#ffffff",
+    "ink": "#0f1b3d",
+    "muted": "#6b7a99",
+    "primary": "#3886fe",
+    "teal": "#25bcc7",
+    "violet": "#a48dfc",
+    "positive": "#2dcabe",
+    "negative": "#e5484d"
+  },
+  "font": {
+    "family": "Plus Jakarta Sans",
+    "fallback": "Inter, system-ui, sans-serif"
+  },
+  "grid": 8,
+  "safeAreaPx": 80,
+  "motionSec": {
+    "line_draw": [
+      0.5,
+      1.0
+    ],
+    "bar_rise": [
+      0.5,
+      0.8
+    ],
+    "count_up": [
+      0.6,
+      1.0
+    ],
+    "donut_reveal": [
+      0.6,
+      1.0
+    ],
+    "flow_arrows": [
+      0.8,
+      1.2
+    ],
+    "highlight": [
+      0.4,
+      0.8
+    ],
+    "timeline_travel": [
+      0.6,
+      1.0
+    ],
+    "transition": [
+      0.3,
+      1.2
+    ]
+  },
+  "easing": {
+    "default": "ease-out",
+    "path": "ease-in-out",
+    "timeline": "linear"
+  },
+  "motionRules": [
+    "subtle natural easing",
+    "0.3-1.0 s typical, longer only for complex concepts",
+    "no whip-pans or bounce"
+  ]
+}

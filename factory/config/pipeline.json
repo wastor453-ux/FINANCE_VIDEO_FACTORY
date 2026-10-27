@@ -1,0 +1,25 @@
+{
+  "_comment": "All tunable, reversible defaults live here. Nothing in this file is a secret.",
+  "schedule": { "cadence": "weekly", "dayOfWeek": null, "timezone": "Asia/Karachi", "startsOnlyWhenApproved": true },
+  "selection": {
+    "perChannelFetch": 10,
+    "minLongFormSec": 360,
+    "minAgeHours": 24,
+    "maxAgeDays": 10,
+    "ageFloorHours": 12,
+    "minBaselineVideos": 3,
+    "weights": { "outlier": 0.6, "engagement": 0.25, "reach": 0.15 }
+  },
+  "video": { "width": 1920, "height": 1080, "fps": 30, "targetMinutes": { "min": 8, "max": 14 } },
+  "render": { "chunkFrames": 600, "crf": 18, "concurrencyPerJob": 2, "maxParallelJobs": 10, "codec": "h264" },
+  "audio": { "sampleRate": 48000, "targetLufs": -16, "truePeakDbfs": -1.5, "musicBedDb": -24, "maxDriftFrames": 2 },
+  "secrets": {
+    "_comment": "Names of environment variables / Secure Vault entries. Values are never stored in the repo.",
+    "youtubeApiKeyEnv": "YOUTUBE_API_KEY",
+    "youtubeAuthMode": "header",
+    "geminiApiKeyEnv": "GEMINI_API_KEY",
+    "githubTokenEnv": "GITHUB_TOKEN"
+  },
+  "gates": ["winner", "script_and_voice_sample", "scene_plan", "render_dispatch", "final_video"],
+  "forbidden_without_explicit_approval": ["production_render", "publish_or_upload", "merge_pull_request"]
+}

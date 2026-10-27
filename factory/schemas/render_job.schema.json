@@ -1,0 +1,109 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Render job",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "jobId",
+    "composition",
+    "repo",
+    "ref",
+    "commit",
+    "startFrame",
+    "endFrame",
+    "chunkFrames",
+    "crf",
+    "inputHashes",
+    "approvedByUser",
+    "approvedAt"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "jobId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._-]{1,80}$"
+    },
+    "composition": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,100}$"
+    },
+    "repo": {
+      "type": "string"
+    },
+    "ref": {
+      "type": "string"
+    },
+    "commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "startFrame": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "endFrame": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "chunkFrames": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1800
+    },
+    "crf": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 51
+    },
+    "inputHashes": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      }
+    },
+    "approvedByUser": {
+      "const": true
+    },
+    "approvedAt": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T"
+    },
+    "estimatedMinutes": {
+      "type": "number"
+    },
+    "width": {
+      "type": "integer",
+      "minimum": 2
+    },
+    "height": {
+      "type": "integer",
+      "minimum": 2
+    },
+    "fps": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 120
+    },
+    "concurrency": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 8
+    },
+    "propsFile": {
+      "type": "string",
+      "description": "Repo-relative JSON passed to Remotion as --props (must be listed in inputHashes)"
+    },
+    "audioFile": {
+      "type": "string",
+      "description": "Repo-relative finished mix from `ffx mix-audio` (must be listed in inputHashes)"
+    },
+    "planFile": {
+      "type": "string",
+      "description": "Repo-relative scene_plan.json used for scene-aware QA frame sampling"
+    }
+  },
+  "additionalProperties": true
+}

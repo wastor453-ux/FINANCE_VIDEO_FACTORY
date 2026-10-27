@@ -1,0 +1,210 @@
+name: Render Factory (approved job, chunked)
+
+# Dispatch ONLY after the user has explicitly authorized this specific render.
+# Two independent gates must both be satisfied:
+#   1. the job file records approvedByUser=true with a timestamp (written after the user's yes), and
+#   2. the dispatcher types RENDER in `confirm`.
+# The job file is validated (schema, safe paths, input SHA-256s) before any runner time is spent.
+# All shell logic lives in factory/bin/ffx.mjs (unit-tested); no input is interpolated into shell code.
+
+on:
+  workflow_dispatch:
+    inputs:
+      job_file:
+        description: "Path of the approved render job, e.g. jobs/2026-W44.json"
+        required: true
+      confirm:
+        description: "Type RENDER to confirm the user authorized this render"
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: render-factory-${{ inputs.job_file }}
+  cancel-in-progress: false
+
+env:
+  NODE_VERSION: "24"
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.info.outputs.matrix }}
+      commit: ${{ steps.info.outputs.commit }}
+      job_id: ${{ steps.info.outputs.job_id }}
+      composition: ${{ steps.info.outputs.composition }}
+      concurrency: ${{ steps.info.outputs.concurrency }}
+      crf: ${{ steps.info.outputs.crf }}
+      props_file: ${{ steps.info.outputs.props_file }}
+      audio_file: ${{ steps.info.outputs.audio_file }}
+      plan_file: ${{ steps.info.outputs.plan_file }}
+      start_frame: ${{ steps.info.outputs.start_frame }}
+      end_frame: ${{ steps.info.outputs.end_frame }}
+      chunk_frames: ${{ steps.info.outputs.chunk_frames }}
+      width: ${{ steps.info.outputs.width }}
+      height: ${{ steps.info.outputs.height }}
+      fps: ${{ steps.info.outputs.fps }}
+    steps:
+      - name: Require typed confirmation
+        env:
+          CONFIRM: ${{ inputs.confirm }}
+        run: |
+          [ "$CONFIRM" = "RENDER" ] || { echo "confirm must be exactly RENDER"; exit 1; }
+      - uses: actions/checkout@v4
+        with:
+          path: dispatch
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Read job commit
+        id: commit
+        working-directory: dispatch
+        env:
+          JOB_FILE: ${{ inputs.job_file }}
+        run: |
+          set -euo pipefail
+          case "$JOB_FILE" in jobs/*.json) ;; *) echo "job_file must be jobs/<name>.json"; exit 1;; esac
+          echo "sha=$(node -e 'process.stdout.write(JSON.parse(require("fs").readFileSync(process.argv[1],"utf8")).commit)' "$JOB_FILE")" >> "$GITHUB_OUTPUT"
+      - name: Checkout the exact commit that will be rendered
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.commit.outputs.sha }}
+          path: code
+          lfs: true
+      - name: Preflight the job (schema, approval, safe paths, input hashes)
+        id: info
+        env:
+          JOB_FILE: ${{ inputs.job_file }}
+        run: |
+          set -euo pipefail
+          node dispatch/factory/bin/ffx.mjs check-job "dispatch/$JOB_FILE" --root code | tee /tmp/jobinfo.json
+          node -e '
+            const i = JSON.parse(require("fs").readFileSync("/tmp/jobinfo.json","utf8"));
+            const j = JSON.parse(require("fs").readFileSync(process.argv[1],"utf8"));
+            const o = {
+              matrix: JSON.stringify(i.matrix), commit: i.commit, job_id: i.jobId, composition: i.composition,
+              concurrency: i.concurrency, crf: i.crf, props_file: i.propsFile ?? "", audio_file: i.audioFile ?? "", plan_file: i.planFile ?? "",
+              start_frame: j.startFrame, end_frame: j.endFrame, chunk_frames: j.chunkFrames,
+              width: i.video.width, height: i.video.height, fps: i.video.fps,
+            };
+            require("fs").appendFileSync(process.env.GITHUB_OUTPUT, Object.entries(o).map(([k,v]) => k + "=" + v + "\n").join(""));
+          ' "dispatch/$JOB_FILE"
+
+  render-chunk:
+    needs: plan
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      max-parallel: 10
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.plan.outputs.commit }}
+          lfs: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: System dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 \
+            libxkbcommon0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libasound2t64
+      - name: Install npm dependencies (locked)
+        run: npm ci --no-audit --no-fund
+      - name: Ensure Chromium (pinned by Remotion)
+        run: npx remotion browser ensure
+      - name: Render and fingerprint the chunk
+        env:
+          COMPOSITION: ${{ needs.plan.outputs.composition }}
+          CHUNK_ID: ${{ matrix.chunk.chunk_id }}
+          START: ${{ matrix.chunk.start }}
+          END: ${{ matrix.chunk.end }}
+          CRF: ${{ needs.plan.outputs.crf }}
+          CONCURRENCY: ${{ needs.plan.outputs.concurrency }}
+          PROPS_FILE: ${{ needs.plan.outputs.props_file }}
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/chunks
+          ARGS=(--frames="$START-$END" --concurrency="$CONCURRENCY" --codec=h264 --crf="$CRF" --pixel-format=yuv420p --overwrite)
+          if [ -n "$PROPS_FILE" ]; then ARGS+=(--props="$PROPS_FILE"); fi
+          npx remotion render "$COMPOSITION" "/tmp/chunks/chunk_${CHUNK_ID}.mp4" "${ARGS[@]}"
+          node factory/bin/ffx.mjs chunk-meta --dir /tmp/chunks --id "$CHUNK_ID" --start "$START" --end "$END"
+      - name: Upload chunk
+        uses: actions/upload-artifact@v4
+        with:
+          name: chunk-${{ needs.plan.outputs.job_id }}-${{ matrix.chunk.chunk_id }}
+          path: /tmp/chunks/chunk_${{ matrix.chunk.chunk_id }}.*
+          retention-days: 3
+          if-no-files-found: error
+
+  assemble:
+    needs: [plan, render-chunk]
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.plan.outputs.commit }}
+          lfs: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: chunk-${{ needs.plan.outputs.job_id }}-*
+          path: /tmp/chunks
+          merge-multiple: true
+      - name: Verify chunks, join, mux audio, verify master
+        env:
+          START: ${{ needs.plan.outputs.start_frame }}
+          END: ${{ needs.plan.outputs.end_frame }}
+          CHUNK_FRAMES: ${{ needs.plan.outputs.chunk_frames }}
+          WIDTH: ${{ needs.plan.outputs.width }}
+          HEIGHT: ${{ needs.plan.outputs.height }}
+          FPS: ${{ needs.plan.outputs.fps }}
+          AUDIO_FILE: ${{ needs.plan.outputs.audio_file }}
+        run: |
+          set -euo pipefail
+          printf '{"startFrame":%s,"endFrame":%s,"chunkFrames":%s,"width":%s,"height":%s,"fps":%s}' \
+            "$START" "$END" "$CHUNK_FRAMES" "$WIDTH" "$HEIGHT" "$FPS" > /tmp/assemble_job.json
+          ARGS=(--chunks /tmp/chunks --job /tmp/assemble_job.json --out /tmp/out)
+          if [ -n "$AUDIO_FILE" ]; then ARGS+=(--audio "$AUDIO_FILE"); fi
+          node factory/bin/ffx.mjs assemble "${ARGS[@]}"
+      - name: QA on the assembled master (the real file)
+        env:
+          START: ${{ needs.plan.outputs.start_frame }}
+          END: ${{ needs.plan.outputs.end_frame }}
+          WIDTH: ${{ needs.plan.outputs.width }}
+          HEIGHT: ${{ needs.plan.outputs.height }}
+          FPS: ${{ needs.plan.outputs.fps }}
+          AUDIO_FILE: ${{ needs.plan.outputs.audio_file }}
+          PLAN_FILE: ${{ needs.plan.outputs.plan_file }}
+        run: |
+          set -euo pipefail
+          FRAMES=$(( END - START + 1 ))
+          ARGS=(/tmp/out/master.mp4 --frames "$FRAMES" --width "$WIDTH" --height "$HEIGHT" --fps "$FPS" --out-dir /tmp/qa)
+          if [ -z "$AUDIO_FILE" ]; then ARGS=(/tmp/out/master_video.mp4 "${ARGS[@]:1}" --no-audio); fi
+          if [ -n "$PLAN_FILE" ]; then ARGS+=(--plan "$PLAN_FILE"); fi
+          # exits 1 only on a hard FAIL; "needs_human" is expected and is reviewed by the user at gate G5
+          node factory/bin/ffx.mjs qa-video "${ARGS[@]}"
+      - name: Upload master and QA package
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: master-${{ needs.plan.outputs.job_id }}
+          path: |
+            /tmp/out/master.mp4
+            /tmp/out/master_video.mp4
+            /tmp/out/assemble_report.json
+            /tmp/qa/qa_report.json
+            /tmp/qa/contact_sheet.png
+          retention-days: 30
+          if-no-files-found: warn

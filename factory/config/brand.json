@@ -1,0 +1,17 @@
+{
+  "_comment": "Branding is intentionally unset. Components must read these values; nothing may hard-code a channel name. null = not confirmed by the owner.",
+  "channelName": null,
+  "handle": null,
+  "logoPath": null,
+  "endCard": { "ctaText": null, "subscribeButton": true },
+  "disclaimerText": "For educational purposes only. Not financial advice. Past performance is not a guarantee of future results.",
+  "visualIdentity": {
+    "mode": "light",
+    "tokensSource": "config/design_tokens.json",
+    "fontFamily": "Plus Jakarta Sans",
+    "status": "WORKING_DEFAULT_NOT_FINAL"
+  },
+  "thumbnail": {
+    "character": { "referenceImage": null, "idName": null, "aiGenerated": true, "usedIn": ["thumbnail"], "neverIn": ["video"] }
+  }
+}

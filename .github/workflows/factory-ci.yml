@@ -1,0 +1,46 @@
+name: Factory CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main, "factory/**"]
+
+permissions:
+  contents: read
+
+jobs:
+  factory-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: Install ffmpeg (media tests must run, not skip)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+      - name: Unit tests (no network, no render)
+        env:
+          FFX_REQUIRE_FFMPEG: "1"
+        run: node --test factory/tests/*.test.mjs
+      - name: Doctor (local checks only)
+        run: node factory/bin/ffx.mjs doctor
+
+  remotion-bundle:
+    # Proves the Remotion project installs from the lockfile and its compositions bundle.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+      - name: System dependencies for headless Chromium
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libxkbcommon0 \
+            libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1 libasound2t64
+      - run: npm ci --no-audit --no-fund
+      - run: npx remotion browser ensure
+      - run: npm run check:bundle

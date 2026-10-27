@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QA report",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "videoFile",
+    "technical",
+    "frameReview",
+    "unresolved",
+    "needsHuman",
+    "verdict"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "videoFile": {
+      "type": "string"
+    },
+    "technical": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "enum": [
+              "pass",
+              "fail"
+            ]
+          }
+        }
+      }
+    },
+    "frameReview": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "frame",
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "enum": [
+              "pass",
+              "fail",
+              "needs_human"
+            ]
+          },
+          "issue": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "audioReview": {
+      "type": "object"
+    },
+    "factReview": {
+      "type": "object"
+    },
+    "unresolved": {
+      "type": "array"
+    },
+    "needsHuman": {
+      "type": "array"
+    },
+    "verdict": {
+      "enum": [
+        "pass",
+        "fail",
+        "needs_human"
+      ]
+    }
+  },
+  "additionalProperties": true
+}
