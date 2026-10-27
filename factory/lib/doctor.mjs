@@ -71,7 +71,7 @@ export async function liveChecks(cfg, voiceCfg, env = process.env, fetchImpl = g
       if (mode === "query") u.searchParams.set("key", yt);
       const r = await fetchImpl(u, { headers: mode === "query" ? {} : { "x-goog-api-key": yt }, signal: AbortSignal.timeout(20000) });
       const j = await r.json().catch(() => ({}));
-      add("youtube_data_api", r.ok && j.items?.length ? "VERIFIED" : "FAILED", r.ok ? `channels.list ok via ${mode} auth (${j.items?.length || 0} item)` : `HTTP ${r.status} via ${mode} auth`);
+      add("youtube_data_api", r.ok && j.items?.length ? "VERIFIED" : "FAILED", r.ok ? `GET /youtube/v3/channels ok via ${mode} auth (${j.items?.length || 0} item)` : `HTTP ${r.status} via ${mode} auth`);
     } catch (e) {
       add("youtube_data_api", "FAILED", `${String(e.message).split(yt).join("***")} (if this is a timeout, retry with YOUTUBE_AUTH_MODE=query)`);
     }

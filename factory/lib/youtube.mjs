@@ -1,6 +1,8 @@
-// YouTube Data API v3 client (fetch injected for tests). Quota-lean: never uses search.list.
-// Per Google's quota table channels.list / playlistItems.list / videos.list cost 1 unit each.
-// Flow per channel: channels.list(forHandle) -> uploads playlist -> playlistItems.list -> videos.list.
+// YouTube Data API v3 client (fetch injected for tests). Quota-lean: never uses the search resource.
+// Per Google's quota table the channels / playlistItems / videos list calls cost 1 unit each.
+// REST paths are the bare resource names (GET .../youtube/v3/channels, .../playlistItems, .../videos) --
+// "channels.list" etc. is the RPC method name used in Google's docs/API Explorer, not a real URL path.
+// Flow per channel: channels(forHandle) -> uploads playlist -> playlistItems -> videos.
 // Auth: the key is sent in the x-goog-api-key header by default. `authMode: "query"` (config or YOUTUBE_AUTH_MODE)
 // sends it as ?key= instead, for environments whose credential proxy only substitutes URL parameters.
 // In every mode the key is scrubbed from error text and never logged. Network errors and 5xx are retried.
@@ -46,7 +48,7 @@ export function createClient({ apiKey, fetchImpl = globalThis.fetch, authMode = 
 
   async function resolveChannel(handle) {
     const h = handle.startsWith("@") ? handle : `@${handle}`;
-    const data = await call("channels.list", { part: "snippet,contentDetails", forHandle: h });
+    const data = await call("channels", { part: "snippet,contentDetails", forHandle: h });
     const item = data.items?.[0];
     if (!item) throw new Error(`channel not found for handle ${h}`);
     return {
@@ -58,14 +60,14 @@ export function createClient({ apiKey, fetchImpl = globalThis.fetch, authMode = 
   }
 
   async function recentUploadIds(uploadsPlaylistId, max) {
-    const data = await call("playlistItems.list", { part: "contentDetails", playlistId: uploadsPlaylistId, maxResults: String(Math.min(max, 50)) });
+    const data = await call("playlistItems", { part: "contentDetails", playlistId: uploadsPlaylistId, maxResults: String(Math.min(max, 50)) });
     return (data.items || []).map((i) => i.contentDetails.videoId);
   }
 
   async function videoDetails(ids) {
     const out = [];
     for (let i = 0; i < ids.length; i += 50) {
-      const data = await call("videos.list", { part: "snippet,contentDetails,statistics", id: ids.slice(i, i + 50).join(",") });
+      const data = await call("videos", { part: "snippet,contentDetails,statistics", id: ids.slice(i, i + 50).join(",") });
       for (const v of data.items || []) {
         const st = v.statistics || {};
         out.push({

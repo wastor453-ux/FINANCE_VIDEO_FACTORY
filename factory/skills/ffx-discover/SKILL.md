@@ -6,7 +6,7 @@ description: Fetch the latest long-form uploads and performance data for the 7 c
 # Discover
 
 - Command: `node factory/bin/ffx.mjs discover --out runs/<week>/discovery.json` (key from env; Muse injects it from Secure Vault).
-- Method: channels.list(forHandle) -> uploads playlist -> playlistItems.list -> videos.list. Never search.list (separate small quota). Expect ~3 quota units per channel.
+- Method: `GET .../channels` (forHandle) -> uploads playlist -> `GET .../playlistItems` -> `GET .../videos`. These are the real REST resource paths (no ".list" suffix -- that's the RPC method name from Google's docs, not a URL path). Never the `search` resource (separate, larger quota). Expect ~3 quota units per channel.
 - Exit code 2 means partial discovery: show the user which channels failed and why before continuing. Never silently proceed with fewer channels.
 - Verify: `ffx validate discovery runs/<week>/discovery.json`.
 - Respect the API terms; use the API only, no scraping of pages for metrics.

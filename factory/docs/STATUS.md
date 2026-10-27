@@ -38,8 +38,13 @@ Live result: `pip install` needed a temp venv (externally-managed-environment er
 ## Built, not exercised
 Skills end to end; `ffx voices` (request shape unverified); `render-factory.yml` on GitHub; Remotion `SystemCheck` composition and `npm ci` with the carried-over lockfile (never run here).
 
+## Bug found and fixed 2026-10-27: wrong YouTube REST paths
+The first real `discover` run (Muse, 7 channels) returned 0 videos, all 7 failing `HTTP 404`. `factory/lib/youtube.mjs` was calling `channels.list`, `playlistItems.list`, `videos.list` -- those are the RPC method names from Google's own docs/API Explorer, not real REST paths. The real paths are the bare resource names: `GET /youtube/v3/channels`, `/playlistItems`, `/videos`. `doctor.mjs`'s own probe already used the correct bare path, which is why doctor verified `youtube_data_api` while the actual discover code 404'd -- two different code paths, only one of them right. The existing test suite didn't catch this because `clients.test.mjs`/`core.test.mjs`'s mock matched `.endsWith("channels.list")` etc., i.e. it was asserting the bug's own (wrong) path, not the real one.
+
+Fixed: the three `call(...)` sites in `youtube.mjs` now use the bare resource names. The test mock in `core.test.mjs` now matches the real paths and asserts (`assert.ok(!u.pathname.endsWith(".list"))`) that no call ever uses the RPC-style suffix again, so this exact regression can't silently pass again. Verified the guard actually works by reintroducing the bug and confirming the test fails, then restoring the fix (63/63 pass). `doctor.mjs`'s log wording and the `ffx-discover` skill doc were also corrected to stop describing the wrong path. **Still not proven: a real discover run against the live API with the corrected code** -- that's next.
+
 ## Pending (in order)
-1. Run a real `discover` on all 7 channels now that query-mode auth is verified.
+1. Re-run a real `discover` on all 7 channels now that the REST path bug is fixed and query-mode auth is verified.
 2. Motion components for every mode in `config/visual_modes.json` (charts, KPI card, A/B cards, flows, kinetic type), each inspected frame by frame, plus a showcase composition.
 3. Transcript tool (captions chain + audio transcription fallback); needs Muse network.
 4. Word-level timing for frame-accurate sync (the TTS API returns audio only, so timing needs alignment, e.g. transcribing our own narration).

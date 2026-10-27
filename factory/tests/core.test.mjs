@@ -140,13 +140,18 @@ function mockYouTube({ failHandle } = {}) {
     const u = new URL(url);
     calls.push({ path: u.pathname, search: u.search, key: opts.headers["x-goog-api-key"] });
     const json = (o, status = 200) => ({ ok: status < 300, status, text: async () => JSON.stringify(o) });
-    if (u.pathname.endsWith("channels.list")) {
+    // Real YouTube Data API v3 REST paths are the bare resource names (no ".list" suffix -- that's
+    // the RPC method name from Google's docs, not a URL path). A mock that matched "channels.list"
+    // would pass against a client bug that 404s against the real API, so this asserts the real path
+    // AND that no call ever uses the RPC-style ".list" suffix.
+    assert.ok(!u.pathname.endsWith(".list"), `REST path must not end in ".list": ${u.pathname}`);
+    if (u.pathname.endsWith("/channels")) {
       const h = u.searchParams.get("forHandle");
       if (h === failHandle) return json({ items: [] });
       return json({ items: [{ id: `UC_${h}`, snippet: { title: h }, contentDetails: { relatedPlaylists: { uploads: `UU_${h}` } } }] });
     }
-    if (u.pathname.endsWith("playlistItems.list")) return json({ items: [{ contentDetails: { videoId: `v_${u.searchParams.get("playlistId")}` } }] });
-    if (u.pathname.endsWith("videos.list")) {
+    if (u.pathname.endsWith("/playlistItems")) return json({ items: [{ contentDetails: { videoId: `v_${u.searchParams.get("playlistId")}` } }] });
+    if (u.pathname.endsWith("/videos")) {
       return json({ items: u.searchParams.get("id").split(",").map((id) => ({ id, snippet: { channelId: "c", channelTitle: "T", title: "t", publishedAt: "2026-10-20T00:00:00Z", liveBroadcastContent: "none" }, contentDetails: { duration: "PT10M" }, statistics: { viewCount: "1000", commentCount: "5" } })) });
     }
     return json({ error: "x" }, 404);
