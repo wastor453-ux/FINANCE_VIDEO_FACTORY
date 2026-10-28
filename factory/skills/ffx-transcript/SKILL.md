@@ -15,4 +15,4 @@ Resilient chain; stop at the first source that passes validation, and record whi
 - Never bypass an access block, login wall or rate limit. If a source is refused, log it in `validation.notes` and move to the next source or ask the user.
 - Validate before use: language matches, word count >= 200, last timestamp is within 10% of the video duration, and 5 distinctive title words appear. Write the result to `validation`.
 - Storage: the transcript is a private working file (`storage: private_workspace_only`). Never commit it, never publish it, never quote it in the script.
-- Schema: `ffx validate transcript runs/<week>/transcript.json`.
+- Schema: `ffx validate transcript runs/<runId>/transcript.json`. Record it: `run-set-stage runs/<runId> transcript VERIFIED --note "<source used>"`.

@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RunState",
+  "type": "object",
+  "required": ["schema_version", "runId", "createdAt", "channel", "stages", "gates"],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "runId": { "type": "string", "pattern": "^\\d{4}-W\\d{2}-[a-z0-9-]+-[A-Za-z0-9_-]+$", "_comment": "e.g. 2026-W44-whiteboardfinance-xxoqWfPA -- the channel slug is lowercased but the trailing YouTube video id segment keeps its real (mixed) case on purpose, for traceability back to the exact video" },
+    "createdAt": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}T" },
+    "channel": {
+      "type": "object",
+      "required": ["handle", "videoId", "title"],
+      "properties": {
+        "handle": { "type": ["string", "null"] },
+        "videoId": { "type": ["string", "null"] },
+        "title": { "type": ["string", "null"] }
+      }
+    },
+    "stages": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["status", "at", "note"],
+        "properties": {
+          "status": { "enum": ["PENDING", "IN_PROGRESS", "VERIFIED", "FAILED", "UNVERIFIED", "NEEDS_HUMAN"] },
+          "at": { "type": ["string", "null"] },
+          "note": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "gates": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["approved", "at", "by", "note"],
+        "properties": {
+          "approved": { "type": "boolean" },
+          "at": { "type": ["string", "null"] },
+          "by": { "type": ["string", "null"] },
+          "note": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "archived": {
+      "type": ["object", "null"],
+      "required": ["at", "path"],
+      "properties": {
+        "at": { "type": "string" },
+        "path": { "type": "string" }
+      }
+    }
+  }
+}

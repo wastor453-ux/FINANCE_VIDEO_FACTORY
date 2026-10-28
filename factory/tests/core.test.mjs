@@ -37,7 +37,7 @@ test("validator: anyOf, $ref and additionalProperties=false", () => {
 // ---------- every schema and config parses ----------
 test("all schemas are valid JSON with schema_version and a title", () => {
   const files = fs.readdirSync(path.join(F, "schemas")).filter((f) => f.endsWith(".schema.json"));
-  assert.equal(files.length, 11);
+  assert.equal(files.length, 12); // 11 pipeline-stage artifacts + run_state (per-run lifecycle tracking)
   for (const f of files) {
     const s = rj(`schemas/${f}`);
     assert.ok(s.title, f);

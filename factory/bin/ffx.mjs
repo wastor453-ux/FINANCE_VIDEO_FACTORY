@@ -15,6 +15,7 @@ import { qaVideo } from "../lib/qa.mjs";
 import { checkJob } from "../lib/job.mjs";
 import { searchVoices } from "../lib/voices.mjs";
 import { localChecks, onlineChecks, liveChecks, summarize } from "../lib/doctor.mjs";
+import { makeRunId, newRunState, setStage, approveGate, isComplete, markArchived, isExpired } from "../lib/run.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const readJson = (p) => JSON.parse(fs.readFileSync(p, "utf8"));
@@ -49,7 +50,13 @@ const HELP = `ffx <command>
   chunk-meta --dir D --id N --start N --end N  write the hash sidecar for a rendered chunk (used by the render workflow)
   assemble --chunks D --job job.json --out D [--audio mix.wav]   verify chunks (hash + ffprobe + coverage), concat, mux audio
   mix-audio --voice voice_manifest.json --voice-dir D --sound sound_plan.json --sfx-dir D --frames N --out mix.wav [--music file]
-  qa-video <file> --frames N --out-dir D [--plan scene_plan.json] [--no-audio] [--human-reviewed]   QA on the real master + contact sheet`;
+  qa-video <file> --frames N --out-dir D [--plan scene_plan.json] [--no-audio] [--human-reviewed]   QA on the real master + contact sheet
+  run-init --channel @handle --video videoId [--title T] [--now ISO]   create one isolated run folder for a video (runs/<runId>/), with run_state.json
+  run-set-stage <runDir> <stage> <status> [--note T]   record a stage's status in that run's run_state.json (PENDING/IN_PROGRESS/VERIFIED/FAILED/UNVERIFIED/NEEDS_HUMAN)
+  run-approve <runDir> <gate> --by NAME [--note T]   record a gate approval (G1..G5) in that run's run_state.json
+  run-status <runDir>   print a run's current stage/gate status
+  run-archive <runDir> [--archive-root D] [--force]   move a run folder to the archive once every gate is approved (refuses otherwise unless --force)
+  run-cleanup [--archive-root D] [--days N] [--dry-run]   delete archived run folders past the retention window; --dry-run only lists them`;
 
 async function main() {
   const [cmd, ...rest] = process.argv.slice(2);
@@ -178,6 +185,84 @@ async function main() {
       if (problems.length) throw new Error("qa_report failed its own schema: " + problems.join("; "));
       console.log(JSON.stringify({ verdict: rep.verdict, failed: rep.unresolved.length, needsHuman: rep.needsHuman.length, report: path.join(flags["out-dir"], "qa_report.json"), contactSheet: rep.contactSheet }, null, 2));
       process.exit(rep.verdict === "fail" ? 1 : 0);
+      break;
+    }
+    case "run-init": {
+      const now = flags.now || new Date().toISOString();
+      const runId = makeRunId({ now, channelHandle: flags.channel, videoId: flags.video });
+      const runDir = path.resolve(flags["runs-root"] || c.retention.runsDir, runId); // relative to cwd, like every other --out path in this CLI
+      const statePath = path.join(runDir, "run_state.json");
+      if (fs.existsSync(statePath)) throw new Error(`run already exists: ${runDir} (reuse it, don't re-init)`);
+      const state = newRunState({ runId, channelHandle: flags.channel, videoId: flags.video, title: flags.title, createdAt: now });
+      writeJson(statePath, state);
+      console.log(JSON.stringify({ runId, runDir: path.relative(process.cwd(), runDir) }, null, 2));
+      break;
+    }
+    case "run-set-stage": {
+      const [runDir, stage, status] = pos;
+      if (!runDir || !stage || !status) throw new Error("usage: ffx run-set-stage <runDir> <stage> <status> [--note T]");
+      const statePath = path.join(runDir, "run_state.json");
+      const next = setStage(readJson(statePath), stage, status, flags.note);
+      writeJson(statePath, next);
+      console.log(`${stage}: ${status}`);
+      break;
+    }
+    case "run-approve": {
+      const [runDir, gate] = pos;
+      if (!runDir || !gate) throw new Error("usage: ffx run-approve <runDir> <gate> --by NAME [--note T]");
+      if (!flags.by) throw new Error("--by NAME is required (who approved this gate, in the current conversation)");
+      const statePath = path.join(runDir, "run_state.json");
+      const next = approveGate(readJson(statePath), gate, flags.by, flags.note);
+      writeJson(statePath, next);
+      console.log(`${gate}: approved by ${flags.by}`);
+      break;
+    }
+    case "run-status": {
+      const runDir = pos[0];
+      if (!runDir) throw new Error("usage: ffx run-status <runDir>");
+      const state = readJson(path.join(runDir, "run_state.json"));
+      console.log(JSON.stringify(state, null, 2));
+      break;
+    }
+    case "run-archive": {
+      const runDir = pos[0];
+      if (!runDir) throw new Error("usage: ffx run-archive <runDir> [--archive-root D] [--force]");
+      const statePath = path.join(runDir, "run_state.json");
+      const state = readJson(statePath);
+      if (!isComplete(state) && !flags.force) {
+        console.error(`refusing to archive: not every gate is approved yet (${Object.entries(state.gates).filter(([, g]) => !g.approved).map(([k]) => k).join(", ")}). Use --force only if you mean to archive an abandoned/skipped run.`);
+        process.exit(1);
+      }
+      const archiveRoot = path.resolve(flags["archive-root"] || c.retention.archiveDir);
+      const dest = path.join(archiveRoot, state.runId);
+      if (fs.existsSync(dest)) throw new Error(`archive destination already exists: ${dest}`);
+      fs.mkdirSync(archiveRoot, { recursive: true });
+      fs.renameSync(path.resolve(runDir), dest);
+      const archivedAt = new Date().toISOString();
+      writeJson(path.join(dest, "run_state.json"), markArchived(readJson(path.join(dest, "run_state.json")), archivedAt, path.relative(process.cwd(), dest)));
+      console.log(JSON.stringify({ archived: path.relative(process.cwd(), dest), archivedAt }, null, 2));
+      break;
+    }
+    case "run-cleanup": {
+      const archiveRoot = path.resolve(flags["archive-root"] || c.retention.archiveDir);
+      const days = Number(flags.days ?? c.retention.retentionDays);
+      const now = flags.now || new Date().toISOString();
+      const entries = fs.existsSync(archiveRoot) ? fs.readdirSync(archiveRoot, { withFileTypes: true }).filter((e) => e.isDirectory()) : [];
+      const deleted = [], kept = [];
+      for (const e of entries) {
+        const dir = path.join(archiveRoot, e.name);
+        const statePath = path.join(dir, "run_state.json");
+        if (!fs.existsSync(statePath)) { kept.push({ runId: e.name, reason: "no run_state.json; left alone" }); continue; }
+        const state = readJson(statePath);
+        if (!state.archived) { kept.push({ runId: e.name, reason: "archived field missing; left alone" }); continue; }
+        if (isExpired(state.archived.at, now, days)) {
+          if (!flags["dry-run"]) fs.rmSync(dir, { recursive: true, force: true });
+          deleted.push({ runId: e.name, archivedAt: state.archived.at });
+        } else {
+          kept.push({ runId: e.name, archivedAt: state.archived.at, daysLeft: Math.ceil(days - (new Date(now) - new Date(state.archived.at)) / 86_400_000) });
+        }
+      }
+      console.log(JSON.stringify({ dryRun: !!flags["dry-run"], retentionDays: days, deleted, kept }, null, 2));
       break;
     }
     default:

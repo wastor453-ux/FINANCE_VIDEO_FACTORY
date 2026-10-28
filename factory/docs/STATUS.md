@@ -2,10 +2,11 @@
 
 TESTED = automated tests ran and passed here. BUILT = written, never run against the real thing. PLANNED = not started. A green test run never means a video exists or looks good.
 
-## Done and tested (synthetic data; 63 tests)
+## Done and tested (synthetic data unless noted; 75 tests)
 | Area | Evidence / note |
 |---|---|
-| Schema validator + 11 artifact schemas | rejects bare numbers: every figure needs `source` + `asOf`, or `illustrative` |
+| Schema validator + 12 artifact schemas (incl. `run_state`) | rejects bare numbers: every figure needs `source` + `asOf`, or `illustrative` |
+| Run lifecycle (`run-init`/`run-set-stage`/`run-approve`/`run-archive`/`run-cleanup`) | per-video isolated folders, gate tracking, archive + 15-day retention — see dedicated section below |
 | Winner selection | outlier vs the channel's own baseline; seen-video memory; synthetic data only |
 | YouTube client | header or query auth, retries on timeout/5xx, never retries 4xx, key scrubbed from errors; **mocked, no real call yet** |
 | Doctor | honest VERIFIED / FAILED / UNVERIFIED rows; retries a network timeout once |
@@ -43,19 +44,34 @@ The first real `discover` run (Muse, 7 channels) returned 0 videos, all 7 failin
 
 Fixed: the three `call(...)` sites in `youtube.mjs` now use the bare resource names. The test mock in `core.test.mjs` now matches the real paths and asserts (`assert.ok(!u.pathname.endsWith(".list"))`) that no call ever uses the RPC-style suffix again, so this exact regression can't silently pass again. Verified the guard actually works by reintroducing the bug and confirming the test fails, then restoring the fix (63/63 pass). `doctor.mjs`'s log wording and the `ffx-discover` skill doc were also corrected to stop describing the wrong path. **Still not proven: a real discover run against the live API with the corrected code** -- that's next.
 
+## First real discover + select run (2026-10-27), recomputed 2026-10-28
+Live `discover` on all 7 channels: 70 videos, 0 failures, 21 quota units, passed `ffx validate discovery`. First `selectWinner()` run (baseline-age fix only) picked WhiteBoard Finance's "The Only Money Plan..." at 2.34 -- superseded below.
+
+**Owner requirement (2026-10-28): a channel can only win with its single latest long-form upload**, not any older long-form video even if it scores higher, and not a short. See `latestLongFormPerChannel()` in `select.mjs` and the `ffx-select` skill doc. Re-running selection on the same discovery file with both fixes (baseline-age bound + latest-only) now gives a different winner: **Mark Tilbury — "7 Proven Ways to Make Money With AI (No Experience)"** (score 2.1052, 15.4x its own baseline, global-fallback baseline since only 2 eligible peers). Runners-up: WhiteBoard Finance "The Only Money Plan..." (1.24), Humphrey Yang "You're Probably On Track to Be a Millionaire" (0.73), Graham Stephan "An Urgent Warning For ALL Investors" (0.70). Dan Martell has **zero** eligible candidates this week -- every recent upload is a short. Erin Talks Money's latest long-form is under 24h old and excluded by the age floor (will reconsider next week if still unclaimed). **Still not approved by the owner (gate G1) — this is a selection, not a committed pick.**
+
+## Bug found and fixed (2026-10-27): channel-baseline age bias in selection
+Investigating the WhiteBoard win surfaced a second, independent problem (not the REST-path bug below): the channel baseline (`baselineViewsPerHour`) is the median views-per-hour of a channel's other eligible long-form videos, with no upper bound on how old those peers can be. Views-per-hour (cumulative views / hours-since-publish) decays by construction over a video's life, so an unbounded peer set — including videos from months back — drags the baseline down and makes **any** recent upload look like a huge outlier for that reason alone, not because it's actually unusual. Traced exactly for the WhiteBoard case: the winning video was 27 hours old (709.5 vph); its baseline (18.2 vph) was the median of 8 peers ranging from Oct 18 down to Jul 23, several of them down to single-digit vph purely from age. That produced a reported "38.95x outlier," most of which was a comparison artifact.
+
+Fixed in `config/pipeline.json` → `selection.baselineMaxAgeDays` (45, independently configurable from `maxAgeDays` which bounds candidates) and `select.mjs`: both the per-channel peer filter and the global fallback median now exclude peers older than this bound. A new regression test (`select.test.mjs`) builds a synthetic channel with 3 recent peers and 5 ancient ones and asserts the old behavior would have produced a false >30x outlier while the fixed behavior produces a correctly unremarkable <2x. **Not yet re-run against the live discovery data** — the 2026-10-27 selection above was computed before this fix landed in the delivered zip; re-running `select` on the same discovery file with the fix in place is the next step before G1 approval.
+
+## Run-lifecycle system: one isolated folder per video, with archive + 15-day retention
+Built: `node factory/bin/ffx.mjs run-init --channel @handle --video id --title "T"` creates `runs/<runId>/` (id = ISO week + channel + video id, e.g. `2026-W44-whiteboardfinance-xxoqWfPA` — collision-resistant across retries/re-runs). Every stage's artifact for that video lives inside it; `run-set-stage` and `run-approve` record stage status and gate approvals (G1-G5) in `run_state.json`, not just in conversation history. `run-archive` moves a run to `archive/<runId>/` once every gate is approved (refuses otherwise unless `--force`, so a half-finished run can't be swept away). `run-cleanup` deletes archived runs past `retention.retentionDays` (15, in `config/pipeline.json`); `--dry-run` previews first. This is what makes the weekly system reusable without ever touching the engine (`lib/`, `skills/`, `config/`, `schemas/`) — each week's data is fully isolated and self-cleaning. `runs/`, `archive/`, and `state/` (cross-run seen-video memory, which intentionally survives archiving) are all gitignored; none of this ever reaches the public repo.
+
+Verified three ways: unit tests on the pure logic (`run.test.mjs`, 10 tests — id generation, stage/gate transitions, archive/retention math); a full CLI-level integration test (`skills_cli.test.mjs` — spawns the real `ffx` binary through init → set-stage → approve → archive-refused-while-incomplete → archive → cleanup-kept-before-window → cleanup-deleted-after-window, in a temp directory); and a manual end-to-end run by hand with real file-system side effects observed directly (archive move confirmed, deletion confirmed). **Not yet used in a real weekly run** — discover/select currently still write to `runs/_staging/` before a winner exists; once G1 is approved for a real winner, `run-init` + the staging-to-run-folder copy needs to happen for the first time outside a test.
+
 ## Pending (in order)
-1. Re-run a real `discover` on all 7 channels now that the REST path bug is fixed and query-mode auth is verified.
-2. Motion components for every mode in `config/visual_modes.json` (charts, KPI card, A/B cards, flows, kinetic type), each inspected frame by frame, plus a showcase composition.
-3. Transcript tool (captions chain + audio transcription fallback); needs Muse network.
-4. Word-level timing for frame-accurate sync (the TTS API returns audio only, so timing needs alignment, e.g. transcribing our own narration).
-5. Scene-plan generator, sound-effect library and music source (license-tracked).
-6. Thumbnail composer (character reference image still needs to be placed in the project) and title/description/tags/chapters generator.
-7. Run-state tool that records gates in code, not only in the skills.
+1. Get owner approval (G1) on the recomputed winner (Mark Tilbury, above) or a manual pick.
+2. `run-init` for the approved winner — the first real (non-test) use of the run-lifecycle system.
+3. Motion components for every mode in `config/visual_modes.json` (charts, KPI card, A/B cards, flows, kinetic type), each inspected frame by frame, plus a showcase composition.
+4. Transcript tool (captions chain + audio transcription fallback); needs Muse network.
+5. Word-level timing for frame-accurate sync (the TTS API returns audio only, so timing needs alignment, e.g. transcribing our own narration).
+6. Scene-plan generator, sound-effect library and music source (license-tracked).
+7. Thumbnail composer (character reference image still needs to be placed in the project) and title/description/tags/chapters generator.
 8. Weekly schedule in Muse, cost tracking.
 9. One supervised dry run, then the first production week. Not started.
 
 ## Decisions waiting on the owner
-Channel name, logo and end-card text (stay configurable); final visual identity (current colours are sampled from the reference sheets and marked WORKING_DEFAULT_NOT_FINAL).
+Channel name, logo and end-card text (stay configurable); final visual identity (current colours are sampled from the reference sheets and marked WORKING_DEFAULT_NOT_FINAL); approval of the re-computed winner (G1, pending item 1 above).
 
 ## Resolved
-Repo hosting: live at `github.com/wastor453-ux/FINANCE_VIDEO_FACTORY`, pushed via Git Data API (snapshot commit `c26f02a3`). YouTube auth mode: query (verified working; header mode fails live, root cause not investigated further since a working alternative exists). Voice: Koda, `en-us-koda`, model `gemini-3.8-flash-tts`, style = the full "user" variant — owner-confirmed 2026-10-27.
+Repo hosting: live at `github.com/wastor453-ux/FINANCE_VIDEO_FACTORY`, pushed via Git Data API (snapshot commit `c26f02a3`). YouTube auth mode: query (verified working; header mode fails live, root cause not investigated further since a working alternative exists). Voice: Koda, `en-us-koda`, model `gemini-3.8-flash-tts`, style = the full "user" variant — owner-confirmed 2026-10-27. YouTube REST path bug (see below). Run-lifecycle / per-video isolation + retention (see above).

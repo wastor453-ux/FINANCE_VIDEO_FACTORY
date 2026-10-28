@@ -8,7 +8,15 @@
     "maxAgeDays": 10,
     "ageFloorHours": 12,
     "minBaselineVideos": 3,
+    "baselineMaxAgeDays": 45,
+    "_baselineMaxAgeDays_comment": "Channel-baseline peers are bounded by this (wider than maxAgeDays, which bounds candidates) so an old peer video's naturally-decayed views-per-hour can't make a brand-new candidate look like a bigger outlier than it really is. Found 2026-10-27: the first real discover run picked a winner whose '38.95x outlier' score was driven mostly by comparing a 1-day-old video against peers from July (vph decays with age by construction: cumulative views / hours-since-publish always trends down over a video's life). Bounding peer age closer to the candidate window is a real fix, not a tuning knob -- leave it in place.",
     "weights": { "outlier": 0.6, "engagement": 0.25, "reach": 0.15 }
+  },
+  "retention": {
+    "runsDir": "runs",
+    "archiveDir": "archive",
+    "retentionDays": 15,
+    "_comment": "Each weekly video gets its own folder under runsDir (never committed to git). Once every gate (G1-G5) is approved, ffx run-archive moves that folder under archiveDir with a recorded archivedAt timestamp. ffx run-cleanup deletes archived folders whose archivedAt is at least retentionDays old. This keeps the engine (lib/, skills/, config/, schemas/) untouched by any single video's run data."
   },
   "video": { "width": 1920, "height": 1080, "fps": 30, "targetMinutes": { "min": 8, "max": 14 } },
   "render": { "chunkFrames": 600, "crf": 18, "concurrencyPerJob": 2, "maxParallelJobs": 10, "codec": "h264" },

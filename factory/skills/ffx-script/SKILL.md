@@ -18,4 +18,4 @@ Same core topic and viewer promise as the source, but our own structure, example
 - Each scene lists `claims`, each with `sourceIds` pointing to `sources` (official filings, BLS, FRED, central banks, regulators, original research). No source, no claim.
 
 ## Check
-`ffx lint-script runs/<week>/script.json` must print SCRIPT OK. Then run ffx-fact-check.
+`ffx lint-script runs/<runId>/script.json` must print SCRIPT OK. Then run ffx-fact-check. Record it: `run-set-stage runs/<runId> script VERIFIED --note "..."`.

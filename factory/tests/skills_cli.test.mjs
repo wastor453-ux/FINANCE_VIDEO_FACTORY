@@ -87,6 +87,48 @@ test("render_job schema requires explicit user approval", () => {
   assert.equal(run(["validate", "render_job", path.join(dir, "n.json")]).status, 1);
 });
 
+test("CLI end to end: run lifecycle (init -> set-stage -> approve -> archive refused until complete -> archive -> cleanup respects retention)", () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "ffx-run-"));
+  const opts = { cwd: dir };
+  let r = run(["run-init", "--channel", "@WhiteBoardFinance", "--video", "xxoqWfPAhhY", "--title", "T", "--now", "2026-10-27T18:32:04Z"], opts);
+  assert.equal(r.status, 0, r.stderr);
+  const { runId } = JSON.parse(r.stdout);
+  assert.equal(runId, "2026-W44-whiteboardfinance-xxoqWfPA");
+  const runDir = path.join(dir, "runs", runId);
+  assert.equal(run(["validate", "run_state", path.join(runDir, "run_state.json")], opts).status, 0);
+
+  // re-init on the same id must refuse, not silently overwrite
+  assert.equal(run(["run-init", "--channel", "@WhiteBoardFinance", "--video", "xxoqWfPAhhY", "--now", "2026-10-27T19:00:00Z"], opts).status, 1);
+
+  assert.equal(run(["run-set-stage", runDir, "discover", "VERIFIED", "--note", "70 videos"], opts).status, 0);
+  assert.equal(run(["run-approve", runDir, "G1", "--by", "owner", "--note", "winner approved"], opts).status, 0);
+
+  // refuses to archive while gates remain unapproved
+  let archiveAttempt = run(["run-archive", runDir, "--archive-root", "archive"], opts);
+  assert.equal(archiveAttempt.status, 1);
+  assert.match(archiveAttempt.stderr, /G2, G3, G4, G5/);
+
+  for (const g of ["G2", "G3", "G4", "G5"]) assert.equal(run(["run-approve", runDir, g, "--by", "owner"], opts).status, 0);
+
+  r = run(["run-archive", runDir, "--archive-root", "archive"], opts);
+  assert.equal(r.status, 0, r.stderr);
+  assert.ok(!fs.existsSync(runDir), "run folder should be moved out of runs/");
+  const archivedState = JSON.parse(fs.readFileSync(path.join(dir, "archive", runId, "run_state.json"), "utf8"));
+  assert.ok(archivedState.archived.at);
+
+  // cleanup before the retention window: kept
+  r = run(["run-cleanup", "--archive-root", "archive", "--days", "15", "--now", "2026-11-05T00:00:00Z"], opts);
+  assert.equal(r.status, 0);
+  assert.equal(JSON.parse(r.stdout).deleted.length, 0);
+  assert.ok(fs.existsSync(path.join(dir, "archive", runId)));
+
+  // cleanup after the retention window: deleted for real
+  r = run(["run-cleanup", "--archive-root", "archive", "--days", "15", "--now", "2026-11-25T00:00:00Z"], opts);
+  assert.equal(r.status, 0);
+  assert.equal(JSON.parse(r.stdout).deleted.length, 1);
+  assert.ok(!fs.existsSync(path.join(dir, "archive", runId)), "archived run should be deleted past retention");
+});
+
 test("verify-media works on a real ffmpeg-made file (and fails on a wrong expectation)", () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "ffx-"));
   const f = path.join(dir, "t.mp4");

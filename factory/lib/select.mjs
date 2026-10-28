@@ -25,11 +25,33 @@ export function engagementRate(v) {
   return (likes + comments) / v.viewCount;
 }
 
-export function eligibility(v, cfg, now, seenIds) {
+/**
+ * For each channel, the one video that is eligible to WIN this week: its single most recent
+ * long-form, non-live upload, regardless of how many other videos were fetched for that channel.
+ * Shorts are skipped when looking for "latest" (a channel can post shorts between long-form
+ * uploads; we want their latest long-form, not their latest upload of any length). A channel
+ * whose only recent output is shorts therefore has no candidate this week -- not an older one.
+ * This does NOT affect the channel-baseline peer pool (computed separately in selectWinner),
+ * which intentionally still looks at a channel's recent history to judge whether its latest is
+ * an outlier -- only which single video is ALLOWED to be the winner.
+ */
+export function latestLongFormPerChannel(videos, cfg) {
+  const byChannel = new Map();
+  for (const v of videos) {
+    if (!(v.durationSec >= cfg.minLongFormSec)) continue;
+    if (v.liveBroadcastContent && v.liveBroadcastContent !== "none") continue;
+    const cur = byChannel.get(v.channelId);
+    if (!cur || new Date(v.publishedAt).getTime() > new Date(cur.publishedAt).getTime()) byChannel.set(v.channelId, v);
+  }
+  return new Set([...byChannel.values()].map((v) => v.videoId));
+}
+
+export function eligibility(v, cfg, now, seenIds, latestIds) {
   const reasons = [];
   if (seenIds.has(v.videoId)) reasons.push("already_seen");
   if (v.liveBroadcastContent && v.liveBroadcastContent !== "none") reasons.push("live_or_upcoming");
   if (!(v.durationSec >= cfg.minLongFormSec)) reasons.push(`shorter_than_${cfg.minLongFormSec}s`);
+  else if (latestIds && !latestIds.has(v.videoId)) reasons.push("not_channels_latest_long_form_upload");
   const age = ageHours(v.publishedAt, now);
   if (!(age >= cfg.minAgeHours)) reasons.push(`younger_than_${cfg.minAgeHours}h`);
   if (age > cfg.maxAgeDays * 24) reasons.push(`older_than_${cfg.maxAgeDays}d`);
@@ -51,18 +73,34 @@ export function selectWinner(videos, cfg, now, seenIds = new Set()) {
     eng: engagementRate(v),
   }));
 
-  const globalVph = median(rated.filter((v) => ageHours(v.publishedAt, now) >= cfg.minAgeHours).map((v) => v.vph));
+  // Same age-decay reasoning as the per-channel baseline below: bound the global fallback too,
+  // so a channel with too few peers doesn't get compared against a pool skewed by old videos.
+  const baselineMaxAgeDaysGlobal = cfg.baselineMaxAgeDays ?? cfg.maxAgeDays;
+  const globalVph = median(rated.filter((v) => { const h = ageHours(v.publishedAt, now); return h >= cfg.minAgeHours && h <= baselineMaxAgeDaysGlobal * 24; }).map((v) => v.vph));
   const globalEng = median(rated.map((v) => v.eng).filter((e) => e > 0));
 
+  // Candidates competing for the win are restricted to each channel's single latest long-form
+  // upload (owner's explicit requirement, 2026-10-28): we compare "what's new this week per
+  // channel", not every recent video from every channel. Older or non-latest videos are still
+  // used below as baseline peers -- they inform whether the latest is an outlier, they just can't
+  // win themselves.
+  const latestIds = latestLongFormPerChannel(rated, cfg);
+
   const evaluated = rated.map((v) => {
-    const reasons = eligibility(v, cfg, now, seenIds);
-    // baseline: this channel's OTHER mature long-form videos in the window
+    const reasons = eligibility(v, cfg, now, seenIds, latestIds);
+    // baseline: this channel's OTHER mature long-form videos, bounded in age.
+    // vph (views / hours-since-publish) decays over a video's life by construction, so an
+    // unbounded peer set (including videos from months ago) drags the baseline down and makes
+    // ANY recent candidate look like a huge outlier for that reason alone, not real performance.
+    // baselineMaxAgeDays keeps peers roughly comparable in age to the candidates we actually score.
+    const baselineMaxAgeDays = cfg.baselineMaxAgeDays ?? cfg.maxAgeDays;
     const peers = rated.filter(
       (p) =>
         p.channelId === v.channelId &&
         p.videoId !== v.videoId &&
         p.durationSec >= cfg.minLongFormSec &&
-        ageHours(p.publishedAt, now) >= cfg.minAgeHours
+        ageHours(p.publishedAt, now) >= cfg.minAgeHours &&
+        ageHours(p.publishedAt, now) <= baselineMaxAgeDays * 24
     );
     const usePeers = peers.length >= cfg.minBaselineVideos;
     const baselineVph = usePeers ? median(peers.map((p) => p.vph)) : globalVph;
