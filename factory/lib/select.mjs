@@ -49,6 +49,7 @@ export function latestLongFormPerChannel(videos, cfg) {
 export function eligibility(v, cfg, now, seenIds, latestIds) {
   const reasons = [];
   if (seenIds.has(v.videoId)) reasons.push("already_seen");
+  if ((cfg.excludeTitlePatterns || []).some((p) => new RegExp(p, "i").test(v.title || ""))) reasons.push("topic_not_motion_friendly");
   if (v.liveBroadcastContent && v.liveBroadcastContent !== "none") reasons.push("live_or_upcoming");
   if (!(v.durationSec >= cfg.minLongFormSec)) reasons.push(`shorter_than_${cfg.minLongFormSec}s`);
   else if (latestIds && !latestIds.has(v.videoId)) reasons.push("not_channels_latest_long_form_upload");

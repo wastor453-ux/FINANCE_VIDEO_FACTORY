@@ -17,6 +17,7 @@ export function localChecks(cfg, env = process.env) {
 
   const nodeMajor = Number(process.versions.node.split(".")[0]);
   add("runtime", "node", nodeMajor >= 20 ? "VERIFIED" : "FAILED", `v${process.versions.node} (need >= 20)`);
+  const optionalTool = new Set(["gh"]);
   for (const [name, cmd, args] of [
     ["ffmpeg", "ffmpeg", ["-version"]],
     ["ffprobe", "ffprobe", ["-version"]],
@@ -25,7 +26,7 @@ export function localChecks(cfg, env = process.env) {
     ["gh", "gh", ["--version"]],
   ]) {
     const out = run(cmd, args);
-    add("runtime", name, out ? "VERIFIED" : name === "gh" ? "UNVERIFIED" : "FAILED", out || "not found on PATH");
+    add("runtime", name, out ? "VERIFIED" : optionalTool.has(name) ? "UNVERIFIED" : "FAILED", out || "not found on PATH");
   }
 
   const s = cfg.secrets;

@@ -22,10 +22,8 @@
     },
     "source": {
       "enum": [
-        "youtube_captions",
-        "caption_library",
-        "yt_dlp_subtitles",
-        "audio_transcription",
+        "gemini_video_understanding",
+        "hosted_transcript_api",
         "manual"
       ]
     },

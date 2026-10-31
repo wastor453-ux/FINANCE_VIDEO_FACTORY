@@ -178,6 +178,9 @@ def main(argv=None):
     if not (os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")):
         print("synthesize: GEMINI_API_KEY is not set", file=sys.stderr)
         return 2
+    sys.path.insert(0, HERE)
+    from proxy_env import clean_no_proxy
+    clean_no_proxy()  # bracketed IPv6 no_proxy entries crash httpx before any call
     try:
         from google import genai  # google-genai >= 2.25.0
     except ImportError:

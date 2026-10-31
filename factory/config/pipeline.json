@@ -10,6 +10,8 @@
     "minBaselineVideos": 3,
     "baselineMaxAgeDays": 45,
     "_baselineMaxAgeDays_comment": "Channel-baseline peers are bounded by this (wider than maxAgeDays, which bounds candidates) so an old peer video's naturally-decayed views-per-hour can't make a brand-new candidate look like a bigger outlier than it really is. Found 2026-10-27: the first real discover run picked a winner whose '38.95x outlier' score was driven mostly by comparing a 1-day-old video against peers from July (vph decays with age by construction: cumulative views / hours-since-publish always trends down over a video's life). Bounding peer age closer to the candidate window is a real fix, not a tuning knob -- leave it in place.",
+    "excludeTitlePatterns": ["\\breact(?:s|ing)? to\\b", "\\bvlog\\b", "\\bpodcast\\b", "\\binterview\\b", "\\blive\\b", "\\bq ?& ?a\\b", "\\bseminar\\b", "\\bwebinar\\b"],
+    "_excludeTitlePatterns_comment": "First-pass topic-fit screen on the title (formats we cannot explain with motion graphics). The real fit check is analysis.motionFit. Case-insensitive regexes.",
     "weights": { "outlier": 0.6, "engagement": 0.25, "reach": 0.15 }
   },
   "retention": {

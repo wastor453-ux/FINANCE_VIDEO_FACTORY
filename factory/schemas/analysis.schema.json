@@ -91,6 +91,41 @@
       "items": {
         "type": "string"
       }
+    },
+    "motionFit": {
+      "type": "object",
+      "required": [
+        "share",
+        "beats"
+      ],
+      "properties": {
+        "share": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "beats": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "beat",
+              "mode"
+            ],
+            "properties": {
+              "beat": {
+                "type": "string"
+              },
+              "mode": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
     }
   },
   "additionalProperties": true

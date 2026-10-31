@@ -59,8 +59,8 @@ test("config: 7 channels, no hard-coded brand, voice/model status reflects live 
   assert.equal(voice.model.id, "gemini-3.8-flash-tts");
   assert.equal(voice.model.status, "CONFIRMED_LIVE_2026-10-27"); // 3.8 id listed + used live by Muse
   assert.equal(voice.request.styleVariants.chosenVariant === undefined, true); // chosenVariant lives one level up, not inside styleVariants
-  assert.equal(voice.request.chosenVariant, "user");
-  assert.equal(voice.style, voice.request.styleVariants.user); // production style must match the owner's chosen variant
+  assert.equal(voice.request.chosenVariant, "short");
+  assert.equal(voice.style, voice.request.styleVariants.short); // production style must match the owner's chosen variant
   const p = rj("config/pipeline.json");
   assert.ok(p.forbidden_without_explicit_approval.includes("production_render"));
   assert.ok(p.forbidden_without_explicit_approval.includes("publish_or_upload"));

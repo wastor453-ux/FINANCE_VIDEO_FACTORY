@@ -10,4 +10,9 @@ description: Verify every factual claim and number in the script against primary
 3. Distinguish historical data, estimates, forecasts and hypothetical examples; never present one as another. Hypotheticals get `illustrative` labels in the scene plan.
 4. Recompute every calculation (compound growth, percentages) in code and store the formula and inputs.
 5. Unverifiable claim: rewrite as an attributed statement or delete it. Never keep a number you could not verify.
-6. Output a short report: verified, corrected, removed, still uncertain (needs human).
+6. **Freshness**: for every statistic record `dataYear`. If it is two or more years old, search for a newer edition and use it; if there is none, say the year in the narration. Check every "latest", "current" or "new" in the narration against the newest edition you can find.
+7. **Source quality**: if a figure came from a summary or blog post, find the primary report; if you cannot, mark `sourceKind: "secondary"` and attribute it ("as reported by").
+8. **No creator claims**: a figure that only the researched creator stated is re-verified at a primary source or cut. Never name or cite them; no `attributed` claims.
+9b. **Scope check**: for every claim, put the source's exact line beside the narration. If the narration says more than the source (for example "reads reviews before they choose" when the source says "never read reviews"), rewrite the narration.
+9. **Promise check**: confirm each entry in `script.promises` is paid off by the scenes it lists.
+10. Output a short report: verified, corrected, removed, still uncertain (needs human).

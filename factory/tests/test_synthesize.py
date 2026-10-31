@@ -101,7 +101,7 @@ class Tests(unittest.TestCase):
         r = S.make_samples(c, CFG, "A short sample sentence for the owner.", d, ["empty", "user", "short"], sleep=nosleep)
         self.assertEqual([x["variant"] for x in r["samples"]], ["empty", "user", "short"])
         styles = [(call["input"][0]["content"][0].get("annotations") or [{}])[0].get("style", "") for call in c.calls]
-        self.assertEqual(styles[0], ""); self.assertEqual(styles[1], CFG["style"]); self.assertTrue(styles[2])
+        self.assertEqual(styles[0], ""); self.assertEqual(styles[1], CFG["request"]["styleVariants"]["user"]); self.assertTrue(styles[2])
         with self.assertRaises(S.TtsError):
             S.make_samples(c, CFG, "Hi there friend.", d, ["nope"], sleep=nosleep)
 

@@ -27,7 +27,7 @@
     "note": "Google's TTS page (read via Muse, 2026-10-27) documents the Gemini 3.8 models as the current ones: 3.8 Flash for studio-grade narration and stable long-form voice, 3.8 Flash-Lite as the cheap high-volume option, and 3.1 Flash Preview as the older model. Confirmed live on 2026-10-27: `gemini-3.8-flash-tts` is listed for this key (doctor --online --live) and successfully produced all three audition samples via the Interactions API."
   },
   "temperature": 1,
-  "style": "Authoritative, calm financial advisor delivery with a warm, confident tone, steady downward inflections, and clear, measured pacing.",
+  "style": "calm, authoritative, measured pace",
   "styleRules": [
     "Keep the style string identical for every request of an episode (and across episodes).",
     "The text field is spoken verbatim: no stage directions in it.",
@@ -60,7 +60,7 @@
       "user": "Authoritative, calm financial advisor delivery with a warm, confident tone, steady downward inflections, and clear, measured pacing.",
       "short": "calm, authoritative, measured pace"
     },
-    "chosenVariant": "user",
+    "chosenVariant": "short",
     "variantNote": "Owner picked 'user' (the exact style line above) on 2026-10-27 after hearing all three on the same sentence. Google's own guidance was to prefer empty/short over a long style string since longer style text is documented to increase drift; the owner's choice overrides that default, so every production TTS call for this channel uses the full 'user' style string, not 'empty' or 'short'. Re-audition if drift becomes visible across a full episode.",
     "inlineTags": [
       "<short pause>",

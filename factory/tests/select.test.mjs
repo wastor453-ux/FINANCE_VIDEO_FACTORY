@@ -139,3 +139,13 @@ test("a channel whose latest upload is a short still competes with its latest LO
   assert.ok(!latestIds.has(olderLong.videoId));
   assert.ok(!latestIds.has(short.videoId)); // shorts are never in the long-form "latest" set at all
 });
+
+test("selection: titles of formats we cannot animate are ineligible (topic fit screen)", async () => {
+  const { eligibility } = await import("../lib/select.mjs");
+  const cfg = { minLongFormSec: 360, minAgeHours: 24, maxAgeDays: 10, excludeTitlePatterns: ["\\bpodcast\\b", "\\breact(?:s|ing)? to\\b"] };
+  const v = (title) => ({ videoId: "a", title, durationSec: 900, publishedAt: "2026-10-20T00:00:00Z", viewCount: 10, liveBroadcastContent: "none" });
+  const now = "2026-10-28T00:00:00Z";
+  assert.ok(eligibility(v("Reacting to my portfolio"), cfg, now, new Set()).includes("topic_not_motion_friendly"));
+  assert.ok(eligibility(v("Podcast ep 4"), cfg, now, new Set()).includes("topic_not_motion_friendly"));
+  assert.ok(!eligibility(v("7 Proven Ways to Make Money With AI (No Experience)"), cfg, now, new Set()).includes("topic_not_motion_friendly"));
+});

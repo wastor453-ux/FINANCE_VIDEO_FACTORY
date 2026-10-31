@@ -16,6 +16,8 @@ import { checkJob } from "../lib/job.mjs";
 import { searchVoices } from "../lib/voices.mjs";
 import { localChecks, onlineChecks, liveChecks, summarize } from "../lib/doctor.mjs";
 import { makeRunId, newRunState, setStage, approveGate, isComplete, markArchived, isExpired } from "../lib/run.mjs";
+import { parseVtt, parseSrt, validateTranscript } from "../lib/transcript.mjs";
+import { scoreScript } from "../lib/script-quality.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const readJson = (p) => JSON.parse(fs.readFileSync(p, "utf8"));
@@ -42,6 +44,7 @@ const HELP = `ffx <command>
   mark-seen --selection <file> --seen <file>   record ALL evaluated videos as seen (after the winner is approved)
   lint-plan <scene_plan.json> [--voice voice_manifest.json]   schema + cross-checks (modes, gaps, sources, sync)
   lint-script <script.json>         schema + claim/source rules
+  script-score <script.json> [--min 80]   AI-tell / spoken-English / promise / freshness quality gate (exit 1 below --min or on any P0)
   plan-chunks --start N --end N [--size N]     print the chunk matrix as JSON
   verify-media <file> --frames N [--audio] [--width W --height H --fps F]
   audio-segment --start N --end N [--fps F]    exact ffmpeg -ss/-t values for a frame range
@@ -56,7 +59,9 @@ const HELP = `ffx <command>
   run-approve <runDir> <gate> --by NAME [--note T]   record a gate approval (G1..G5) in that run's run_state.json
   run-status <runDir>   print a run's current stage/gate status
   run-archive <runDir> [--archive-root D] [--force]   move a run folder to the archive once every gate is approved (refuses otherwise unless --force)
-  run-cleanup [--archive-root D] [--days N] [--dry-run]   delete archived run folders past the retention window; --dry-run only lists them`;
+  run-cleanup [--archive-root D] [--days N] [--dry-run]   delete archived run folders past the retention window; --dry-run only lists them
+  transcript --video-id ID --title T --duration-sec N --source SRC --language L [--vtt F | --srt F | --manual F] --out transcript.json
+    parse (vtt/srt) or wrap (manual, plain text) an already-obtained transcript, validate it (word count, duration match, title-word match), write transcript.json. Does NOT fetch captions or call any transcription API itself -- obtain the raw text first (tools/gemini_transcript.py, a hosted transcript API, or a human paste), per the ffx-transcript skill's resilient chain, then run this. Exits 1 if validation fails; never silently proceeds on a bad transcript.`;
 
 async function main() {
   const [cmd, ...rest] = process.argv.slice(2);
@@ -129,6 +134,16 @@ async function main() {
       const probs = errs.length ? errs : lintScript(sc);
       if (probs.length) { console.error(`SCRIPT PROBLEMS (${probs.length}):\n  - ${probs.join("\n  - ")}`); process.exit(1); }
       console.log("SCRIPT OK");
+      break;
+    }
+    case "script-score": {
+      const sc = readJson(pos[0]);
+      const creatorNames = readJson(path.join(ROOT, "config/channels.json")).channels.flatMap((x) => [x.name, x.handle.replace(/^@/, "")]);
+      const res = scoreScript(sc, { now: flags.now ? new Date(flags.now) : new Date(), creatorNames });
+      console.log(JSON.stringify(res, null, 2));
+      const min = Number(flags.min ?? 80);
+      if (res.verdict === "FAIL" || res.score < min) { console.error(`SCRIPT QUALITY: ${res.verdict} (score ${res.score}, need >= ${min} and no P0)`); process.exit(1); }
+      console.error(`SCRIPT QUALITY: PASS (score ${res.score})`);
       break;
     }
     case "plan-chunks": {
@@ -263,6 +278,42 @@ async function main() {
         }
       }
       console.log(JSON.stringify({ dryRun: !!flags["dry-run"], retentionDays: days, deleted, kept }, null, 2));
+      break;
+    }
+    case "transcript": {
+      const { "video-id": videoId, title, source, language } = flags;
+      const durationSec = Number(flags["duration-sec"]);
+      if (!videoId || !title || !source || !language || !Number.isFinite(durationSec)) {
+        throw new Error("usage: ffx transcript --video-id ID --title T --duration-sec N --source SRC --language L [--vtt F | --srt F | --manual F] --out transcript.json");
+      }
+      const validSources = ["gemini_video_understanding", "hosted_transcript_api", "manual"];
+      if (!validSources.includes(source)) throw new Error(`--source must be one of: ${validSources.join(", ")}`);
+
+      let segments;
+      if (flags.vtt) segments = parseVtt(fs.readFileSync(flags.vtt, "utf8"));
+      else if (flags.srt) segments = parseSrt(fs.readFileSync(flags.srt, "utf8"));
+      else if (flags.manual) {
+        const text = fs.readFileSync(flags.manual, "utf8").replace(/\s+/g, " ").trim();
+        segments = text ? [{ startMs: 0, endMs: durationSec * 1000, text }] : [];
+      } else {
+        throw new Error("one of --vtt, --srt, or --manual is required (this command parses/validates an already-obtained transcript; it does not fetch one)");
+      }
+      if (!segments.length) throw new Error("no segments parsed from the given input -- empty or unparseable file");
+
+      const validation = validateTranscript({ segments, videoDurationSec: durationSec, title, expectedLanguage: flags["expected-language"], actualLanguage: language });
+      const out = {
+        schema_version: "1.0",
+        videoId,
+        source,
+        language,
+        validated: validation.ok,
+        validation,
+        segments,
+        storage: "private_workspace_only",
+      };
+      writeJson(flags.out || "transcript.json", out);
+      console.log(validation.ok ? `VALID transcript: ${validation.wordCount} words, duration match ok, ${validation.titleWordsFound}/${validation.titleWordsNeeded} title words found` : `INVALID transcript:\n  - ${validation.notes.join("\n  - ")}`);
+      process.exit(validation.ok ? 0 : 1);
       break;
     }
     default:

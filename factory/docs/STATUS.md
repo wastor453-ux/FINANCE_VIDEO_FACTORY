@@ -2,11 +2,12 @@
 
 TESTED = automated tests ran and passed here. BUILT = written, never run against the real thing. PLANNED = not started. A green test run never means a video exists or looks good.
 
-## Done and tested (synthetic data unless noted; 75 tests)
+## Done and tested (synthetic data unless noted; 88 tests)
 | Area | Evidence / note |
 |---|---|
 | Schema validator + 12 artifact schemas (incl. `run_state`) | rejects bare numbers: every figure needs `source` + `asOf`, or `illustrative` |
 | Run lifecycle (`run-init`/`run-set-stage`/`run-approve`/`run-archive`/`run-cleanup`) | per-video isolated folders, gate tracking, archive + 15-day retention — see dedicated section below |
+| Transcript parsing/validation (`ffx transcript`) | VTT/SRT/manual parsing incl. real rolling-caption shape, 3-part validation — see dedicated section below |
 | Winner selection | outlier vs the channel's own baseline; seen-video memory; synthetic data only |
 | YouTube client | header or query auth, retries on timeout/5xx, never retries 4xx, key scrubbed from errors; **mocked, no real call yet** |
 | Doctor | honest VERIFIED / FAILED / UNVERIFIED rows; retries a network timeout once |
@@ -59,11 +60,28 @@ Built: `node factory/bin/ffx.mjs run-init --channel @handle --video id --title "
 
 Verified three ways: unit tests on the pure logic (`run.test.mjs`, 10 tests — id generation, stage/gate transitions, archive/retention math); a full CLI-level integration test (`skills_cli.test.mjs` — spawns the real `ffx` binary through init → set-stage → approve → archive-refused-while-incomplete → archive → cleanup-kept-before-window → cleanup-deleted-after-window, in a temp directory); and a manual end-to-end run by hand with real file-system side effects observed directly (archive move confirmed, deletion confirmed). **Not yet used in a real weekly run** — discover/select currently still write to `runs/_staging/` before a winner exists; once G1 is approved for a real winner, `run-init` + the staging-to-run-folder copy needs to happen for the first time outside a test.
 
+## G1 approved (2026-10-29): winner locked in
+A fresh `discover` (not the Oct 27 one -- ages/eligibility shift daily, so selection was re-run on same-day data) + `select` confirmed **Mark Tilbury — "7 Proven Ways to Make Money With AI (No Experience)"** (score 2.0486, 14.3x global-fallback baseline). Owner approved. Run folder created: `runs/2026-W44-marktilbury-hriu0irR/`, staging discovery/selection files copied in (hash-verified), both stages marked VERIFIED, G1 approved by owner, `mark-seen` run (70 video IDs now in `state/seen_videos.json`, including the winner) -- this is the run-lifecycle system's first real (non-test) use. One flagged-but-not-blocking caveat: this topic leans on strategy/anecdote more than official statistics (BLS/FRED-style sourcing), so the fact-check stage may need more "illustrative" labels than a budgeting/data-heavy topic would.
+
+Noted in passing: a stray empty `factory/state/seen_videos.json` exists in Muse's workspace. It isn't shipped by this project (not in git, not referenced by any skill or the CLI) and isn't read by anything -- the real, permanent seen-memory is the project-root `state/seen_videos.json`. Safe to delete; harmless if left alone.
+
+## Transcript tool built (2026-10-29)
+`factory/lib/transcript.mjs` + `ffx transcript` CLI command. Deliberately thin: it parses (VTT or SRT, including messy real-world "rolling" YouTube auto-captions with `<c>` tags and inline timestamp tags -- stripped and exact-duplicate consecutive cues deduped) or wraps (`--manual`, plain pasted text as one full-duration segment) an **already-obtained** transcript, then validates it: word count >= 200, last caption within 10% of real video duration, at least `min(5, available)` distinctive title words present. It does not fetch captions or call a transcription API itself -- that external step (see the 2026-10-30 section below for what actually works) is unverifiable from here without network/these tools, so rather than guess at an untested subprocess/API shape, the tool's contract is "hand me whatever text you got, honestly, and I'll validate and format it correctly." (Update 2026-10-30: the yt-dlp and whisper doctor checks were removed -- see below.)
+
+Tested: 10 unit tests on the pure parse/validate logic (synthetic VTT including the rolling-caption shape, SRT, manual-text wrapping, all three validation failure modes with their exact notes) + 1 CLI-level integration test (real `ffx transcript` invocations for vtt/srt/manual, a schema-valid pass, an honest failure that still writes the file marked `validated: false`, and a refusal when no input is given at all). **Not yet exercised against a real video's actual captions** -- that's the next step, using the approved winner above.
+
+## Transcript sources: what failed and what replaced it (2026-10-30)
+Real run in Muse on `hriu0irRcpE` (youtube.com itself reachable, doctor green): `yt-dlp` got HTTP 429 then LOGIN_REQUIRED ("Sign in to confirm you're not a bot"); `youtube-transcript-api` raised `IpBlocked` (cloud-provider IP). Both are removed from the skill, schema source list, CLI and `ffx doctor`; Whisper-on-YouTube-audio is removed too (same refused download). No cookies, proxies or bypasses are used.
+Replacement: `factory/tools/gemini_transcript.py` -- Gemini video understanding with the YouTube URL (fetched on Google's side, same key as the voice). Request shape is from Google's docs and tested against a fake client; **not yet run live** -- that first call is the verification. Documented caveats: preview feature, public videos only, free tier 8 h of YouTube video/day, limits may change; output is a model transcription. Fallbacks: an owner-approved hosted transcript API (none configured; Supadata's free tier lists 100 requests/month, unverified here), then a human paste. Known gap: Muse's bundle has no `transcript` command (stale vs this repo) -- re-sync before use.
+
+## Gemini transcript route verified live (2026-10-30)
+Run in Muse on `hriu0irRcpE`: 424 cues, 5,011 words, last cue at 1,582 s of 1,584 s; `ffx transcript` -> VALID (5011 words, duration match ok, 5/5 title words); transcript stage VERIFIED. First attempt failed only on a local sandbox setting (bracketed IPv6 entries in lowercase `no_proxy` crash httpx); `tools/proxy_env.py` now drops just those entries before the Gemini SDK is used, in both `gemini_transcript.py` and `synthesize.py`. The transcript is Gemini's transcription of the audio, not YouTube's caption file.
+
 ## Pending (in order)
-1. Get owner approval (G1) on the recomputed winner (Mark Tilbury, above) or a manual pick.
-2. `run-init` for the approved winner — the first real (non-test) use of the run-lifecycle system.
-3. Motion components for every mode in `config/visual_modes.json` (charts, KPI card, A/B cards, flows, kinetic type), each inspected frame by frame, plus a showcase composition.
-4. Transcript tool (captions chain + audio transcription fallback); needs Muse network.
+1. (done 2026-10-30) Transcript via Gemini verified live.
+2. Analyze stage (hook/structure/core points from the transcript).
+3. Script + fact-check stage (gate G2, along with a voice sample).
+4. Motion components for every mode in `config/visual_modes.json` (charts, KPI card, A/B cards, flows, kinetic type), each inspected frame by frame, plus a showcase composition.
 5. Word-level timing for frame-accurate sync (the TTS API returns audio only, so timing needs alignment, e.g. transcribing our own narration).
 6. Scene-plan generator, sound-effect library and music source (license-tracked).
 7. Thumbnail composer (character reference image still needs to be placed in the project) and title/description/tags/chapters generator.
@@ -71,7 +89,7 @@ Verified three ways: unit tests on the pure logic (`run.test.mjs`, 10 tests — 
 9. One supervised dry run, then the first production week. Not started.
 
 ## Decisions waiting on the owner
-Channel name, logo and end-card text (stay configurable); final visual identity (current colours are sampled from the reference sheets and marked WORKING_DEFAULT_NOT_FINAL); approval of the re-computed winner (G1, pending item 1 above).
+Channel name, logo and end-card text (stay configurable); final visual identity (current colours are sampled from the reference sheets and marked WORKING_DEFAULT_NOT_FINAL).
 
 ## Resolved
-Repo hosting: live at `github.com/wastor453-ux/FINANCE_VIDEO_FACTORY`, pushed via Git Data API (snapshot commit `c26f02a3`). YouTube auth mode: query (verified working; header mode fails live, root cause not investigated further since a working alternative exists). Voice: Koda, `en-us-koda`, model `gemini-3.8-flash-tts`, style = the full "user" variant — owner-confirmed 2026-10-27. YouTube REST path bug (see below). Run-lifecycle / per-video isolation + retention (see above).
+Repo hosting: live at `github.com/wastor453-ux/FINANCE_VIDEO_FACTORY`, pushed via Git Data API (snapshot commit `c26f02a3`). YouTube auth mode: query (verified working; header mode fails live, root cause not investigated further since a working alternative exists). Voice: Koda, `en-us-koda`, model `gemini-3.8-flash-tts`, style = the full "user" variant — owner-confirmed 2026-10-27. YouTube REST path bug (see above). Run-lifecycle / per-video isolation + retention (see above). Channel-baseline age bias and latest-per-channel selection rules (see above). **G1: Mark Tilbury "7 Proven Ways to Make Money With AI (No Experience)" approved 2026-10-29.**

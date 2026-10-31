@@ -39,3 +39,9 @@ test("the CLI refuses to run without a key or SDK and never prints a key", { ski
   assert.equal(r.status, 2);
   assert.match(r.stderr, /GEMINI_API_KEY is not set/);
 });
+
+test("Gemini transcript tool (Python): request shape, parsing, SRT, error handling — against a fake client", { skip: !HAVE_PY, timeout: 120000 }, () => {
+  const r = spawnSync("python3", ["-m", "unittest", "-v", "test_gemini_transcript"], { cwd: here, encoding: "utf8" });
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stderr, /Ran 9 tests/);
+});
