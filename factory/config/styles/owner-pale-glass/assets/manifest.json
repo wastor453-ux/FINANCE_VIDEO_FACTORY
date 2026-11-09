@@ -1,0 +1,98 @@
+[
+ {
+  "id": "cool-blue-fog",
+  "file": "cool-blue-fog.png",
+  "sourceBoard": "atmospheric_background_reference.png",
+  "sourceRegion": [
+   42,
+   197,
+   540,
+   384
+  ],
+  "sourceSize": [
+   498,
+   187
+  ],
+  "note": "Luminous white base with a huge soft-focus pale-blue bloom from upper left."
+ },
+ {
+  "id": "lavender-horizon",
+  "file": "lavender-horizon.png",
+  "sourceBoard": "atmospheric_background_reference.png",
+  "sourceRegion": [
+   589,
+   197,
+   1086,
+   384
+  ],
+  "sourceSize": [
+   497,
+   187
+  ],
+  "note": "Airy white with blurred lavender and blue light pooling at opposite corners."
+ },
+ {
+  "id": "glass-aurora",
+  "file": "glass-aurora.png",
+  "sourceBoard": "atmospheric_background_reference.png",
+  "sourceRegion": [
+   1135,
+   197,
+   1632,
+   384
+  ],
+  "sourceSize": [
+   497,
+   187
+  ],
+  "note": "Pale blue and mint translucent blurred ribbons with lots of negative space."
+ },
+ {
+  "id": "soft-orb-depth",
+  "file": "soft-orb-depth.png",
+  "sourceBoard": "atmospheric_background_reference.png",
+  "sourceRegion": [
+   42,
+   501,
+   540,
+   660
+  ],
+  "sourceSize": [
+   498,
+   159
+  ],
+  "note": "Distant blurred blue/lilac orbs behind empty white glass cards."
+ },
+ {
+  "id": "financial-data-atmosphere",
+  "file": "financial-data-atmosphere.png",
+  "sourceBoard": "atmospheric_background_reference.png",
+  "sourceRegion": [
+   589,
+   501,
+   1086,
+   660
+  ],
+  "sourceSize": [
+   497,
+   159
+  ],
+  "note": "Extremely faint abstract line-chart silhouettes blurred in the far background."
+ },
+ {
+  "id": "calm-executive",
+  "file": "calm-executive.png",
+  "sourceBoard": "atmospheric_background_reference.png",
+  "sourceRegion": [
+   1135,
+   501,
+   1632,
+   660
+  ],
+  "sourceSize": [
+   497,
+   159
+  ],
+  "note": "Frosted white with blue edge glow and soft depth."
+ }
+]

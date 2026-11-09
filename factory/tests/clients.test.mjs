@@ -15,7 +15,7 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const F = path.join(here, "..");
 const cfg = JSON.parse(fs.readFileSync(path.join(F, "config/pipeline.json"), "utf8"));
 const voiceCfg = JSON.parse(fs.readFileSync(path.join(F, "config/voice.json"), "utf8"));
-const KEY = "AIzaSyFAKEKEYFORTESTS000000000000000";
+const KEY = "TEST_KEY_NOT_REAL_0123456789abcdef";
 const ok = (obj) => ({ ok: true, status: 200, text: async () => JSON.stringify(obj), json: async () => obj });
 const resp = (status, body = "{}") => ({ ok: status < 400, status, text: async () => body, json: async () => JSON.parse(body) });
 const noSleep = async () => {};
@@ -76,7 +76,7 @@ test("doctor live: unlisted voice is UNVERIFIED (not FAILED); model check and yo
   assert.match(rows.find((r) => r.name === "tts_model_alternatives").detail, /gemini-3\.1-flash-tts-preview: NOT listed/);
   const v = rows.find((r) => r.name === "tts_voice");
   assert.equal(v.status, "UNVERIFIED");
-  assert.match(v.detail, /ffx voices --search Koda/);
+  assert.match(v.detail, /ffx voices --search Enzo/);
 });
 
 test("voice search builds the filtered request, hides the key and returns raw matches", async () => {
@@ -99,4 +99,26 @@ test("mix can be written as AAC .m4a (fits GitHub's file limit) with the exact d
   const info = probe(out);
   assert.equal(info.streams[0].codec_name, "aac");
   assert.ok(Math.abs(Number(info.format.duration) - 3) < 0.06, info.format.duration);
+});
+
+test("youtube: backup key takes over on quota error, stays sticky, and no key leaks", async () => {
+  const used = [];
+  const fetchImpl = async (u, o) => {
+    const key = o.headers["x-goog-api-key"]; used.push(key);
+    if (key === "KEY_ONE") return resp(403, '{"error":{"errors":[{"reason":"quotaExceeded"}],"message":"quota KEY_ONE"}}');
+    return ok({ items: [{ id: "UC1", snippet: { title: "T" }, contentDetails: { relatedPlaylists: { uploads: "UU1" } } }] });
+  };
+  const c = createClient({ apiKey: "KEY_ONE", backupKeys: ["KEY_TWO"], fetchImpl, retries: 0 });
+  await c.resolveChannel("@a"); await c.resolveChannel("@b");
+  assert.deepEqual(used, ["KEY_ONE", "KEY_TWO", "KEY_TWO"]);
+  assert.equal(c.keyInUse, 2);
+});
+
+test("youtube: bad request (no quota/key problem) does not switch keys; both keys failing reports without leaking", async () => {
+  const used = [];
+  const c1 = createClient({ apiKey: "K1", backupKeys: ["K2"], retries: 0, fetchImpl: async (u, o) => { used.push(o.headers["x-goog-api-key"]); return resp(400, '{"error":"bad parameter"}'); } });
+  await assert.rejects(c1.resolveChannel("@a"), /HTTP 400/);
+  assert.deepEqual(used, ["K1"]);
+  const c2 = createClient({ apiKey: "K1", backupKeys: ["K2"], retries: 0, fetchImpl: async () => resp(429, "slow down K1 K2") });
+  await assert.rejects(c2.resolveChannel("@a"), (e) => /HTTP 429/.test(e.message) && !/K1|K2/.test(e.message));
 });

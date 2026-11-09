@@ -17,6 +17,7 @@ export function localChecks(cfg, env = process.env) {
 
   const nodeMajor = Number(process.versions.node.split(".")[0]);
   add("runtime", "node", nodeMajor >= 20 ? "VERIFIED" : "FAILED", `v${process.versions.node} (need >= 20)`);
+  const optionalTool = new Set(["gh"]);
   for (const [name, cmd, args] of [
     ["ffmpeg", "ffmpeg", ["-version"]],
     ["ffprobe", "ffprobe", ["-version"]],
@@ -25,12 +26,15 @@ export function localChecks(cfg, env = process.env) {
     ["gh", "gh", ["--version"]],
   ]) {
     const out = run(cmd, args);
-    add("runtime", name, out ? "VERIFIED" : name === "gh" ? "UNVERIFIED" : "FAILED", out || "not found on PATH");
+    add("runtime", name, out ? "VERIFIED" : optionalTool.has(name) ? "UNVERIFIED" : "FAILED", out || "not found on PATH");
   }
 
   const s = cfg.secrets;
   for (const [label, key] of [["youtube_api_key", s.youtubeApiKeyEnv], ["gemini_api_key", s.geminiApiKeyEnv], ["github_token", s.githubTokenEnv]]) {
     add("secrets", label, env[key] ? "VERIFIED" : "UNVERIFIED", env[key] ? `env ${key} is set (value not shown; validity untested)` : `env ${key} not set (Muse may inject it from Secure Vault at run time)`);
+  }
+  for (const [label, key] of [["youtube_api_key_backup", s.youtubeApiKeyEnvBackup], ["gemini_api_key_backup", s.geminiApiKeyEnvBackup], ["transcript_api_key (hosted transcripts, optional)", s.transcriptApiKeyEnv]]) {
+    if (key) add("secrets", label, env[key] ? "VERIFIED" : "UNVERIFIED", env[key] ? `env ${key} is set (optional backup; value not shown)` : `env ${key} not set (optional backup, no failover until it is)`);
   }
   return rows;
 }

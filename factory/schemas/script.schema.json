@@ -88,12 +88,110 @@
             "items": {
               "$ref": "#/definitions/claim"
             }
+          },
+          "beats": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "narration",
+                "visualIntent"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "narration": {
+                  "type": "string",
+                  "minLength": 3
+                },
+                "visualIntent": {
+                  "type": "string"
+                },
+                "emphasis": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "onScreenText": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "interrupt": {
+                  "type": "boolean"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {
+                    "claimId": {
+                      "type": "string"
+                    },
+                    "values": {
+                      "type": "array"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "delivery": {
+            "type": "string",
+            "description": "Voice register for this scene (a key of config/voice.json request.registers.byId): hook, analysis, conversational, irony, risk, downfall, outro. Omit for the default documentary delivery.",
+            "enum": [
+              "hook",
+              "analysis",
+              "conversational",
+              "irony",
+              "risk",
+              "downfall",
+              "outro"
+            ]
           }
         }
       }
     },
     "disclaimerIncluded": {
       "const": true
+    },
+    "promises": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "paidOffIn"
+        ],
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "paidOffIn": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^S\\d{2,3}$"
+            }
+          }
+        }
+      }
+    },
+    "hookType": {
+      "enum": [
+        "curiosity_gap",
+        "stakes",
+        "bold_claim",
+        "empathy_mirror",
+        "specific_promise",
+        "in_media_res",
+        "pattern_interrupt"
+      ]
+    },
+    "rehookBeat": {
+      "type": "string"
     }
   },
   "additionalProperties": true,
@@ -121,6 +219,25 @@
         },
         "verified": {
           "type": "boolean"
+        },
+        "dataYear": {
+          "type": "integer",
+          "minimum": 1990,
+          "maximum": 2100
+        },
+        "dataYearNarrated": {
+          "type": "boolean"
+        },
+        "sourceKind": {
+          "enum": [
+            "primary",
+            "secondary",
+            "attributed",
+            "illustrative"
+          ]
+        },
+        "sourceQuote": {
+          "type": "string"
         }
       }
     }

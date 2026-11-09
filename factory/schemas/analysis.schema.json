@@ -91,6 +91,80 @@
       "items": {
         "type": "string"
       }
+    },
+    "motionFit": {
+      "type": "object",
+      "required": [
+        "share",
+        "beats"
+      ],
+      "properties": {
+        "share": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "beats": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "beat",
+              "mode"
+            ],
+            "properties": {
+              "beat": {
+                "type": "string"
+              },
+              "mode": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "beliefShift": {
+      "type": "object",
+      "required": [
+        "fromBelief",
+        "toBelief"
+      ],
+      "properties": {
+        "fromBelief": {
+          "type": "string"
+        },
+        "toBelief": {
+          "type": "string"
+        }
+      },
+      "description": "What the viewer wrongly believes at second 0 and what the source shows them by the end (research only; our script makes its own case)."
+    },
+    "curiosityLoops": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "question",
+          "resolvedAt"
+        ],
+        "properties": {
+          "question": {
+            "type": "string"
+          },
+          "resolvedAt": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Questions planted early and answered later; they keep viewers watching."
+    },
+    "friction": {
+      "type": "string",
+      "description": "The real obstacle, risk or failure rate that makes the topic hard; honest friction builds trust."
     }
   },
   "additionalProperties": true

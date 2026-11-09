@@ -1,0 +1,290 @@
+{
+  "schema_version": "2.0",
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "totalFrames": 540,
+  "style": {
+    "packId": "owner-pale-glass",
+    "background": "cool-blue-fog"
+  },
+  "scenes": [
+    {
+      "id": "S01",
+      "startFrame": 0,
+      "endFrame": 540,
+      "beats": [
+        {
+          "id": "D1",
+          "startFrame": 0,
+          "endFrame": 180,
+          "mode": "hero_number",
+          "purpose": "Show a balance with its trend",
+          "onScreenText": [],
+          "usesCharacter": false,
+          "data": [
+            {
+              "label": "Total Balance",
+              "value": 12480,
+              "unit": "USD",
+              "illustrative": true,
+              "delta": {
+                "value": 12.4,
+                "unit": "%",
+                "window": "30d"
+              },
+              "series": [
+                8,
+                9,
+                8.6,
+                9.8,
+                10.4,
+                10,
+                11.2,
+                12.1,
+                11.8,
+                13,
+                14.2,
+                15.6
+              ],
+              "source": "FDIC",
+              "asOf": "2026-09"
+            }
+          ],
+          "events": [
+            {
+              "id": "e1",
+              "recipe": "count_up",
+              "role": "primary",
+              "startFrame": 10,
+              "endFrame": 36,
+              "holdUntilFrame": 100,
+              "exitFrame": 180,
+              "ease": "ease-out"
+            },
+            {
+              "id": "e2",
+              "recipe": "pill_in",
+              "role": "secondary",
+              "startFrame": 36,
+              "endFrame": 48,
+              "holdUntilFrame": 80,
+              "exitFrame": 180,
+              "ease": "ease-out"
+            },
+            {
+              "id": "e9",
+              "recipe": "camera_push",
+              "role": "secondary",
+              "startFrame": 0,
+              "endFrame": 170,
+              "holdUntilFrame": 170,
+              "exitFrame": 180,
+              "ease": "ease-in-out"
+            }
+          ]
+        },
+        {
+          "id": "D2",
+          "startFrame": 180,
+          "endFrame": 360,
+          "mode": "line_chart",
+          "purpose": "Show how steady saving compounds over ten years",
+          "usesCharacter": false,
+          "onScreenText": [
+            "Ten years of steady saving"
+          ],
+          "data": [
+            {
+              "label": "Year 1",
+              "value": 1200,
+              "unit": "USD",
+              "illustrative": true
+            },
+            {
+              "label": "Year 2",
+              "value": 2500,
+              "unit": "USD",
+              "illustrative": true
+            },
+            {
+              "label": "Year 3",
+              "value": 4100,
+              "unit": "USD",
+              "illustrative": true
+            },
+            {
+              "label": "Year 4",
+              "value": 6000,
+              "unit": "USD",
+              "illustrative": true
+            },
+            {
+              "label": "Year 5",
+              "value": 8200,
+              "unit": "USD",
+              "illustrative": true
+            },
+            {
+              "label": "Year 6",
+              "value": 10800,
+              "unit": "USD",
+              "illustrative": true
+            },
+            {
+              "label": "Year 7",
+              "value": 13800,
+              "unit": "USD",
+              "illustrative": true
+            },
+            {
+              "label": "Year 8",
+              "value": 17300,
+              "unit": "USD",
+              "illustrative": true
+            },
+            {
+              "label": "Year 9",
+              "value": 21400,
+              "unit": "USD",
+              "illustrative": true
+            },
+            {
+              "label": "Year 10",
+              "value": 26000,
+              "unit": "USD",
+              "illustrative": true
+            }
+          ],
+          "events": [
+            {
+              "id": "e1",
+              "recipe": "axes_in",
+              "role": "secondary",
+              "startFrame": 188,
+              "endFrame": 202,
+              "holdUntilFrame": 202,
+              "exitFrame": 360,
+              "ease": "ease-out"
+            },
+            {
+              "id": "e2",
+              "recipe": "line_draw",
+              "role": "primary",
+              "startFrame": 202,
+              "endFrame": 232,
+              "holdUntilFrame": 280,
+              "exitFrame": 360,
+              "ease": "ease-out"
+            },
+            {
+              "id": "e3",
+              "recipe": "pill_in",
+              "role": "secondary",
+              "startFrame": 232,
+              "endFrame": 244,
+              "holdUntilFrame": 280,
+              "exitFrame": 360,
+              "ease": "ease-out"
+            },
+            {
+              "id": "e9",
+              "recipe": "camera_push",
+              "role": "secondary",
+              "startFrame": 180,
+              "endFrame": 360,
+              "holdUntilFrame": 360,
+              "exitFrame": 360,
+              "ease": "ease-in-out"
+            }
+          ]
+        },
+        {
+          "id": "D3",
+          "startFrame": 360,
+          "endFrame": 540,
+          "mode": "bar_chart",
+          "purpose": "Show where a month of spending goes",
+          "usesCharacter": false,
+          "onScreenText": [
+            "Where the money goes each month"
+          ],
+          "data": [
+            {
+              "label": "Housing",
+              "value": 1650,
+              "unit": "USD",
+              "illustrative": true
+            },
+            {
+              "label": "Food",
+              "value": 620,
+              "unit": "USD",
+              "illustrative": true
+            },
+            {
+              "label": "Transport",
+              "value": 420,
+              "unit": "USD",
+              "illustrative": true
+            },
+            {
+              "label": "Utilities",
+              "value": 280,
+              "unit": "USD",
+              "illustrative": true
+            },
+            {
+              "label": "Other",
+              "value": 310,
+              "unit": "USD",
+              "illustrative": true
+            }
+          ],
+          "events": [
+            {
+              "id": "e1",
+              "recipe": "axes_in",
+              "role": "secondary",
+              "startFrame": 368,
+              "endFrame": 382,
+              "holdUntilFrame": 382,
+              "exitFrame": 540,
+              "ease": "ease-out"
+            },
+            {
+              "id": "e2",
+              "recipe": "bar_rise",
+              "role": "primary",
+              "startFrame": 382,
+              "endFrame": 404,
+              "holdUntilFrame": 460,
+              "exitFrame": 540,
+              "ease": "ease-out"
+            },
+            {
+              "id": "e3",
+              "recipe": "legend_in",
+              "role": "secondary",
+              "startFrame": 410,
+              "endFrame": 422,
+              "holdUntilFrame": 422,
+              "exitFrame": 540,
+              "ease": "ease-out"
+            },
+            {
+              "id": "e9",
+              "recipe": "camera_push",
+              "role": "secondary",
+              "startFrame": 360,
+              "endFrame": 540,
+              "holdUntilFrame": 540,
+              "exitFrame": 540,
+              "ease": "ease-in-out"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

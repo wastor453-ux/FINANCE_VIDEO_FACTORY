@@ -37,7 +37,7 @@ test("validator: anyOf, $ref and additionalProperties=false", () => {
 // ---------- every schema and config parses ----------
 test("all schemas are valid JSON with schema_version and a title", () => {
   const files = fs.readdirSync(path.join(F, "schemas")).filter((f) => f.endsWith(".schema.json"));
-  assert.equal(files.length, 12); // 11 pipeline-stage artifacts + run_state (per-run lifecycle tracking)
+  assert.equal(files.length, 13); // 11 pipeline-stage artifacts + run_state + scene_plan_v2
   for (const f of files) {
     const s = rj(`schemas/${f}`);
     assert.ok(s.title, f);
@@ -54,13 +54,13 @@ test("config: 7 channels, no hard-coded brand, voice/model status reflects live 
   assert.equal(brand.thumbnail.character.aiGenerated, true);
   assert.deepEqual(brand.thumbnail.character.neverIn, ["video"]);
   const voice = rj("config/voice.json");
-  assert.equal(voice.voice.status, "CONFIRMED_BY_OWNER_2026-10-27"); // owner picked sample_user by ear
-  assert.equal(voice.voice.id, "en-us-koda");
+  assert.match(voice.voice.status, /^CHOSEN_BY_OWNER_2026-11-03/); // owner chose Enzo in the AI Studio Playground
+  assert.equal(voice.voice.id, "en-us-enzo");
   assert.equal(voice.model.id, "gemini-3.8-flash-tts");
   assert.equal(voice.model.status, "CONFIRMED_LIVE_2026-10-27"); // 3.8 id listed + used live by Muse
   assert.equal(voice.request.styleVariants.chosenVariant === undefined, true); // chosenVariant lives one level up, not inside styleVariants
-  assert.equal(voice.request.chosenVariant, "user");
-  assert.equal(voice.style, voice.request.styleVariants.user); // production style must match the owner's chosen variant
+  assert.equal(voice.request.chosenVariant, "documentary");
+  assert.equal(voice.style, voice.request.styleVariants.documentary); // production style must match the owner's chosen variant
   const p = rj("config/pipeline.json");
   assert.ok(p.forbidden_without_explicit_approval.includes("production_render"));
   assert.ok(p.forbidden_without_explicit_approval.includes("publish_or_upload"));

@@ -1,0 +1,449 @@
+{
+  "schema_version": "1.0",
+  "_comment": "The fixed motion vocabulary. A plan may only use these recipe ids. Ranges marked packKey come from the active style pack (motion.durationSec); the others are defined here and stay inside the 1.5 s element-move cap, except camera and ambient. holdAfterSec = how long the finished picture must stay visible after the move ends. Mapping modes -> recipes is in `modes`; every mode in visual_modes.json must appear there (a test enforces it).",
+  "easings": [
+    "ease-out",
+    "ease-in-out",
+    "linear",
+    "exit"
+  ],
+  "recipes": {
+    "panel_in": {
+      "family": "enter",
+      "sec": [
+        0.45,
+        0.7
+      ],
+      "heavy": false,
+      "holdAfterSec": 0,
+      "ease": "ease-out"
+    },
+    "panel_out": {
+      "family": "exit",
+      "sec": [
+        0.25,
+        0.4
+      ],
+      "heavy": false,
+      "holdAfterSec": 0,
+      "ease": "exit"
+    },
+    "axes_in": {
+      "family": "chart",
+      "sec": [
+        0.3,
+        0.6
+      ],
+      "heavy": false,
+      "holdAfterSec": 0,
+      "ease": "ease-out"
+    },
+    "legend_in": {
+      "family": "chart",
+      "sec": [
+        0.3,
+        0.6
+      ],
+      "heavy": false,
+      "holdAfterSec": 0,
+      "ease": "ease-out"
+    },
+    "pill_in": {
+      "family": "chart",
+      "sec": [
+        0.25,
+        0.4
+      ],
+      "heavy": false,
+      "holdAfterSec": 1.0,
+      "ease": "ease-out"
+    },
+    "callout_in": {
+      "family": "emphasis",
+      "sec": [
+        0.25,
+        0.4
+      ],
+      "heavy": false,
+      "holdAfterSec": 1.0,
+      "ease": "ease-out"
+    },
+    "highlight": {
+      "packKey": "highlight",
+      "family": "emphasis",
+      "heavy": false,
+      "holdAfterSec": 0.5,
+      "ease": "ease-out"
+    },
+    "text_reveal_line": {
+      "family": "text",
+      "sec": [
+        0.4,
+        0.6
+      ],
+      "heavy": false,
+      "primaryCapable": true,
+      "holdAfterSec": 0,
+      "readsText": true,
+      "ease": "ease-out"
+    },
+    "text_reveal_words": {
+      "family": "text",
+      "sec": [
+        0.4,
+        1.2
+      ],
+      "heavy": false,
+      "primaryCapable": true,
+      "holdAfterSec": 0,
+      "readsText": true,
+      "ease": "ease-out"
+    },
+    "checklist_build": {
+      "family": "text",
+      "sec": [
+        0.5,
+        1.2
+      ],
+      "heavy": true,
+      "primaryCapable": true,
+      "holdAfterSec": 1.0,
+      "readsText": true,
+      "ease": "ease-out"
+    },
+    "count_up": {
+      "packKey": "count_up",
+      "family": "chart",
+      "heavy": true,
+      "primaryCapable": true,
+      "holdAfterSec": 1.5,
+      "ease": "ease-out"
+    },
+    "line_draw": {
+      "packKey": "line_draw",
+      "family": "chart",
+      "heavy": true,
+      "primaryCapable": true,
+      "holdAfterSec": 1.0,
+      "ease": "ease-out"
+    },
+    "bar_rise": {
+      "packKey": "bar_rise",
+      "family": "chart",
+      "heavy": true,
+      "primaryCapable": true,
+      "holdAfterSec": 1.0,
+      "ease": "ease-out"
+    },
+    "donut_reveal": {
+      "packKey": "donut_reveal",
+      "family": "chart",
+      "heavy": true,
+      "primaryCapable": true,
+      "holdAfterSec": 1.0,
+      "ease": "ease-out"
+    },
+    "flow_arrows": {
+      "packKey": "flow_arrows",
+      "family": "chart",
+      "heavy": true,
+      "primaryCapable": true,
+      "holdAfterSec": 1.0,
+      "ease": "ease-in-out"
+    },
+    "debt_progress": {
+      "packKey": "debt_progress",
+      "family": "chart",
+      "heavy": true,
+      "primaryCapable": true,
+      "holdAfterSec": 1.0,
+      "ease": "ease-out"
+    },
+    "timeline_marker": {
+      "packKey": "timeline_marker",
+      "family": "chart",
+      "heavy": true,
+      "primaryCapable": true,
+      "holdAfterSec": 1.0,
+      "ease": "linear"
+    },
+    "compare_cards_in": {
+      "family": "chart",
+      "sec": [
+        0.4,
+        0.8
+      ],
+      "heavy": true,
+      "primaryCapable": true,
+      "holdAfterSec": 2.0,
+      "ease": "ease-out"
+    },
+    "process_flow_build": {
+      "family": "chart",
+      "sec": [
+        0.8,
+        1.2
+      ],
+      "heavy": true,
+      "primaryCapable": true,
+      "holdAfterSec": 1.0,
+      "ease": "ease-in-out"
+    },
+    "diagram_morph": {
+      "packKey": "diagram_morph",
+      "family": "transition",
+      "heavy": true,
+      "primaryCapable": true,
+      "holdAfterSec": 1.0,
+      "ease": "ease-in-out"
+    },
+    "card_to_chart_zoom": {
+      "packKey": "card_to_chart_zoom",
+      "family": "transition",
+      "heavy": true,
+      "primaryCapable": true,
+      "holdAfterSec": 1.0,
+      "ease": "ease-in-out"
+    },
+    "shape_mask": {
+      "packKey": "shape_mask",
+      "family": "transition",
+      "heavy": false,
+      "holdAfterSec": 0,
+      "ease": "ease-in-out"
+    },
+    "clean_wipe": {
+      "packKey": "clean_wipe",
+      "family": "transition",
+      "heavy": false,
+      "holdAfterSec": 0,
+      "ease": "ease-in-out"
+    },
+    "parallax": {
+      "packKey": "parallax",
+      "family": "camera",
+      "heavy": false,
+      "holdAfterSec": 0,
+      "ease": "ease-in-out",
+      "exemptFromMoveCap": true
+    },
+    "camera_push": {
+      "family": "camera",
+      "sec": [
+        2,
+        6
+      ],
+      "heavy": false,
+      "holdAfterSec": 0,
+      "ease": "ease-in-out",
+      "exemptFromMoveCap": true,
+      "maxScalePercent": 8
+    },
+    "ambient_drift": {
+      "family": "ambient",
+      "sec": [
+        4,
+        12
+      ],
+      "heavy": false,
+      "holdAfterSec": 0,
+      "ease": "linear",
+      "exemptFromMoveCap": true,
+      "ambient": true
+    }
+  },
+  "transitions": [
+    "clean_wipe",
+    "diagram_morph",
+    "card_to_chart_zoom",
+    "shape_mask",
+    "none"
+  ],
+  "limits": {
+    "maxMoveSec": 1.5,
+    "maxConcurrentMoves": 3,
+    "maxSecBetweenEventStarts": 5,
+    "readSecPerWord": 0.3,
+    "readSecBase": 0.5,
+    "lowConfidenceShareWarn": 0.15,
+    "noThreeInARow": true,
+    "transitionMaxShare": 0.3,
+    "transitionShareMinCount": 8
+  },
+  "modes": {
+    "hook_question": {
+      "recipes": [
+        "text_reveal_words",
+        "text_reveal_line",
+        "count_up"
+      ],
+      "minData": 0
+    },
+    "hero_number": {
+      "recipes": [
+        "count_up",
+        "pill_in"
+      ],
+      "minData": 1,
+      "maxData": 3
+    },
+    "line_chart": {
+      "recipes": [
+        "axes_in",
+        "line_draw",
+        "pill_in",
+        "legend_in"
+      ],
+      "minData": 3
+    },
+    "bar_chart": {
+      "recipes": [
+        "axes_in",
+        "bar_rise",
+        "legend_in"
+      ],
+      "minData": 2
+    },
+    "donut_allocation": {
+      "recipes": [
+        "donut_reveal",
+        "legend_in"
+      ],
+      "minData": 2
+    },
+    "cashflow_waterfall": {
+      "recipes": [
+        "axes_in",
+        "bar_rise",
+        "flow_arrows"
+      ],
+      "minData": 3
+    },
+    "compound_growth": {
+      "recipes": [
+        "axes_in",
+        "line_draw",
+        "pill_in",
+        "legend_in"
+      ],
+      "minData": 3
+    },
+    "stacked_breakdown": {
+      "recipes": [
+        "axes_in",
+        "bar_rise",
+        "legend_in"
+      ],
+      "minData": 3
+    },
+    "debt_payoff": {
+      "recipes": [
+        "axes_in",
+        "line_draw",
+        "debt_progress",
+        "pill_in"
+      ],
+      "minData": 2
+    },
+    "inflation_power": {
+      "recipes": [
+        "axes_in",
+        "line_draw",
+        "pill_in",
+        "count_up"
+      ],
+      "minData": 3
+    },
+    "scenario_comparison": {
+      "recipes": [
+        "axes_in",
+        "bar_rise",
+        "compare_cards_in",
+        "count_up"
+      ],
+      "minData": 2
+    },
+    "kpi_card": {
+      "recipes": [
+        "count_up",
+        "pill_in"
+      ],
+      "minData": 1
+    },
+    "compare_ab": {
+      "recipes": [
+        "compare_cards_in",
+        "count_up"
+      ],
+      "minData": 2,
+      "maxData": 2
+    },
+    "annotation_callout": {
+      "recipes": [
+        "callout_in",
+        "highlight"
+      ],
+      "minData": 0
+    },
+    "worked_example": {
+      "recipes": [
+        "count_up",
+        "text_reveal_line",
+        "panel_in"
+      ],
+      "minData": 1
+    },
+    "process_flow": {
+      "recipes": [
+        "flow_arrows",
+        "process_flow_build"
+      ],
+      "minData": 0
+    },
+    "timeline": {
+      "recipes": [
+        "timeline_marker",
+        "text_reveal_line"
+      ],
+      "minData": 0
+    },
+    "causal_diagram": {
+      "recipes": [
+        "flow_arrows",
+        "diagram_morph"
+      ],
+      "minData": 0
+    },
+    "risks_grid": {
+      "recipes": [
+        "checklist_build"
+      ],
+      "minData": 0
+    },
+    "action_checklist": {
+      "recipes": [
+        "checklist_build"
+      ],
+      "minData": 0
+    },
+    "closing_composition": {
+      "recipes": [
+        "text_reveal_words",
+        "card_to_chart_zoom",
+        "shape_mask"
+      ],
+      "minData": 0
+    }
+  },
+  "alwaysAllowed": [
+    "panel_in",
+    "panel_out",
+    "text_reveal_line",
+    "highlight",
+    "callout_in",
+    "ambient_drift",
+    "camera_push",
+    "parallax",
+    "clean_wipe"
+  ]
+}

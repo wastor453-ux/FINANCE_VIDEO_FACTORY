@@ -1,0 +1,115 @@
+{
+  "id": "B3",
+  "startFrame": 0,
+  "endFrame": 180,
+  "mode": "line_chart",
+  "purpose": "Show how steady saving compounds over ten years",
+  "usesCharacter": false,
+  "onScreenText": [
+    "Ten years of steady saving"
+  ],
+  "data": [
+    {
+      "label": "Year 1",
+      "value": 1200,
+      "unit": "USD",
+      "illustrative": true
+    },
+    {
+      "label": "Year 2",
+      "value": 2500,
+      "unit": "USD",
+      "illustrative": true
+    },
+    {
+      "label": "Year 3",
+      "value": 4100,
+      "unit": "USD",
+      "illustrative": true
+    },
+    {
+      "label": "Year 4",
+      "value": 6000,
+      "unit": "USD",
+      "illustrative": true
+    },
+    {
+      "label": "Year 5",
+      "value": 8200,
+      "unit": "USD",
+      "illustrative": true
+    },
+    {
+      "label": "Year 6",
+      "value": 10800,
+      "unit": "USD",
+      "illustrative": true
+    },
+    {
+      "label": "Year 7",
+      "value": 13800,
+      "unit": "USD",
+      "illustrative": true
+    },
+    {
+      "label": "Year 8",
+      "value": 17300,
+      "unit": "USD",
+      "illustrative": true
+    },
+    {
+      "label": "Year 9",
+      "value": 21400,
+      "unit": "USD",
+      "illustrative": true
+    },
+    {
+      "label": "Year 10",
+      "value": 26000,
+      "unit": "USD",
+      "illustrative": true
+    }
+  ],
+  "events": [
+    {
+      "id": "e1",
+      "recipe": "axes_in",
+      "role": "secondary",
+      "startFrame": 8,
+      "endFrame": 22,
+      "holdUntilFrame": 22,
+      "exitFrame": 180,
+      "ease": "ease-out"
+    },
+    {
+      "id": "e2",
+      "recipe": "line_draw",
+      "role": "primary",
+      "startFrame": 22,
+      "endFrame": 52,
+      "holdUntilFrame": 100,
+      "exitFrame": 180,
+      "ease": "ease-out"
+    },
+    {
+      "id": "e3",
+      "recipe": "pill_in",
+      "role": "secondary",
+      "startFrame": 52,
+      "endFrame": 64,
+      "holdUntilFrame": 100,
+      "exitFrame": 180,
+      "ease": "ease-out"
+    },
+    {
+      "id": "e9",
+      "recipe": "camera_push",
+      "role": "secondary",
+      "startFrame": 0,
+      "endFrame": 180,
+      "holdUntilFrame": 180,
+      "exitFrame": 180,
+      "ease": "ease-in-out"
+    }
+  ]
+}

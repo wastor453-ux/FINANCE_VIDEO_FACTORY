@@ -97,3 +97,15 @@ test("archive + retention: a run is deletable only once retentionDays have passe
   assert.equal(isExpired(s.archived.at, "2026-10-16T00:00:00Z", 15), true); // 15 days: now
   assert.equal(isExpired(s.archived.at, "2026-10-20T00:00:00Z", 15), true); // 19 days: well past
 });
+
+test("revokeGate needs an approved gate, a name and a reason, and keeps the history in the note", async () => {
+  const { revokeGate } = await import("../lib/run.mjs");
+  let s = newRunState({ runId: "r", channelHandle: "@x", videoId: "v", title: "t", createdAt: "2026-11-05T00:00:00Z" });
+  assert.throws(() => revokeGate(s, "G3", "owner", "wrong gate"), /not approved/);
+  s = approveGate(s, "G3", "owner", "voice", "2026-11-05T17:54:44Z");
+  assert.throws(() => revokeGate(s, "G3", "", "x"), /who decided/);
+  assert.throws(() => revokeGate(s, "G3", "owner", ""), /reason/);
+  s = revokeGate(s, "G3", "owner", "that was the voice, not the scene plan", "2026-11-05T18:00:00Z");
+  assert.equal(s.gates.G3.approved, false);
+  assert.match(s.gates.G3.note, /REVOKED: that was the voice.*approved by owner at 2026-11-05T17:54:44Z/);
+});

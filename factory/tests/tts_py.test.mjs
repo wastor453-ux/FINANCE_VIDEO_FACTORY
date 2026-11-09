@@ -14,7 +14,7 @@ const HAVE_PY = spawnSync("python3", ["--version"]).status === 0;
 test("TTS tool (Python): request shape, text rules, retries, manifest — against a fake client", { skip: !HAVE_PY, timeout: 120000 }, () => {
   const r = spawnSync("python3", ["-m", "unittest", "-v", "test_synthesize"], { cwd: here, encoding: "utf8", env: { ...process.env, PYTHONPATH: here } });
   assert.equal(r.status, 0, r.stdout + r.stderr);
-  assert.match(r.stderr, /Ran 9 tests/);
+  assert.match(r.stderr, /Ran \d+ tests?[\s\S]*OK/); // count not hard-coded: the suite grows
 });
 
 test("the manifest the TTS tool writes passes the voice_manifest schema", { skip: !HAVE_PY, timeout: 60000 }, () => {
@@ -38,4 +38,22 @@ test("the CLI refuses to run without a key or SDK and never prints a key", { ski
   const r = spawnSync("python3", [path.join(F, "tools/synthesize.py"), "sample", "--text", "hi", "--out", os.tmpdir()], { encoding: "utf8", env });
   assert.equal(r.status, 2);
   assert.match(r.stderr, /GEMINI_API_KEY is not set/);
+});
+
+test("Gemini transcript tool (Python): request shape, parsing, SRT, error handling — against a fake client", { skip: !HAVE_PY, timeout: 120000 }, () => {
+  const r = spawnSync("python3", ["-m", "unittest", "-v", "test_gemini_transcript"], { cwd: here, encoding: "utf8" });
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stderr, /Ran \d+ tests?[\s\S]*OK/); // count not hard-coded: the suite grows
+});
+
+test("word timing tool (Python): ASR-to-script alignment, boundary refinement, check", { skip: !HAVE_PY, timeout: 60000 }, () => {
+  const r = spawnSync("python3", ["-m", "unittest", "-v", "test_word_timing"], { cwd: here, encoding: "utf8", env: { ...process.env, PYTHONPATH: here } });
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stderr, /Ran \d+ tests?[\s\S]*OK/);
+});
+
+test("style pack tool (Python): numeric extraction with provenance, role building, background baking", { skip: !HAVE_PY, timeout: 60000 }, () => {
+  const r = spawnSync("python3", ["-m", "unittest", "-v", "test_style_pack"], { cwd: here, encoding: "utf8", env: { ...process.env, PYTHONPATH: here } });
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stderr, /Ran \d+ tests?[\s\S]*OK/);
 });

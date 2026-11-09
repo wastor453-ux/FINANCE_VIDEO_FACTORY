@@ -1,0 +1,105 @@
+{
+  "schema_version": "2.0",
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "totalFrames": 180,
+  "style": {
+    "packId": "owner-pale-glass",
+    "background": "cool-blue-fog"
+  },
+  "scenes": [
+    {
+      "id": "S01",
+      "startFrame": 0,
+      "endFrame": 180,
+      "beats": [
+        {
+          "id": "B4",
+          "startFrame": 0,
+          "endFrame": 180,
+          "mode": "bar_chart",
+          "purpose": "Show where a month of spending goes",
+          "usesCharacter": false,
+          "onScreenText": [
+            "Where the money goes each month"
+          ],
+          "data": [
+            {
+              "label": "Housing",
+              "value": 1650,
+              "unit": "USD",
+              "illustrative": true
+            },
+            {
+              "label": "Food",
+              "value": 620,
+              "unit": "USD",
+              "illustrative": true
+            },
+            {
+              "label": "Transport",
+              "value": 420,
+              "unit": "USD",
+              "illustrative": true
+            },
+            {
+              "label": "Utilities",
+              "value": 280,
+              "unit": "USD",
+              "illustrative": true
+            },
+            {
+              "label": "Other",
+              "value": 310,
+              "unit": "USD",
+              "illustrative": true
+            }
+          ],
+          "events": [
+            {
+              "id": "e1",
+              "recipe": "axes_in",
+              "role": "secondary",
+              "startFrame": 8,
+              "endFrame": 22,
+              "holdUntilFrame": 22,
+              "exitFrame": 180,
+              "ease": "ease-out"
+            },
+            {
+              "id": "e2",
+              "recipe": "bar_rise",
+              "role": "primary",
+              "startFrame": 22,
+              "endFrame": 44,
+              "holdUntilFrame": 100,
+              "exitFrame": 180,
+              "ease": "ease-out"
+            },
+            {
+              "id": "e3",
+              "recipe": "legend_in",
+              "role": "secondary",
+              "startFrame": 50,
+              "endFrame": 62,
+              "holdUntilFrame": 62,
+              "exitFrame": 180,
+              "ease": "ease-out"
+            },
+            {
+              "id": "e9",
+              "recipe": "camera_push",
+              "role": "secondary",
+              "startFrame": 0,
+              "endFrame": 180,
+              "holdUntilFrame": 180,
+              "exitFrame": 180,
+              "ease": "ease-in-out"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

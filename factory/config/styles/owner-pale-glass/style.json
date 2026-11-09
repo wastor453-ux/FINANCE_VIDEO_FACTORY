@@ -1,0 +1,668 @@
+{
+ "schema": "ffx-style-pack/1",
+ "id": "owner-pale-glass",
+ "name": "Owner pale glass (from the owner's five reference boards)",
+ "color": {
+  "ink": "#102044",
+  "inkSecondary": "#466CA0",
+  "canvas": "#EAF1FF",
+  "surface": "#FAFCFE",
+  "border": "#E2F0FD",
+  "primary": "#3478F6",
+  "cyan": "#31B9F4",
+  "teal": "#1BBFAE",
+  "lavender": "#8C7BFF",
+  "series": [
+   {
+    "slot": 1,
+    "id": "blue",
+    "fill": "#3988FE",
+    "stroke": "#3988FE",
+    "text": "#2F6FD1"
+   },
+   {
+    "slot": 2,
+    "id": "teal",
+    "fill": "#27BFC6",
+    "stroke": "#229FAC",
+    "text": "#1E7F92"
+   },
+   {
+    "slot": 3,
+    "id": "lavender",
+    "fill": "#A58EFB",
+    "stroke": "#9381E5",
+    "text": "#6F66B9"
+   },
+   {
+    "slot": 4,
+    "id": "lightBlue",
+    "fill": "#89C8FD",
+    "stroke": "#6292C2",
+    "text": "#4F77A4"
+   },
+   {
+    "slot": 5,
+    "id": "slate",
+    "fill": "#A8B8D7",
+    "stroke": "#7D8DAE",
+    "text": "#5F6F90"
+   },
+   {
+    "slot": 6,
+    "id": "deepBlue",
+    "fill": "#2749BA",
+    "stroke": "#2749BA",
+    "text": "#2749BA"
+   }
+  ],
+  "flow": {
+   "gain": {
+    "fill": "#39D3C3",
+    "stroke": "#2EA19F",
+    "text": "#257D86"
+   },
+   "loss": {
+    "fill": "#BEA5FC",
+    "stroke": "#9485D0",
+    "text": "#716AAB"
+   },
+   "lossAlt": {
+    "fill": "#96CDFC",
+    "stroke": "#6B96C1",
+    "text": "#50739C"
+   },
+   "rule": "The boards never use red. Outflows are lavender or light blue and inflows teal. Colour is never the only signal: every gain or loss also carries a triangle glyph and a +/- sign."
+  },
+  "gates": {
+   "strokeMinContrast": 3.0,
+   "textMinContrast": 4.5,
+   "inkMinContrast": 7,
+   "fillMinContrast": 1.5,
+   "fillContrastNote": "Fills are the owner's pastel colours used as large areas labelled in ink, so they only need to stay visible against the surface (1.5:1). Thin lines (line charts, outlines, arrows) use the derived stroke variant at 3:1; any text coloured like a series uses the derived text variant at 4.5:1."
+  }
+ },
+ "geometry": {
+  "referenceFrameWidth": 1536,
+  "cardRadiusAtReference": 8.5,
+  "cardBorderAtReference": 1,
+  "cardShadow": {
+   "blurAtReference": 8,
+   "opacity": 0.05,
+   "yAtReference": 2
+  },
+  "evidence": "Radius read from a 6x zoom of the Graph Atlas card corner (about 8-9 px on a 1536 px board). Border is a 1 px line (surface.border). Shadow is a faint 8 px halo below the edge (surface.shadowEdge).",
+  "grid": 8
+ },
+ "type": {
+  "display": "Plus Jakarta Sans",
+  "body": "Inter",
+  "identified": "by eye from the boards (heavy geometric sans for titles, small tracked capitals for section labels); UNVERIFIED against the original design files",
+  "numerals": "tabular lining figures",
+  "videoScalePx": {
+   "caption": 28,
+   "label": 32,
+   "body": 40,
+   "subtitle": 52,
+   "title": 72,
+   "display": 104,
+   "heroNumber": 160,
+   "megaNumber": 240
+  },
+  "videoScaleNote": "authored for phone legibility at 1920x1080, not measured from the boards (which are overview sheets)"
+ },
+ "motion": {
+  "durationSec": {
+   "line_draw": [
+    0.5,
+    1.0
+   ],
+   "bar_rise": [
+    0.5,
+    0.8
+   ],
+   "count_up": [
+    0.6,
+    1.0
+   ],
+   "donut_reveal": [
+    0.6,
+    1.0
+   ],
+   "flow_arrows": [
+    0.8,
+    1.2
+   ],
+   "debt_progress": [
+    0.8,
+    1.2
+   ],
+   "timeline_marker": [
+    0.6,
+    1.0
+   ],
+   "highlight": [
+    0.4,
+    0.8
+   ],
+   "diagram_morph": [
+    0.5,
+    1.0
+   ],
+   "clean_wipe": [
+    0.3,
+    0.8
+   ],
+   "card_to_chart_zoom": [
+    0.6,
+    1.2
+   ],
+   "parallax": [
+    0.5,
+    1.0
+   ],
+   "shape_mask": [
+    0.6,
+    1.2
+   ]
+  },
+  "durationSource": "Motion Grammar board, panels B and C (printed values)",
+  "easing": {
+   "ease-out": [
+    0,
+    0,
+    0.38,
+    0.9
+   ],
+   "ease-in-out": [
+    0.4,
+    0.14,
+    0.3,
+    1
+   ],
+   "linear": [
+    0,
+    0,
+    1,
+    1
+   ],
+   "exit": [
+    0.2,
+    0,
+    1,
+    0.9
+   ]
+  },
+  "easingNote": "board names mapped to no-overshoot curves (y within 0..1) from the motion research",
+  "boardRules": [
+   "subtle natural easing",
+   "typical 0.3-1.0 s",
+   "longer only for complex concepts",
+   "no whip-pans or flashy bounce"
+  ],
+  "leadFrames": 4,
+  "fps": 30
+ },
+ "components": {
+  "source": "Motion Grammar board panel A and Story System board",
+  "list": [
+   "kpi_card",
+   "source_date_label",
+   "chart_legend",
+   "annotation_callout",
+   "compare_ab_cards",
+   "assumption_tag",
+   "section_title_lower_third",
+   "key_takeaway_checklist",
+   "disclaimer_strip"
+  ]
+ },
+ "scene": {
+  "evidence": "AUTHORED from the owner's two sample motion videos (tilted floating layers, parallax, slow camera push) and the boards' soft glass cards; values are design choices within safe limits, not measurements.",
+  "perspectivePx": 1800,
+  "perspectiveOriginPct": [
+   62,
+   45
+  ],
+  "settleTiltDeg": {
+   "x": 4,
+   "y": -10
+  },
+  "entryTiltDegY": -22,
+  "layerZ": {
+   "back": -120,
+   "main": 40,
+   "tile": 110,
+   "near": 150
+  },
+  "cameraPushScale": 0.05,
+  "parallaxPx": {
+   "far": -70,
+   "mid": -35
+  },
+  "glass": {
+   "radiusAtReference": 27,
+   "borderPx": 1.5,
+   "shadow": [
+    [
+     0,
+     2,
+     3,
+     0.05
+    ],
+    [
+     0,
+     18,
+     40,
+     0.18
+    ],
+    [
+     0,
+     60,
+     120,
+     0.28
+    ]
+   ]
+  },
+  "limits": {
+   "maxTiltDeg": 15,
+   "maxEntryTiltDeg": 30,
+   "maxPushScale": 0.08,
+   "maxStaggerSec": 0.15,
+   "maxChartTiltScale": 1
+  },
+  "staggerSec": 0.08,
+  "maxStaggerSec": 0.15,
+  "chartTiltScale": 0.5
+ },
+ "trustRules": {
+  "source": "Graph Atlas, Story System and Motion Grammar boards",
+  "rules": [
+   "label data (illustrative vs verified)",
+   "cite source and date",
+   "show units and assumptions",
+   "no guaranteed outcomes",
+   "keep text readable on mobile"
+  ]
+ },
+ "backgrounds": {
+  "rule": "background only blurred; low contrast behind data; avoid flat solid fills; 16:9 safe composition",
+  "default": "cool-blue-fog",
+  "items": [
+   {
+    "id": "cool-blue-fog",
+    "file": "assets/cool-blue-fog.png",
+    "note": "Luminous white base with a huge soft-focus pale-blue bloom from upper left.",
+    "source": {
+     "board": "atmospheric_background_reference.png",
+     "region": [
+      42,
+      197,
+      540,
+      384
+     ],
+     "sizePx": [
+      498,
+      187
+     ]
+    },
+    "approximate": true
+   },
+   {
+    "id": "lavender-horizon",
+    "file": "assets/lavender-horizon.png",
+    "note": "Airy white with blurred lavender and blue light pooling at opposite corners.",
+    "source": {
+     "board": "atmospheric_background_reference.png",
+     "region": [
+      589,
+      197,
+      1086,
+      384
+     ],
+     "sizePx": [
+      497,
+      187
+     ]
+    },
+    "approximate": true
+   },
+   {
+    "id": "glass-aurora",
+    "file": "assets/glass-aurora.png",
+    "note": "Pale blue and mint translucent blurred ribbons with lots of negative space.",
+    "source": {
+     "board": "atmospheric_background_reference.png",
+     "region": [
+      1135,
+      197,
+      1632,
+      384
+     ],
+     "sizePx": [
+      497,
+      187
+     ]
+    },
+    "approximate": true
+   },
+   {
+    "id": "soft-orb-depth",
+    "file": "assets/soft-orb-depth.png",
+    "note": "Distant blurred blue/lilac orbs behind empty white glass cards.",
+    "source": {
+     "board": "atmospheric_background_reference.png",
+     "region": [
+      42,
+      501,
+      540,
+      660
+     ],
+     "sizePx": [
+      498,
+      159
+     ]
+    },
+    "approximate": true
+   },
+   {
+    "id": "financial-data-atmosphere",
+    "file": "assets/financial-data-atmosphere.png",
+    "note": "Extremely faint abstract line-chart silhouettes blurred in the far background.",
+    "source": {
+     "board": "atmospheric_background_reference.png",
+     "region": [
+      589,
+      501,
+      1086,
+      660
+     ],
+     "sizePx": [
+      497,
+      159
+     ]
+    },
+    "approximate": true
+   },
+   {
+    "id": "calm-executive",
+    "file": "assets/calm-executive.png",
+    "note": "Frosted white with blue edge glow and soft depth.",
+    "source": {
+     "board": "atmospheric_background_reference.png",
+     "region": [
+      1135,
+      501,
+      1632,
+      660
+     ],
+     "sizePx": [
+      497,
+      159
+     ]
+    },
+    "approximate": true
+   }
+  ]
+ },
+ "provenance": {
+  "boards": {
+   "atmospheric_background_reference.png": "72c7a5c2c92c238825fd17a8dff1c655e6b7ff6514bffb9d1a4ebaad86ba5866",
+   "finance_graph_atlas.png": "9d324d395407798ff5bca459f14424ffa26a9e5d7050d45903914e18894e53f1"
+  },
+  "values": {
+   "brand.navy": {
+    "used": "#102044",
+    "chose": "declared",
+    "observed": "#061F51",
+    "declared": "#102044",
+    "deltaE": 9.93,
+    "board": "atmospheric_background_reference.png",
+    "region": [
+     625,
+     770,
+     641,
+     786
+    ]
+   },
+   "brand.primary": {
+    "used": "#3478F6",
+    "chose": "declared",
+    "observed": "#3C7DFF",
+    "declared": "#3478F6",
+    "deltaE": 2.79,
+    "board": "atmospheric_background_reference.png",
+    "region": [
+     716,
+     770,
+     732,
+     786
+    ]
+   },
+   "brand.cyan": {
+    "used": "#31B9F4",
+    "chose": "declared",
+    "observed": "#34C1FD",
+    "declared": "#31B9F4",
+    "deltaE": 2.95,
+    "board": "atmospheric_background_reference.png",
+    "region": [
+     808,
+     770,
+     824,
+     786
+    ]
+   },
+   "brand.teal": {
+    "used": "#1BBFAE",
+    "chose": "declared",
+    "observed": "#19C6B9",
+    "declared": "#1BBFAE",
+    "deltaE": 3.44,
+    "board": "atmospheric_background_reference.png",
+    "region": [
+     899,
+     770,
+     915,
+     786
+    ]
+   },
+   "brand.lavender": {
+    "used": "#8C7BFF",
+    "chose": "declared",
+    "observed": "#957AFC",
+    "declared": "#8C7BFF",
+    "deltaE": 2.87,
+    "board": "atmospheric_background_reference.png",
+    "region": [
+     991,
+     770,
+     1007,
+     786
+    ]
+   },
+   "brand.fog": {
+    "used": "#EAF1FF",
+    "chose": "declared",
+    "observed": "#E7F1FE",
+    "declared": "#EAF1FF",
+    "deltaE": 1.18,
+    "board": "atmospheric_background_reference.png",
+    "region": [
+     1082,
+     770,
+     1098,
+     786
+    ]
+   },
+   "surface.card": {
+    "used": "#FAFCFE",
+    "chose": "observed",
+    "observed": "#FAFCFE",
+    "declared": null,
+    "deltaE": null,
+    "board": "finance_graph_atlas.png",
+    "region": [
+     300,
+     140,
+     330,
+     150
+    ]
+   },
+   "surface.border": {
+    "used": "#E2F0FD",
+    "chose": "observed",
+    "observed": "#E2F0FD",
+    "declared": null,
+    "deltaE": null,
+    "board": "finance_graph_atlas.png",
+    "region": [
+     20,
+     250,
+     21,
+     251
+    ]
+   },
+   "text.secondary": {
+    "used": "#466CA0",
+    "chose": "observed",
+    "observed": "#466CA0",
+    "declared": null,
+    "deltaE": null,
+    "board": "finance_graph_atlas.png",
+    "region": [
+     50,
+     190,
+     110,
+     200
+    ]
+   },
+   "series.blue": {
+    "used": "#3988FE",
+    "chose": "observed",
+    "observed": "#3988FE",
+    "declared": null,
+    "deltaE": null,
+    "board": "finance_graph_atlas.png",
+    "region": [
+     635,
+     230,
+     670,
+     330
+    ]
+   },
+   "series.teal": {
+    "used": "#27BFC6",
+    "chose": "observed",
+    "observed": "#27BFC6",
+    "declared": null,
+    "deltaE": null,
+    "board": "finance_graph_atlas.png",
+    "region": [
+     705,
+     295,
+     745,
+     330
+    ]
+   },
+   "series.lavender": {
+    "used": "#A58EFB",
+    "chose": "observed",
+    "observed": "#A58EFB",
+    "declared": null,
+    "deltaE": null,
+    "board": "finance_graph_atlas.png",
+    "region": [
+     785,
+     305,
+     820,
+     330
+    ]
+   },
+   "series.lightBlue": {
+    "used": "#89C8FD",
+    "chose": "observed",
+    "observed": "#89C8FD",
+    "declared": null,
+    "deltaE": null,
+    "board": "finance_graph_atlas.png",
+    "region": [
+     860,
+     315,
+     895,
+     330
+    ]
+   },
+   "series.slate": {
+    "used": "#A8B8D7",
+    "chose": "observed",
+    "observed": "#A8B8D7",
+    "declared": null,
+    "deltaE": null,
+    "board": "finance_graph_atlas.png",
+    "region": [
+     935,
+     315,
+     970,
+     330
+    ]
+   },
+   "series.deepBlue": {
+    "used": "#2749BA",
+    "chose": "observed",
+    "observed": "#2749BA",
+    "declared": null,
+    "deltaE": null,
+    "board": "finance_graph_atlas.png",
+    "region": [
+     445,
+     555,
+     475,
+     585
+    ]
+   },
+   "flow.inflow": {
+    "used": "#39D3C3",
+    "chose": "observed",
+    "observed": "#39D3C3",
+    "declared": null,
+    "deltaE": null,
+    "board": "finance_graph_atlas.png",
+    "region": [
+     360,
+     533,
+     400,
+     545
+    ]
+   },
+   "flow.outflowFixed": {
+    "used": "#BEA5FC",
+    "chose": "observed",
+    "observed": "#BEA5FC",
+    "declared": null,
+    "deltaE": null,
+    "board": "finance_graph_atlas.png",
+    "region": [
+     205,
+     495,
+     245,
+     520
+    ]
+   },
+   "flow.outflowVariable": {
+    "used": "#96CDFC",
+    "chose": "observed",
+    "observed": "#96CDFC",
+    "declared": null,
+    "deltaE": null,
+    "board": "finance_graph_atlas.png",
+    "region": [
+     285,
+     535,
+     320,
+     548
+    ]
+   }
+  }
+ }
+}

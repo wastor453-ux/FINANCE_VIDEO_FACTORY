@@ -1,0 +1,55 @@
+{
+  "id": "B1",
+  "startFrame": 0,
+  "endFrame": 180,
+  "mode": "hero_number",
+  "purpose": "Show the average savings rate",
+  "onScreenText": [],
+  "usesCharacter": false,
+  "data": [
+    {
+      "label": "Average US savings account",
+      "value": 0.46,
+      "unit": "%",
+      "source": "FDIC",
+      "asOf": "2026-09",
+      "delta": {
+        "value": 0.1,
+        "unit": " pts",
+        "window": "vs 2025"
+      }
+    }
+  ],
+  "events": [
+    {
+      "id": "e1",
+      "recipe": "count_up",
+      "role": "primary",
+      "startFrame": 10,
+      "endFrame": 36,
+      "holdUntilFrame": 100,
+      "exitFrame": 180,
+      "ease": "ease-out"
+    },
+    {
+      "id": "e2",
+      "recipe": "pill_in",
+      "role": "secondary",
+      "startFrame": 30,
+      "endFrame": 42,
+      "holdUntilFrame": 80,
+      "exitFrame": 180,
+      "ease": "ease-out"
+    },
+    {
+      "id": "e9",
+      "recipe": "camera_push",
+      "role": "secondary",
+      "startFrame": 0,
+      "endFrame": 170,
+      "holdUntilFrame": 170,
+      "exitFrame": 180,
+      "ease": "ease-in-out"
+    }
+  ]
+}

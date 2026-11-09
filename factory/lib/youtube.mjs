@@ -16,17 +16,33 @@ export function parseIsoDuration(iso) {
   return (Number(d || 0) * 86400) + (Number(h || 0) * 3600) + (Number(mi || 0) * 60) + Number(s || 0);
 }
 
-export function createClient({ apiKey, fetchImpl = globalThis.fetch, authMode = "header", retries = 2, timeoutMs = 20000, sleep = (ms) => new Promise((r) => setTimeout(r, ms)) }) {
+export function createClient({ apiKey, backupKeys = [], fetchImpl = globalThis.fetch, authMode = "header", retries = 2, timeoutMs = 20000, sleep = (ms) => new Promise((r) => setTimeout(r, ms)) }) {
   if (authMode !== "header" && authMode !== "query") throw new Error(`authMode must be "header" or "query" (got "${authMode}")`);
   if (!apiKey) throw new Error("YouTube API key missing (set the env var named in config/pipeline.json -> secrets.youtubeApiKeyEnv)");
   let units = 0;
+  const keys = [apiKey, ...backupKeys].filter((k, i, a) => k && a.indexOf(k) === i);
+  let active = 0; // sticky: once a backup key is needed, later calls keep using it
+  const scrubAll = (t) => keys.reduce((acc, k) => acc.split(k).join("***"), String(t));
+  // Quota, rate limit, invalid/expired key, or the service being down: another key may succeed. Other 4xx (bad request) will not.
+  const FAILOVER_BODY = /quotaExceeded|dailyLimitExceeded|rateLimitExceeded|keyInvalid|API key (not valid|expired)|API_KEY_INVALID/i;
 
   async function call(path, params) {
+    for (;;) {
+      try {
+        return await callWith(keys[active], path, params);
+      } catch (e) {
+        if (e.failover && active < keys.length - 1) { active += 1; continue; }
+        throw e;
+      }
+    }
+  }
+
+  async function callWith(apiKey, path, params) {
     const url = new URL(`${BASE}/${path}`);
     for (const [k, v] of Object.entries(params)) url.searchParams.set(k, v);
     const headers = { accept: "application/json" };
     if (authMode === "query") url.searchParams.set("key", apiKey); else headers["x-goog-api-key"] = apiKey;
-    const scrub = (t) => String(t).split(apiKey).join("***");
+    const scrub = scrubAll; // scrubs every configured key, not only the one in use
     let lastErr;
     for (let attempt = 0; attempt <= retries; attempt++) {
       if (attempt) await sleep(500 * 2 ** (attempt - 1));
@@ -35,15 +51,15 @@ export function createClient({ apiKey, fetchImpl = globalThis.fetch, authMode = 
         res = await fetchImpl(url, { headers, signal: AbortSignal.timeout(timeoutMs) });
         text = await res.text();
       } catch (e) {
-        lastErr = new Error(`YouTube ${path} network error: ${scrub(e.cause?.code || e.message)}`);
+        lastErr = Object.assign(new Error(`YouTube ${path} network error: ${scrub(e.cause?.code || e.message)}`), { failover: true });
         continue; // timeouts and resets are retried
       }
       units += 1;
-      if (res.status >= 500) { lastErr = new Error(`YouTube ${path} failed: HTTP ${res.status}`); continue; }
-      if (!res.ok) throw new Error(`YouTube ${path} failed: HTTP ${res.status} ${scrub(text).slice(0, 400)}`); // 4xx: do not retry
+      if (res.status >= 500) { lastErr = Object.assign(new Error(`YouTube ${path} failed: HTTP ${res.status}`), { failover: true }); continue; }
+      if (!res.ok) throw Object.assign(new Error(`YouTube ${path} failed: HTTP ${res.status} ${scrub(text).slice(0, 400)}`), { failover: res.status === 429 || FAILOVER_BODY.test(text) }); // 4xx: do not retry the same key
       return JSON.parse(text);
     }
-    throw new Error(`${lastErr.message} (after ${retries + 1} attempts)`);
+    throw Object.assign(new Error(`${lastErr.message} (after ${retries + 1} attempts)`), { failover: lastErr.failover });
   }
 
   async function resolveChannel(handle) {
@@ -100,11 +116,11 @@ export function createClient({ apiKey, fetchImpl = globalThis.fetch, authMode = 
         channels.push({ ...ch, fetched: details.length });
         videos.push(...details);
       } catch (e) {
-        failures.push({ handle, error: String(e.message).split(apiKey).join("***") });
+        failures.push({ handle, error: scrubAll(e.message) });
       }
     }
     return { channels, videos, failures, quotaUnitsUsed: units };
   }
 
-  return { resolveChannel, recentUploadIds, videoDetails, discover, get unitsUsed() { return units; } };
+  return { resolveChannel, recentUploadIds, videoDetails, discover, get unitsUsed() { return units; }, get keyInUse() { return active + 1; }, get keyCount() { return keys.length; } };
 }

@@ -1,0 +1,41 @@
+{
+  "_comment": "Where each value is read from the owner's reference boards (native pixel boxes). Boards are the source of truth; this file only says where to look. Re-run `style_pack.py extract` if a board is replaced.",
+  "boards": {
+    "atlas": "finance_graph_atlas.png",
+    "atmos": "atmospheric_background_reference.png",
+    "grammar": "finance_motion_grammar.png",
+    "story": "finance_video_story_system.png",
+    "mechanics": "money_mechanics_diagram_library.png"
+  },
+  "samples": [
+    { "key": "brand.navy", "board": "atmos", "method": "median", "region": [625, 770, 641, 786], "declared": "#102044", "note": "swatch with printed label" },
+    { "key": "brand.primary", "board": "atmos", "method": "median", "region": [716, 770, 732, 786], "declared": "#3478F6" },
+    { "key": "brand.cyan", "board": "atmos", "method": "median", "region": [808, 770, 824, 786], "declared": "#31B9F4" },
+    { "key": "brand.teal", "board": "atmos", "method": "median", "region": [899, 770, 915, 786], "declared": "#1BBFAE" },
+    { "key": "brand.lavender", "board": "atmos", "method": "median", "region": [991, 770, 1007, 786], "declared": "#8C7BFF" },
+    { "key": "brand.fog", "board": "atmos", "method": "median", "region": [1082, 770, 1098, 786], "declared": "#EAF1FF" },
+    { "key": "brand.white", "board": "atmos", "method": "median", "region": [1174, 770, 1190, 786], "declared": "#FFFFFF" },
+
+    { "key": "series.blue", "board": "atlas", "method": "median", "region": [635, 230, 670, 330], "note": "chart 2, Housing bar" },
+    { "key": "series.teal", "board": "atlas", "method": "median", "region": [705, 295, 745, 330], "note": "chart 2, Food bar" },
+    { "key": "series.lavender", "board": "atlas", "method": "median", "region": [785, 305, 820, 330], "note": "chart 2, Transport bar" },
+    { "key": "series.lightBlue", "board": "atlas", "method": "median", "region": [860, 315, 895, 330], "note": "chart 2, Utilities bar" },
+    { "key": "series.slate", "board": "atlas", "method": "median", "region": [935, 315, 970, 330], "note": "chart 2, Other bar" },
+    { "key": "series.deepBlue", "board": "atlas", "method": "median", "region": [445, 555, 475, 585], "note": "chart 4, Ending balance bar" },
+
+    { "key": "flow.inflow", "board": "atlas", "method": "median", "region": [360, 533, 400, 545], "note": "chart 4, Savings (+$800)" },
+    { "key": "flow.outflowFixed", "board": "atlas", "method": "median", "region": [205, 495, 245, 520], "note": "chart 4, Fixed costs (-$2,000)" },
+    { "key": "flow.outflowVariable", "board": "atlas", "method": "median", "region": [285, 535, 320, 548], "note": "chart 4, Variable costs (-$1,200)" },
+
+    { "key": "surface.card", "board": "atlas", "method": "median", "region": [300, 140, 330, 150] },
+    { "key": "surface.canvas", "board": "atlas", "method": "median", "region": [5, 5, 25, 25] },
+    { "key": "surface.border", "board": "atlas", "method": "point", "region": [20, 250, 21, 251], "note": "1 px card edge, left side of chart 1" },
+    { "key": "surface.shadowEdge", "board": "atlas", "method": "point", "region": [250, 377, 251, 378], "note": "pixel just below the card bottom edge" },
+
+    { "key": "text.titleInk", "board": "atlas", "method": "darkest", "region": [135, 25, 630, 70] },
+    { "key": "text.cardTitleInk", "board": "atlas", "method": "darkest", "region": [85, 130, 300, 148] },
+    { "key": "text.secondary", "board": "atlas", "method": "darkest", "region": [50, 190, 110, 200], "note": "axis label; thin text, so antialiasing makes this lighter than the true colour" },
+    { "key": "text.pillBlue", "board": "atlas", "method": "median", "region": [468, 191, 512, 203], "note": "end-point pill, series 1" },
+    { "key": "text.pillTeal", "board": "atlas", "method": "median", "region": [468, 243, 512, 255], "note": "end-point pill, series 2" }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "_comment": "Visual modes that have a verified renderer. src/components/BeatView.tsx renders only these; `ffx lint-plan --renderable` rejects plans that use any other mode. Add a mode here only after its component passes the side-by-side, motion, determinism and cost checks.",
+  "modes": {
+    "hero_number": "HeroScene",
+    "line_chart": "LineScene",
+    "bar_chart": "BarScene"
+  }
+}

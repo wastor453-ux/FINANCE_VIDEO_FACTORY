@@ -36,7 +36,7 @@ test("every ffx command named in skills exists in the CLI help", () => {
   for (const d of fs.readdirSync(path.join(F, "skills"))) {
     const txt = fs.readFileSync(path.join(F, "skills", d, "SKILL.md"), "utf8");
     for (const [, cmd] of txt.matchAll(/ffx(?:\.mjs)? ([a-z][a-z-]+)/g)) {
-      if (["doctor", "discover", "select", "validate", "mark-seen", "plan-chunks", "verify-media", "audio-segment", "lint-plan", "lint-script"].includes(cmd)) assert.ok(help.includes(cmd), `${d}: ${cmd}`);
+      if (["doctor", "discover", "select", "validate", "mark-seen", "plan-chunks", "verify-media", "audio-segment", "lint-plan", "lint-script", "transcript"].includes(cmd)) assert.ok(help.includes(cmd), `${d}: ${cmd}`);
     }
   }
 });
@@ -127,6 +127,48 @@ test("CLI end to end: run lifecycle (init -> set-stage -> approve -> archive ref
   assert.equal(r.status, 0);
   assert.equal(JSON.parse(r.stdout).deleted.length, 1);
   assert.ok(!fs.existsSync(path.join(dir, "archive", runId)), "archived run should be deleted past retention");
+});
+
+test("CLI end to end: transcript parses vtt/srt/manual, validates, writes schema-valid output, and fails honestly on a bad one", () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "ffx-transcript-"));
+  const title = "7 Proven Ways to Make Money With AI (No Experience)";
+  const words = Array.from({ length: 210 }, (_, i) => `word${i}`).join(" ");
+  const vttPath = path.join(dir, "cap.vtt");
+  fs.writeFileSync(vttPath, `WEBVTT\n\n00:00:00.000 --> 00:09:55.000\n${words} proven ways make money experience\n`);
+  let r = run(["transcript", "--video-id", "hriu0irRcpE", "--title", title, "--duration-sec", "600", "--source", "hosted_transcript_api", "--language", "en", "--vtt", vttPath, "--out", path.join(dir, "t.json")], {});
+  assert.equal(r.status, 0, r.stderr);
+  assert.match(r.stdout, /VALID transcript/);
+  const out = JSON.parse(fs.readFileSync(path.join(dir, "t.json"), "utf8"));
+  assert.equal(out.validated, true);
+  assert.equal(out.source, "hosted_transcript_api");
+  assert.equal(run(["validate", "transcript", path.join(dir, "t.json")]).status, 0);
+
+  const srtPath = path.join(dir, "cap.srt");
+  fs.writeFileSync(srtPath, `1\n00:00:00,000 --> 00:09:55,000\n${words} proven ways make money experience\n`);
+  r = run(["transcript", "--video-id", "hriu0irRcpE", "--title", title, "--duration-sec", "600", "--source", "gemini_video_understanding", "--language", "en", "--srt", srtPath, "--out", path.join(dir, "t2.json")], {});
+  assert.equal(r.status, 0, r.stderr);
+
+  const manualPath = path.join(dir, "manual.txt");
+  fs.writeFileSync(manualPath, `${words} proven ways make money experience`);
+  r = run(["transcript", "--video-id", "hriu0irRcpE", "--title", title, "--duration-sec", "600", "--source", "manual", "--language", "en", "--manual", manualPath, "--out", path.join(dir, "t3.json")], {});
+  assert.equal(r.status, 0, r.stderr);
+  const manualOut = JSON.parse(fs.readFileSync(path.join(dir, "t3.json"), "utf8"));
+  assert.equal(manualOut.source, "manual");
+  assert.equal(manualOut.segments.length, 1);
+
+  // a transcript that's too short and off-topic must fail honestly, not pass silently
+  const badPath = path.join(dir, "bad.txt");
+  fs.writeFileSync(badPath, "not enough words here at all");
+  r = run(["transcript", "--video-id", "hriu0irRcpE", "--title", title, "--duration-sec", "600", "--source", "manual", "--language", "en", "--manual", badPath, "--out", path.join(dir, "bad.json")], {});
+  assert.equal(r.status, 1);
+  assert.match(r.stdout, /INVALID transcript/);
+  const badOut = JSON.parse(fs.readFileSync(path.join(dir, "bad.json"), "utf8"));
+  assert.equal(badOut.validated, false); // invalid output is still written (for inspection), just never claimed valid
+
+  // no input source at all must refuse, not silently produce an empty transcript
+  r = run(["transcript", "--video-id", "x", "--title", "x", "--duration-sec", "600", "--source", "manual", "--language", "en", "--out", path.join(dir, "none.json")], {});
+  assert.equal(r.status, 1);
+  assert.match(r.stderr, /one of --vtt, --srt, or --manual is required/);
 });
 
 test("verify-media works on a real ffmpeg-made file (and fails on a wrong expectation)", () => {

@@ -6,7 +6,7 @@ Workspace `/home/hatch/workspace`; Node 24.22.1, Python 3.12.3, ffmpeg 8.1.2, gi
 ## Known blockers (from Muse's doctor run)
 - **GitHub push refused.** The token is registered only for `api.github.com`, so git over `github.com` is not authenticated. Fix: reconnect the token with `github.com` added as a host, or complete the GitHub OAuth flow.
 - **YouTube Data API timed out** with the header method. Set `YOUTUBE_AUTH_MODE=query` and re-run the doctor. The key is then sent as `?key=` and is scrubbed from all output.
-- **Koda not found** in the unfiltered 50-voice list. Run `node factory/bin/ffx.mjs voices --search Koda`, then `--type prompted` and `--type replicated`. Show the raw result to the owner before writing any ID into `config/voice.json`.
+- **Enzo (and Koda before it) may not be in the first 50 voices** in the unfiltered 50-voice list. Run `node factory/bin/ffx.mjs voices --search Enzo`, then `--type prompted` and `--type replicated`. Show the raw result to the owner before writing any ID into `config/voice.json`.
 
 ## One-time steps
 1. Fix the GitHub token host (above). Prefer a fine-grained token limited to the project repository: Contents RW, Actions RW, Pull requests RW, Metadata R.

@@ -1,21 +1,19 @@
 {
   "_comment": "Voice identity for every episode. status fields are honest: nothing here is verified until `ffx doctor --live` confirms it with a real key.",
   "provider": "gemini-tts",
-  "projectVoiceName": "Koda",
+  "projectVoiceName": "Enzo",
   "voice": {
-    "name": "Koda",
-    "id": "en-us-koda",
+    "name": "Enzo",
+    "id": "en-us-enzo",
     "type": "prebuilt (voice library)",
-    "status": "CONFIRMED_BY_OWNER_2026-10-27",
+    "status": "CHOSEN_BY_OWNER_2026-11-03 (Google AI Studio Playground, temperature 0.8); NOT yet confirmed by a live factory API call",
     "libraryFacts": {
-      "language": "en-US",
-      "accent": "Inland Southern",
+      "status": "UNVERIFIED: described by the owner/AI Studio, not read from the voices endpoint. Confirm with `ffx voices --search Enzo`.",
       "gender": "male",
       "pitch": "low",
-      "persona": "Advertising Pitch & Commerce / Commercial Voiceover (Influencer)",
-      "description": "21-year-old Influencer from the Inland South. Tone is objective, direct, and helpful"
+      "persona": "crisp, authoritative financial-podcaster delivery"
     },
-    "note": "Found by `ffx voices --search Koda` on 2026-10-27 (Muse). The library's own description (Inland Southern accent, young-influencer persona) did not match what the owner heard in the `sample_user` take, which they approved by ear on 2026-10-27 as fitting the authoritative calm financial-advisor read. The 'en-us-koda' id was accepted by the live Interactions API (speech_config) in that same sample run."
+    "note": "Replaces Koda (2026-10-27). Koda stays in the history only."
   },
   "model": {
     "id": "gemini-3.8-flash-tts",
@@ -26,14 +24,15 @@
     ],
     "note": "Google's TTS page (read via Muse, 2026-10-27) documents the Gemini 3.8 models as the current ones: 3.8 Flash for studio-grade narration and stable long-form voice, 3.8 Flash-Lite as the cheap high-volume option, and 3.1 Flash Preview as the older model. Confirmed live on 2026-10-27: `gemini-3.8-flash-tts` is listed for this key (doctor --online --live) and successfully produced all three audition samples via the Interactions API."
   },
-  "temperature": 1,
-  "style": "Authoritative, calm financial advisor delivery with a warm, confident tone, steady downward inflections, and clear, measured pacing.",
+  "temperature": 0.8,
+  "style": "Maintain the exact American male voice identity and pitch without variation. Deliver with the casual, authoritative realism of a native American financial podcaster speaking one-on-one with a client. Use natural American inflections, unhurried measured pacing, and grounded, controlled expression.",
   "styleRules": [
-    "Keep the style string identical for every request of an episode (and across episodes).",
-    "The text field is spoken verbatim: no stage directions in it.",
-    "Only <short pause> and <long pause> inline tags; sound effects come from the sound plan, not the voice.",
+    "The voice identity is fixed: the top-level style (or the registers prefix in per-scene mode) is the same for every scene of every episode.",
+    "The text field is spoken verbatim: no stage directions in it, no square or round bracket cues.",
+    "Never use hyphens or dashes in spoken text: the model can read them aloud as 'minus'. The tool also strips them; the script gate flags them.",
+    "Only the tags in request.inlineTags (<short pause>, <long pause>, <breath>, <sigh>); sound effects come from the sound plan, not the voice. <breath> and <sigh> are unverified by ear.",
     "Never ask the model to 'keep the voice steady' (documented to increase drift).",
-    "Do not put age, gender or accent changes in style; choose a different library voice instead."
+    "Registers (per-scene mode only) describe delivery nuance. Age, gender and accent live in the fixed identity prefix, never in a register."
   ],
   "output": {
     "format": "wav",
@@ -43,9 +42,13 @@
     "upsampleTo": 48000
   },
   "chunking": {
-    "unit": "scene",
-    "maxCharsPerRequest": 1800,
-    "retries": 2
+    "unit": "scene_or_single_take",
+    "maxCharsPerRequest": 2000,
+    "singleTakeMaxChars": 25000,
+    "deadlineSec": 120,
+    "singleTakeDeadlineSec": 600,
+    "retries": 2,
+    "_comment": "maxCharsPerRequest applies to one scene. singleTakeMaxChars is the whole episode in one request; Google's documented limits (input about 8,192 tokens, one response about 8.5 minutes of audio, one page says 5,000 characters per job) are NOT yet proven for a full 10 to 15 minute episode: run the 3-scene check in docs/STATUS.md first, and use per-scene mode if the live service refuses."
   },
   "accent": "American English",
   "request": {
@@ -57,19 +60,40 @@
     },
     "styleVariants": {
       "empty": "",
-      "user": "Authoritative, calm financial advisor delivery with a warm, confident tone, steady downward inflections, and clear, measured pacing.",
-      "short": "calm, authoritative, measured pace"
+      "short": "casual, authoritative financial podcaster, measured pace",
+      "documentary": "Maintain the exact American male voice identity and pitch without variation. Deliver with the casual, authoritative realism of a native American financial podcaster speaking one-on-one with a client. Use natural American inflections, unhurried measured pacing, and grounded, controlled expression.",
+      "koda_documentary_archived": "Use a mature, rich, deep American male voice with smooth, sophisticated delivery. Sound like a premium financial documentary narrator. Speak calmly with controlled pacing, intriguing emphasis, and natural pauses. Avoid theatrical or artificial delivery."
     },
-    "chosenVariant": "user",
-    "variantNote": "Owner picked 'user' (the exact style line above) on 2026-10-27 after hearing all three on the same sentence. Google's own guidance was to prefer empty/short over a long style string since longer style text is documented to increase drift; the owner's choice overrides that default, so every production TTS call for this channel uses the full 'user' style string, not 'empty' or 'short'. Re-audition if drift becomes visible across a full episode.",
+    "chosenVariant": "documentary",
+    "variantNote": "Owner chose Enzo at temperature 0.8 with the native American financial podcaster style on 2026-11-03 after Playground testing (about 180 wpm on one explainer clip). Replaces Koda + documentary (2026-11-02).",
     "inlineTags": [
       "<short pause>",
-      "<long pause>"
+      "<long pause>",
+      "<breath>",
+      "<sigh>"
     ],
     "emphasis": "capitalise a word for vocal stress",
     "neverInText": [
       "bracketed stage directions",
-      "sound-effect tags"
-    ]
+      "sound-effect tags",
+      "hyphens and dashes"
+    ],
+    "inlineTagsNote": "<short pause> and <long pause> are documented for gemini-3.8-flash-tts. <breath> and <sigh> are UNVERIFIED by ear: if the model speaks them or they sound wrong, remove them here. Square-bracket directions are always refused. The script gate caps tag density.",
+    "registers": {
+      "status": "UNVERIFIED by ear. Used only in per-scene mode; single-take uses the one top-level style.",
+      "prefix": "Native American financial podcaster and documentary narrator.",
+      "byId": {
+        "hook": "Engaged, clear, focused delivery, natural pauses.",
+        "analysis": "Calm, measured, analytical clarity, objective.",
+        "conversational": "Casual, authoritative, warm conversational delivery.",
+        "irony": "Dry, subtle nuance, measured delivery.",
+        "risk": "Calm, direct, realistic cautionary tone.",
+        "downfall": "Grounded, serious, steady cadence.",
+        "outro": "Reflective, warm, clear, closing delivery."
+      },
+      "note": "A scene with no delivery uses the top-level style (documentary, owner-approved). A scene with delivery uses prefix + register so the voice character stays the same across scenes."
+    },
+    "sendTemperature": true,
+    "_sendTemperature_note": "UNVERIFIED: whether the Interactions API accepts generation_config.temperature. If the first live call is rejected for it, set this to false and report; the owner's Playground setting was 0.8."
   }
 }

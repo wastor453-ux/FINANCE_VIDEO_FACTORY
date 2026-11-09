@@ -50,8 +50,8 @@ Run this at the start of each weekly session (a `--dry-run` first is fine if you
 | 2 | ffx-select | selection.json | **G1: user approves winner** |
 | 3 | ffx-transcript | transcript.json | none (validation must pass) |
 | 4 | ffx-analyze | analysis.json | none |
-| 5 | ffx-script + ffx-fact-check | script.json | **G2: user approves script + a 30 s voice sample** |
-| 6 | ffx-voice | voice_manifest.json | (part of G2) |
+| 5 | ffx-script + ffx-fact-check | script.json | **G2: user approves the script (with its fact-check)** |
+| 6 | ffx-voice | voice_manifest.json | none (voice is fixed in config; narration is rendered after G2) |
 | 7 | ffx-scene-plan | scene_plan.json | **G3: user approves scene plan** |
 | 8 | ffx-sound-design | sound_plan.json | (part of G3) |
 | 9 | ffx-render-dispatch | render_job.json | **G4: explicit render authorization** |

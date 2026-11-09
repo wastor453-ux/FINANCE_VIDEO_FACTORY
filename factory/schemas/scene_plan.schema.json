@@ -149,6 +149,32 @@
           "items": {
             "type": "string"
           }
+        },
+        "delta": {
+          "type": "object",
+          "required": [
+            "value",
+            "unit"
+          ],
+          "properties": {
+            "value": {
+              "type": "number"
+            },
+            "unit": {
+              "type": "string"
+            },
+            "window": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "series": {
+          "type": "array",
+          "minItems": 3,
+          "items": {
+            "type": "number"
+          }
         }
       },
       "anyOf": [

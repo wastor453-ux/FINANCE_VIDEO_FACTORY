@@ -70,6 +70,16 @@ export function approveGate(state, gate, by, note, at) {
   return { ...state, gates: { ...state.gates, [gate]: { approved: true, at: at || new Date().toISOString(), by, note: note || null } } };
 }
 
+/** Undo a gate approval that was recorded on the wrong gate. A reason is required; the history is kept in the note. */
+export function revokeGate(state, gate, by, reason, at) {
+  if (!(gate in state.gates)) throw new Error(`unknown gate "${gate}" (known: ${GATES.join(", ")})`);
+  if (!state.gates[gate]?.approved) throw new Error(`gate ${gate} is not approved, nothing to revoke`);
+  if (!by) throw new Error("revoking a gate requires who decided it (--by)");
+  if (!reason) throw new Error("revoking a gate requires a reason (--reason)");
+  const was = state.gates[gate];
+  return { ...state, gates: { ...state.gates, [gate]: { approved: false, at: at || new Date().toISOString(), by, note: `REVOKED: ${reason} (was approved by ${was.by} at ${was.at})` } } };
+}
+
 /** True once every gate that applies up to and including G5 has been approved -- i.e. safe to archive. */
 export function isComplete(state) {
   return GATES.every((g) => state.gates[g]?.approved === true);

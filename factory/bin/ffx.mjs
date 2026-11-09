@@ -15,7 +15,13 @@ import { qaVideo } from "../lib/qa.mjs";
 import { checkJob } from "../lib/job.mjs";
 import { searchVoices } from "../lib/voices.mjs";
 import { localChecks, onlineChecks, liveChecks, summarize } from "../lib/doctor.mjs";
-import { makeRunId, newRunState, setStage, approveGate, isComplete, markArchived, isExpired } from "../lib/run.mjs";
+import { generateTheme, validateTheme, seedFromString, seedWithLedger } from "../lib/theme.mjs";
+import { loadStylePack } from "../lib/style.mjs";
+import { lintPlanV2 } from "../lib/plan-v2.mjs";
+import { makeRunId, newRunState, setStage, approveGate, revokeGate, isComplete, markArchived, isExpired } from "../lib/run.mjs";
+import { parseVtt, parseSrt, validateTranscript } from "../lib/transcript.mjs";
+import { scoreScript } from "../lib/script-quality.mjs";
+import { fitScore, itemsFrom } from "../lib/fit.mjs";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const readJson = (p) => JSON.parse(fs.readFileSync(p, "utf8"));
@@ -40,8 +46,11 @@ const HELP = `ffx <command>
   discover --out <file>             fetch recent uploads of all channels (needs YouTube key in env)
   select --in <discovery.json> --out <selection.json> [--seen state/seen_videos.json] [--now ISO]
   mark-seen --selection <file> --seen <file>   record ALL evaluated videos as seen (after the winner is approved)
-  lint-plan <scene_plan.json> [--voice voice_manifest.json]   schema + cross-checks (modes, gaps, sources, sync)
+  lint-plan <scene_plan.json> [--voice voice_manifest.json] [--script script.json] [--style dir] [--renderable]   schema + cross-checks (v1 and v2 plans; v2 = scenes > beats > typed events)
   lint-script <script.json>         schema + claim/source rules
+  fit-score <script.json|analysis.json>   topic-fit: share of runtime shown by real charts/diagrams (exit 1 below the bar)
+  hook-record <script.json>          append the script's hookType to state/hook_history.json (run when G2 is approved)
+  script-score <script.json> [--min 85] [--legacy]   AI-tell / spoken-English / promise / freshness quality gate (exit 1 below --min or on any P0)
   plan-chunks --start N --end N [--size N]     print the chunk matrix as JSON
   verify-media <file> --frames N [--audio] [--width W --height H --fps F]
   audio-segment --start N --end N [--fps F]    exact ffmpeg -ss/-t values for a frame range
@@ -53,10 +62,16 @@ const HELP = `ffx <command>
   qa-video <file> --frames N --out-dir D [--plan scene_plan.json] [--no-audio] [--human-reviewed]   QA on the real master + contact sheet
   run-init --channel @handle --video videoId [--title T] [--now ISO]   create one isolated run folder for a video (runs/<runId>/), with run_state.json
   run-set-stage <runDir> <stage> <status> [--note T]   record a stage's status in that run's run_state.json (PENDING/IN_PROGRESS/VERIFIED/FAILED/UNVERIFIED/NEEDS_HUMAN)
+  theme --seed-string "topic|episode" [--recent recent_seeds.json] [--out theme.json]   generate a validated OPTIONAL generated theme family (the channel look comes from a style pack: style-check)
+  style-check <styleDir>   validate a style pack (colours with provenance, contrast gates, assets, motion curves)
   run-approve <runDir> <gate> --by NAME [--note T]   record a gate approval (G1..G5) in that run's run_state.json
+  run-revoke <runDir> <gate> --by NAME --reason T    undo a gate approval recorded on the wrong gate (reason is kept in the note)
+  voice-approve <runDir> --by NAME [--note T]        approve the VOICEOVER (sets voice_manifest.approved; this is not a gate)
   run-status <runDir>   print a run's current stage/gate status
   run-archive <runDir> [--archive-root D] [--force]   move a run folder to the archive once every gate is approved (refuses otherwise unless --force)
-  run-cleanup [--archive-root D] [--days N] [--dry-run]   delete archived run folders past the retention window; --dry-run only lists them`;
+  run-cleanup [--archive-root D] [--days N] [--dry-run]   delete archived run folders past the retention window; --dry-run only lists them
+  transcript --video-id ID --title T --duration-sec N --source SRC --language L [--vtt F | --srt F | --manual F] --out transcript.json
+    parse (vtt/srt) or wrap (manual, plain text) an already-obtained transcript, validate it (word count, duration match, title-word match), write transcript.json. Does NOT fetch captions or call any transcription API itself -- obtain the raw text first (tools/gemini_transcript.py, a hosted transcript API, or a human paste), per the ffx-transcript skill's resilient chain, then run this. Exits 1 if validation fails; never silently proceeds on a bad transcript.`;
 
 async function main() {
   const [cmd, ...rest] = process.argv.slice(2);
@@ -84,12 +99,13 @@ async function main() {
     }
     case "discover": {
       const key = process.env[c.secrets.youtubeApiKeyEnv];
-      const client = createClient({ apiKey: key, authMode: process.env.YOUTUBE_AUTH_MODE || c.secrets.youtubeAuthMode || "header" });
+      const backup = [process.env[c.secrets.youtubeApiKeyEnvBackup]].filter(Boolean);
+      const client = createClient({ apiKey: key, backupKeys: backup, authMode: process.env.YOUTUBE_AUTH_MODE || c.secrets.youtubeAuthMode || "header" });
       const handles = readJson(path.join(ROOT, "config/channels.json")).channels.map((x) => x.handle);
       const res = await client.discover(handles, c.selection.perChannelFetch);
       const out = { schema_version: "1.0", fetchedAt: new Date().toISOString(), ...res };
       writeJson(flags.out || "discovery.json", out);
-      console.log(`discovered ${res.videos.length} videos from ${res.channels.length}/${handles.length} channels; failures: ${res.failures.length}; quota units: ${res.quotaUnitsUsed}`);
+      console.log(`discovered ${res.videos.length} videos from ${res.channels.length}/${handles.length} channels; failures: ${res.failures.length}; quota units: ${res.quotaUnitsUsed}; key in use: ${client.keyInUse} of ${client.keyCount}`);
       process.exit(res.failures.length ? 2 : 0); // non-zero: partial discovery must be seen by a human
       break;
     }
@@ -116,6 +132,16 @@ async function main() {
     }
     case "lint-plan": {
       const plan = readJson(pos[0]);
+      if (plan.schema_version === "2.0") {
+        const schemaErrs = validate(readJson(path.join(ROOT, "schemas/scene_plan_v2.schema.json")), plan);
+        if (schemaErrs.length) { console.error(`PLAN SCHEMA PROBLEMS (${schemaErrs.length}):\n  - ${schemaErrs.join("\n  - ")}`); process.exit(1); }
+        const { pack } = loadStylePack(path.resolve(flags.style || path.join(ROOT, "config/styles", plan.style.packId)));
+        const res = lintPlanV2(plan, { recipes: readJson(path.join(ROOT, "config/motion_recipes.json")), modes: readJson(path.join(ROOT, "config/visual_modes.json")), pack, voice: flags.voice ? readJson(flags.voice) : null, script: flags.script ? readJson(flags.script) : null, renderable: flags.renderable ? readJson(path.join(ROOT, "config/components.json")).modes : null });
+        if (res.warnings.length) console.error(`PLAN WARNINGS (${res.warnings.length}):\n  - ${res.warnings.join("\n  - ")}`);
+        if (res.errors.length) { console.error(`PLAN PROBLEMS (${res.errors.length}):\n  - ${res.errors.join("\n  - ")}`); process.exit(1); }
+        console.log("PLAN OK (v2)");
+        break;
+      }
       const errs = validate(readJson(path.join(ROOT, "schemas/scene_plan.schema.json")), plan);
       const voice = flags.voice ? readJson(flags.voice) : null;
       const probs = errs.length ? errs : lintScenePlan(plan, readJson(path.join(ROOT, "config/visual_modes.json")), voice, c.video.fps);
@@ -129,6 +155,43 @@ async function main() {
       const probs = errs.length ? errs : lintScript(sc);
       if (probs.length) { console.error(`SCRIPT PROBLEMS (${probs.length}):\n  - ${probs.join("\n  - ")}`); process.exit(1); }
       console.log("SCRIPT OK");
+      break;
+    }
+    case "fit-score": {
+      const doc = readJson(pos[0]);
+      const modes = readJson(path.join(ROOT, "config/visual_modes.json")).modes;
+      const res = fitScore(itemsFrom(doc, c.script.wpm), modes, c.fit);
+      console.log(JSON.stringify(res, null, 2));
+      if (!res.pass) { console.error(`TOPIC FIT: FAIL (${res.reasons.join("; ")})`); process.exit(1); }
+      console.error(`TOPIC FIT: PASS (score ${res.score})`);
+      break;
+    }
+    case "hook-record": {
+      const sc = readJson(pos[0]);
+      if (!sc.hookType) { console.error("script has no hookType"); process.exit(1); }
+      const hp = path.join(ROOT, "..", "state", "hook_history.json");
+      let h = { types: [] }; try { h = readJson(hp); } catch {}
+      h.types = [...(h.types || []), sc.hookType].slice(-12);
+      fs.mkdirSync(path.dirname(hp), { recursive: true }); fs.writeFileSync(hp, JSON.stringify(h, null, 2) + "\n");
+      console.log(`recorded hook type ${sc.hookType}; recent: ${h.types.slice(-3).join(", ")}`);
+      break;
+    }
+    case "script-score": {
+      const sc = readJson(pos[0]);
+      const creatorNames = readJson(path.join(ROOT, "config/channels.json")).channels.flatMap((x) => [x.name, x.handle.replace(/^@/, "")]);
+      const histPath = path.join(ROOT, "..", "state", "hook_history.json");
+      let recentHookTypes = []; try { recentHookTypes = readJson(histPath).types || []; } catch {}
+      const modeIds = new Set(readJson(path.join(ROOT, "config/visual_modes.json")).modes.map((m) => m.id));
+      const structure = flags.legacy ? null : c.script;
+      const modeFamilies = new Map(readJson(path.join(ROOT, "config/visual_modes.json")).modes.map((m) => [m.id, m.family]));
+      const voiceCfg = readJson(path.join(ROOT, "config/voice.json"));
+      const allowedTags = voiceCfg.request.inlineTags;
+      const registerIds = new Set(Object.keys(voiceCfg.request.registers?.byId || {}));
+      const res = scoreScript(sc, { now: flags.now ? new Date(flags.now) : new Date(), creatorNames, structure, modeIds, modeFamilies, recentHookTypes, allowedTags, registerIds });
+      console.log(JSON.stringify(res, null, 2));
+      const min = Number(flags.min ?? c.script.passScore);
+      if (res.verdict === "FAIL" || res.score < min) { console.error(`SCRIPT QUALITY: ${res.verdict} (score ${res.score}, need >= ${min} and no P0)`); process.exit(1); }
+      console.error(`SCRIPT QUALITY: PASS (score ${res.score})`);
       break;
     }
     case "plan-chunks": {
@@ -217,6 +280,46 @@ async function main() {
       console.log(`${gate}: approved by ${flags.by}`);
       break;
     }
+    case "theme": {
+      let seed, ledger = null;
+      if (flags["seed-string"]) {
+        const recent = flags.recent ? readJson(flags.recent) : [];
+        const r = seedWithLedger(flags["seed-string"], recent);
+        seed = r.seed; ledger = { minHueUsed: r.minHueUsed, relaxed: r.relaxed };
+      } else throw new Error('usage: ffx theme --seed-string "topic|episode" [--recent file] [--out theme.json]');
+      const theme = generateTheme(seed);
+      const problems = validateTheme(theme);
+      if (problems.length) throw new Error("theme failed the gate:\n- " + problems.join("\n- "));
+      if (flags.out) writeJson(flags.out, theme);
+      console.log(JSON.stringify({ id: theme.id, seed, ledger, gate: "pass", out: flags.out || null }, null, 2));
+      break;
+    }
+    case "style-check": {
+      const [dir] = pos;
+      if (!dir) throw new Error("usage: ffx style-check <styleDir>");
+      const { pack, problems } = loadStylePack(path.resolve(dir));
+      console.log(JSON.stringify({ id: pack.id, series: pack.color.series.length, backgrounds: pack.backgrounds.items.length, problems }, null, 2));
+      if (problems.length) process.exit(2);
+      break;
+    }
+    case "run-revoke": {
+      const [runDir, gate] = pos;
+      if (!runDir || !gate) throw new Error("usage: ffx run-revoke <runDir> <gate> --by NAME --reason T");
+      const statePath = path.join(runDir, "run_state.json");
+      writeJson(statePath, revokeGate(readJson(statePath), gate, flags.by, flags.reason));
+      console.log(`${gate}: approval revoked`);
+      break;
+    }
+    case "voice-approve": {
+      const [runDir] = pos;
+      if (!runDir || !flags.by) throw new Error("usage: ffx voice-approve <runDir> --by NAME [--note T]");
+      const mp = path.join(runDir, "voice", "voice_manifest.json");
+      if (!fs.existsSync(mp)) throw new Error(`no voice manifest at ${mp}`);
+      const m = readJson(mp);
+      writeJson(mp, { ...m, approved: true, approvedBy: flags.by, approvedAt: new Date().toISOString(), approvalNote: flags.note || null });
+      console.log(`voice approved by ${flags.by} (${m.scenes?.length ?? "?"} scenes, ${m.totalMs} ms)`);
+      break;
+    }
     case "run-status": {
       const runDir = pos[0];
       if (!runDir) throw new Error("usage: ffx run-status <runDir>");
@@ -263,6 +366,42 @@ async function main() {
         }
       }
       console.log(JSON.stringify({ dryRun: !!flags["dry-run"], retentionDays: days, deleted, kept }, null, 2));
+      break;
+    }
+    case "transcript": {
+      const { "video-id": videoId, title, source, language } = flags;
+      const durationSec = Number(flags["duration-sec"]);
+      if (!videoId || !title || !source || !language || !Number.isFinite(durationSec)) {
+        throw new Error("usage: ffx transcript --video-id ID --title T --duration-sec N --source SRC --language L [--vtt F | --srt F | --manual F] --out transcript.json");
+      }
+      const validSources = ["gemini_video_understanding", "hosted_transcript_api", "manual"];
+      if (!validSources.includes(source)) throw new Error(`--source must be one of: ${validSources.join(", ")}`);
+
+      let segments;
+      if (flags.vtt) segments = parseVtt(fs.readFileSync(flags.vtt, "utf8"));
+      else if (flags.srt) segments = parseSrt(fs.readFileSync(flags.srt, "utf8"));
+      else if (flags.manual) {
+        const text = fs.readFileSync(flags.manual, "utf8").replace(/\s+/g, " ").trim();
+        segments = text ? [{ startMs: 0, endMs: durationSec * 1000, text }] : [];
+      } else {
+        throw new Error("one of --vtt, --srt, or --manual is required (this command parses/validates an already-obtained transcript; it does not fetch one)");
+      }
+      if (!segments.length) throw new Error("no segments parsed from the given input -- empty or unparseable file");
+
+      const validation = validateTranscript({ segments, videoDurationSec: durationSec, title, expectedLanguage: flags["expected-language"], actualLanguage: language });
+      const out = {
+        schema_version: "1.0",
+        videoId,
+        source,
+        language,
+        validated: validation.ok,
+        validation,
+        segments,
+        storage: "private_workspace_only",
+      };
+      writeJson(flags.out || "transcript.json", out);
+      console.log(validation.ok ? `VALID transcript: ${validation.wordCount} words, duration match ok, ${validation.titleWordsFound}/${validation.titleWordsNeeded} title words found` : `INVALID transcript:\n  - ${validation.notes.join("\n  - ")}`);
+      process.exit(validation.ok ? 0 : 1);
       break;
     }
     default:

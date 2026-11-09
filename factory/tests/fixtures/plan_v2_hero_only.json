@@ -1,0 +1,90 @@
+{
+  "schema_version": "2.0",
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "totalFrames": 180,
+  "style": {
+    "packId": "owner-pale-glass",
+    "background": "cool-blue-fog"
+  },
+  "scenes": [
+    {
+      "id": "S01",
+      "startFrame": 0,
+      "endFrame": 180,
+      "beats": [
+        {
+          "id": "B2",
+          "startFrame": 0,
+          "endFrame": 180,
+          "mode": "hero_number",
+          "purpose": "Show a balance with its trend",
+          "onScreenText": [],
+          "usesCharacter": false,
+          "data": [
+            {
+              "label": "Total Balance",
+              "value": 12480,
+              "unit": "USD",
+              "illustrative": true,
+              "delta": {
+                "value": 12.4,
+                "unit": "%",
+                "window": "30d"
+              },
+              "series": [
+                8,
+                9,
+                8.6,
+                9.8,
+                10.4,
+                10,
+                11.2,
+                12.1,
+                11.8,
+                13,
+                14.2,
+                15.6
+              ],
+              "source": "FDIC",
+              "asOf": "2026-09"
+            }
+          ],
+          "events": [
+            {
+              "id": "e1",
+              "recipe": "count_up",
+              "role": "primary",
+              "startFrame": 10,
+              "endFrame": 36,
+              "holdUntilFrame": 100,
+              "exitFrame": 180,
+              "ease": "ease-out"
+            },
+            {
+              "id": "e2",
+              "recipe": "pill_in",
+              "role": "secondary",
+              "startFrame": 36,
+              "endFrame": 48,
+              "holdUntilFrame": 80,
+              "exitFrame": 180,
+              "ease": "ease-out"
+            },
+            {
+              "id": "e9",
+              "recipe": "camera_push",
+              "role": "secondary",
+              "startFrame": 0,
+              "endFrame": 170,
+              "holdUntilFrame": 170,
+              "exitFrame": 180,
+              "ease": "ease-in-out"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

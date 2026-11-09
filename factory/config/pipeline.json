@@ -1,8 +1,13 @@
 {
   "_comment": "All tunable, reversible defaults live here. Nothing in this file is a secret.",
-  "schedule": { "cadence": "weekly", "dayOfWeek": null, "timezone": "Asia/Karachi", "startsOnlyWhenApproved": true },
+  "schedule": {
+    "cadence": "weekly",
+    "dayOfWeek": null,
+    "timezone": "Asia/Karachi",
+    "startsOnlyWhenApproved": true
+  },
   "selection": {
-    "perChannelFetch": 10,
+    "perChannelFetch": 30,
     "minLongFormSec": 360,
     "minAgeHours": 24,
     "maxAgeDays": 10,
@@ -10,7 +15,50 @@
     "minBaselineVideos": 3,
     "baselineMaxAgeDays": 45,
     "_baselineMaxAgeDays_comment": "Channel-baseline peers are bounded by this (wider than maxAgeDays, which bounds candidates) so an old peer video's naturally-decayed views-per-hour can't make a brand-new candidate look like a bigger outlier than it really is. Found 2026-10-27: the first real discover run picked a winner whose '38.95x outlier' score was driven mostly by comparing a 1-day-old video against peers from July (vph decays with age by construction: cumulative views / hours-since-publish always trends down over a video's life). Bounding peer age closer to the candidate window is a real fix, not a tuning knob -- leave it in place.",
-    "weights": { "outlier": 0.6, "engagement": 0.25, "reach": 0.15 }
+    "excludeTitlePatterns": [
+      "\\breact(?:s|ing)? to\\b",
+      "\\bvlog\\b",
+      "\\bpodcast\\b",
+      "\\binterview\\b",
+      "\\blive\\b",
+      "\\bq ?& ?a\\b",
+      "\\bseminar\\b",
+      "\\bwebinar\\b"
+    ],
+    "_excludeTitlePatterns_comment": "First-pass topic-fit screen on the title (formats we cannot explain with motion graphics). The real fit check is analysis.motionFit. Case-insensitive regexes.",
+    "weights": {
+      "outlier": 0.6,
+      "engagement": 0.25,
+      "reach": 0.15
+    },
+    "_perChannelFetch_comment": "Raised from 10 so channels that post many Shorts still show long-form uploads (Dan Martell had none in 10). Costs the same quota: playlistItems and videos.list are both 1 unit per call."
+  },
+  "script": {
+    "passScore": 85,
+    "_passScore_comment": "Owner approved the 85 bar on 2026-11-01 (docs/SCRIPT_RUBRIC.md). The gate also fails on any P0.",
+    "wpm": 169,
+    "_wpm_comment": "Measured 2026-11-04 on a full episode (Enzo, per-scene mode, 12 scenes): 1,766 words in 628.5 s = 168.6 wpm including pauses (per scene about 150 to 194). The earlier 180 came from one short clip and made the script about 7% too short. Re-measure when the voice or style changes.",
+    "beatMinSec": 4,
+    "beatMaxSec": 15,
+    "hookFirstBeatMaxSec": 12,
+    "hookMaxTotalSec": 45,
+    "interruptMaxSec": 90,
+    "rehookWindow": [
+      0.35,
+      0.65
+    ],
+    "maxSentenceWords": 28,
+    "targetWords": [
+      1700,
+      2500
+    ],
+    "_targetWords_comment": "10 to 15 minutes at script.wpm (169): 10 x 169 = 1,690 and 15 x 169 = 2,535, rounded."
+  },
+  "fit": {
+    "minScore": 0.55,
+    "supportWeight": 0.3,
+    "minStoryTypes": 2,
+    "_comment": "Topic-fit bar (owner: use what is best, change later). Share of runtime shown by real charts or diagrams (weight 1.0) versus supporting cards and text (supportWeight). Needs at least minStoryTypes different story types. Starting values, untested on real weeks."
   },
   "retention": {
     "runsDir": "runs",
@@ -18,16 +66,55 @@
     "retentionDays": 15,
     "_comment": "Each weekly video gets its own folder under runsDir (never committed to git). Once every gate (G1-G5) is approved, ffx run-archive moves that folder under archiveDir with a recorded archivedAt timestamp. ffx run-cleanup deletes archived folders whose archivedAt is at least retentionDays old. This keeps the engine (lib/, skills/, config/, schemas/) untouched by any single video's run data."
   },
-  "video": { "width": 1920, "height": 1080, "fps": 30, "targetMinutes": { "min": 8, "max": 14 } },
-  "render": { "chunkFrames": 600, "crf": 18, "concurrencyPerJob": 2, "maxParallelJobs": 10, "codec": "h264" },
-  "audio": { "sampleRate": 48000, "targetLufs": -16, "truePeakDbfs": -1.5, "musicBedDb": -24, "maxDriftFrames": 2 },
+  "video": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "targetMinutes": {
+      "min": 8,
+      "max": 18,
+      "target": [
+        10,
+        15
+      ]
+    }
+  },
+  "render": {
+    "chunkFrames": 600,
+    "crf": 18,
+    "concurrencyPerJob": 2,
+    "maxParallelJobs": 10,
+    "codec": "h264"
+  },
+  "audio": {
+    "sampleRate": 48000,
+    "targetLufs": -16,
+    "truePeakDbfs": -1.5,
+    "musicBedDb": -24,
+    "maxDriftFrames": 2
+  },
   "secrets": {
     "_comment": "Names of environment variables / Secure Vault entries. Values are never stored in the repo.",
     "youtubeApiKeyEnv": "YOUTUBE_API_KEY",
+    "youtubeApiKeyEnvBackup": "YOUTUBE_API_KEY_2",
     "youtubeAuthMode": "query",
     "geminiApiKeyEnv": "GEMINI_API_KEY",
-    "githubTokenEnv": "GITHUB_TOKEN"
+    "geminiApiKeyEnvBackup": "GEMINI_API_KEY_2",
+    "_backup_comment": "Optional second key per service, used automatically when the first hits quota/rate limit/invalid key/service errors. For Gemini use a key from a DIFFERENT Google project (keys of one project share one quota).",
+    "githubTokenEnv": "GITHUB_TOKEN",
+    "transcriptApiKeyEnv": "TRANSCRIPT_API_KEY",
+    "_transcript_comment": "Optional key for the hosted transcript service (Supadata). Without it the chain falls back to Gemini video understanding, then manual."
   },
-  "gates": ["winner", "script_and_voice_sample", "scene_plan", "render_dispatch", "final_video"],
-  "forbidden_without_explicit_approval": ["production_render", "publish_or_upload", "merge_pull_request"]
+  "gates": [
+    "winner",
+    "script",
+    "scene_plan",
+    "render_dispatch",
+    "final_video"
+  ],
+  "forbidden_without_explicit_approval": [
+    "production_render",
+    "publish_or_upload",
+    "merge_pull_request"
+  ]
 }

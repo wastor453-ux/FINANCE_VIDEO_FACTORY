@@ -1,0 +1,210 @@
+{
+  "schema_version": "2.0",
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "totalFrames": 750,
+  "style": {
+    "packId": "owner-pale-glass",
+    "background": "cool-blue-fog"
+  },
+  "scenes": [
+    {
+      "id": "S01",
+      "startFrame": 0,
+      "endFrame": 750,
+      "beats": [
+        {
+          "id": "S01-B1",
+          "startFrame": 0,
+          "endFrame": 150,
+          "mode": "hook_question",
+          "purpose": "Open with the question the viewer already asks",
+          "usesCharacter": false,
+          "onScreenText": [
+            "Why saving feels hard"
+          ],
+          "data": [],
+          "events": [
+            {
+              "id": "e1",
+              "recipe": "text_reveal_words",
+              "role": "primary",
+              "startFrame": 10,
+              "endFrame": 30,
+              "holdUntilFrame": 90,
+              "exitFrame": 150,
+              "ease": "ease-out",
+              "params": {
+                "words": 5
+              }
+            }
+          ]
+        },
+        {
+          "id": "S01-B2",
+          "startFrame": 150,
+          "endFrame": 330,
+          "mode": "hero_number",
+          "purpose": "Show the one number the argument hangs on",
+          "usesCharacter": false,
+          "onScreenText": [
+            "20% of income"
+          ],
+          "data": [
+            {
+              "label": "Savings rate",
+              "value": 20,
+              "unit": "%",
+              "illustrative": true
+            }
+          ],
+          "events": [
+            {
+              "id": "e1",
+              "recipe": "count_up",
+              "role": "primary",
+              "startFrame": 160,
+              "endFrame": 185,
+              "holdUntilFrame": 230,
+              "exitFrame": 330,
+              "ease": "ease-out",
+              "anchor": {
+                "wordIndex": 12,
+                "word": "twenty",
+                "startMs": 5467,
+                "confidence": "ok"
+              }
+            },
+            {
+              "id": "e2",
+              "recipe": "pill_in",
+              "role": "secondary",
+              "startFrame": 200,
+              "endFrame": 212,
+              "holdUntilFrame": 243,
+              "exitFrame": 330,
+              "ease": "ease-out"
+            }
+          ]
+        },
+        {
+          "id": "S01-B3",
+          "startFrame": 330,
+          "endFrame": 570,
+          "mode": "line_chart",
+          "purpose": "Show how the balance grows over time",
+          "usesCharacter": false,
+          "onScreenText": [],
+          "data": [
+            {
+              "label": "Year 1",
+              "value": 1000,
+              "unit": "USD",
+              "illustrative": true
+            },
+            {
+              "label": "Year 5",
+              "value": 6000,
+              "unit": "USD",
+              "illustrative": true
+            },
+            {
+              "label": "Year 10",
+              "value": 14000,
+              "unit": "USD",
+              "illustrative": true
+            }
+          ],
+          "events": [
+            {
+              "id": "e1",
+              "recipe": "axes_in",
+              "role": "secondary",
+              "startFrame": 335,
+              "endFrame": 350,
+              "holdUntilFrame": 350,
+              "exitFrame": 570,
+              "ease": "ease-out"
+            },
+            {
+              "id": "e2",
+              "recipe": "line_draw",
+              "role": "primary",
+              "startFrame": 350,
+              "endFrame": 375,
+              "holdUntilFrame": 405,
+              "exitFrame": 570,
+              "ease": "ease-out"
+            },
+            {
+              "id": "e3",
+              "recipe": "pill_in",
+              "role": "secondary",
+              "startFrame": 420,
+              "endFrame": 432,
+              "holdUntilFrame": 463,
+              "exitFrame": 570,
+              "ease": "ease-out"
+            }
+          ]
+        },
+        {
+          "id": "S01-B4",
+          "startFrame": 570,
+          "endFrame": 750,
+          "mode": "bar_chart",
+          "purpose": "Compare the two options side by side",
+          "usesCharacter": false,
+          "onScreenText": [],
+          "data": [
+            {
+              "label": "Option A",
+              "value": 3,
+              "unit": "USD",
+              "illustrative": true
+            },
+            {
+              "label": "Option B",
+              "value": 5,
+              "unit": "USD",
+              "illustrative": true
+            }
+          ],
+          "events": [
+            {
+              "id": "e1",
+              "recipe": "axes_in",
+              "role": "secondary",
+              "startFrame": 575,
+              "endFrame": 590,
+              "holdUntilFrame": 590,
+              "exitFrame": 750,
+              "ease": "ease-out"
+            },
+            {
+              "id": "e2",
+              "recipe": "bar_rise",
+              "role": "primary",
+              "startFrame": 590,
+              "endFrame": 612,
+              "holdUntilFrame": 645,
+              "exitFrame": 750,
+              "ease": "ease-out"
+            },
+            {
+              "id": "e3",
+              "recipe": "legend_in",
+              "role": "secondary",
+              "startFrame": 640,
+              "endFrame": 655,
+              "holdUntilFrame": 655,
+              "exitFrame": 750,
+              "ease": "ease-out"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

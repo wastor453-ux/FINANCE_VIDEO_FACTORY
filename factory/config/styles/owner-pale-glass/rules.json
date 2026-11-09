@@ -1,0 +1,296 @@
+{
+  "_comment": "How the style pack is assembled from observed.json. Colours are NEVER written here, only which sampled value fills which role and whether the board's printed label (declared) or its pixels (observed) wins. Measured geometry carries its evidence.",
+  "id": "owner-pale-glass",
+  "name": "Owner pale glass (from the owner's five reference boards)",
+  "color": {
+    "preferDefault": "observed",
+    "roles": {
+      "ink": {
+        "from": "brand.navy",
+        "prefer": "declared"
+      },
+      "primary": {
+        "from": "brand.primary",
+        "prefer": "declared"
+      },
+      "cyan": {
+        "from": "brand.cyan",
+        "prefer": "declared"
+      },
+      "teal": {
+        "from": "brand.teal",
+        "prefer": "declared"
+      },
+      "lavender": {
+        "from": "brand.lavender",
+        "prefer": "declared"
+      },
+      "canvas": {
+        "from": "brand.fog",
+        "prefer": "declared"
+      },
+      "surface": {
+        "from": "surface.card",
+        "prefer": "observed"
+      },
+      "border": {
+        "from": "surface.border",
+        "prefer": "observed"
+      },
+      "inkSecondary": {
+        "from": "text.secondary",
+        "prefer": "observed"
+      }
+    },
+    "series": [
+      {
+        "id": "blue",
+        "from": "series.blue"
+      },
+      {
+        "id": "teal",
+        "from": "series.teal"
+      },
+      {
+        "id": "lavender",
+        "from": "series.lavender"
+      },
+      {
+        "id": "lightBlue",
+        "from": "series.lightBlue"
+      },
+      {
+        "id": "slate",
+        "from": "series.slate"
+      },
+      {
+        "id": "deepBlue",
+        "from": "series.deepBlue"
+      }
+    ],
+    "flow": {
+      "gain": {
+        "from": "flow.inflow"
+      },
+      "loss": {
+        "from": "flow.outflowFixed"
+      },
+      "lossAlt": {
+        "from": "flow.outflowVariable"
+      },
+      "rule": "The boards never use red. Outflows are lavender or light blue and inflows teal. Colour is never the only signal: every gain or loss also carries a triangle glyph and a +/- sign."
+    },
+    "textMinContrast": 4.5,
+    "inkMinContrast": 7,
+    "fillMinContrast": 1.5,
+    "fillContrastNote": "Fills are the owner's pastel colours used as large areas labelled in ink, so they only need to stay visible against the surface (1.5:1). Thin lines (line charts, outlines, arrows) use the derived stroke variant at 3:1; any text coloured like a series uses the derived text variant at 4.5:1.",
+    "strokeMinContrast": 3.0
+  },
+  "geometry": {
+    "referenceFrameWidth": 1536,
+    "cardRadiusAtReference": 8.5,
+    "cardBorderAtReference": 1,
+    "cardShadow": {
+      "blurAtReference": 8,
+      "opacity": 0.05,
+      "yAtReference": 2
+    },
+    "evidence": "Radius read from a 6x zoom of the Graph Atlas card corner (about 8-9 px on a 1536 px board). Border is a 1 px line (surface.border). Shadow is a faint 8 px halo below the edge (surface.shadowEdge).",
+    "grid": 8
+  },
+  "type": {
+    "display": "Plus Jakarta Sans",
+    "body": "Inter",
+    "identified": "by eye from the boards (heavy geometric sans for titles, small tracked capitals for section labels); UNVERIFIED against the original design files",
+    "numerals": "tabular lining figures",
+    "videoScalePx": {
+      "caption": 28,
+      "label": 32,
+      "body": 40,
+      "subtitle": 52,
+      "title": 72,
+      "display": 104,
+      "heroNumber": 160,
+      "megaNumber": 240
+    },
+    "videoScaleNote": "authored for phone legibility at 1920x1080, not measured from the boards (which are overview sheets)"
+  },
+  "motion": {
+    "durationSec": {
+      "line_draw": [
+        0.5,
+        1.0
+      ],
+      "bar_rise": [
+        0.5,
+        0.8
+      ],
+      "count_up": [
+        0.6,
+        1.0
+      ],
+      "donut_reveal": [
+        0.6,
+        1.0
+      ],
+      "flow_arrows": [
+        0.8,
+        1.2
+      ],
+      "debt_progress": [
+        0.8,
+        1.2
+      ],
+      "timeline_marker": [
+        0.6,
+        1.0
+      ],
+      "highlight": [
+        0.4,
+        0.8
+      ],
+      "diagram_morph": [
+        0.5,
+        1.0
+      ],
+      "clean_wipe": [
+        0.3,
+        0.8
+      ],
+      "card_to_chart_zoom": [
+        0.6,
+        1.2
+      ],
+      "parallax": [
+        0.5,
+        1.0
+      ],
+      "shape_mask": [
+        0.6,
+        1.2
+      ]
+    },
+    "durationSource": "Motion Grammar board, panels B and C (printed values)",
+    "easing": {
+      "ease-out": [
+        0,
+        0,
+        0.38,
+        0.9
+      ],
+      "ease-in-out": [
+        0.4,
+        0.14,
+        0.3,
+        1
+      ],
+      "linear": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "exit": [
+        0.2,
+        0,
+        1,
+        0.9
+      ]
+    },
+    "easingNote": "board names mapped to no-overshoot curves (y within 0..1) from the motion research",
+    "boardRules": [
+      "subtle natural easing",
+      "typical 0.3-1.0 s",
+      "longer only for complex concepts",
+      "no whip-pans or flashy bounce"
+    ],
+    "leadFrames": 4,
+    "fps": 30
+  },
+  "components": {
+    "source": "Motion Grammar board panel A and Story System board",
+    "list": [
+      "kpi_card",
+      "source_date_label",
+      "chart_legend",
+      "annotation_callout",
+      "compare_ab_cards",
+      "assumption_tag",
+      "section_title_lower_third",
+      "key_takeaway_checklist",
+      "disclaimer_strip"
+    ]
+  },
+  "trustRules": {
+    "source": "Graph Atlas, Story System and Motion Grammar boards",
+    "rules": [
+      "label data (illustrative vs verified)",
+      "cite source and date",
+      "show units and assumptions",
+      "no guaranteed outcomes",
+      "keep text readable on mobile"
+    ]
+  },
+  "backgrounds": {
+    "rule": "background only blurred; low contrast behind data; avoid flat solid fills; 16:9 safe composition",
+    "default": "cool-blue-fog"
+  },
+  "scene": {
+    "evidence": "AUTHORED from the owner's two sample motion videos (tilted floating layers, parallax, slow camera push) and the boards' soft glass cards; values are design choices within safe limits, not measurements.",
+    "perspectivePx": 1800,
+    "perspectiveOriginPct": [
+      62,
+      45
+    ],
+    "settleTiltDeg": {
+      "x": 4,
+      "y": -10
+    },
+    "entryTiltDegY": -22,
+    "layerZ": {
+      "back": -120,
+      "main": 40,
+      "tile": 110,
+      "near": 150
+    },
+    "cameraPushScale": 0.05,
+    "parallaxPx": {
+      "far": -70,
+      "mid": -35
+    },
+    "glass": {
+      "radiusAtReference": 27,
+      "borderPx": 1.5,
+      "shadow": [
+        [
+          0,
+          2,
+          3,
+          0.05
+        ],
+        [
+          0,
+          18,
+          40,
+          0.18
+        ],
+        [
+          0,
+          60,
+          120,
+          0.28
+        ]
+      ]
+    },
+    "limits": {
+      "maxTiltDeg": 15,
+      "maxEntryTiltDeg": 30,
+      "maxPushScale": 0.08,
+      "maxStaggerSec": 0.15,
+      "maxChartTiltScale": 1
+    },
+    "staggerSec": 0.08,
+    "maxStaggerSec": 0.15,
+    "chartTiltScale": 0.5
+  }
+}
