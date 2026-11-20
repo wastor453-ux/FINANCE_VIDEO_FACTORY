@@ -300,7 +300,54 @@
     "maxRollDegPerSec": 0.35,
     "minPxPerSec": 2.5,
     "deadWindowSec": 3,
-    "maxAmp": 1.5
+    "maxAmp": 1.5,
+    "maxEmptySec": 0.6,
+    "maxFloatPx": 10
+   },
+   "floatPx": 5,
+   "floatPeriodSec": 6.5,
+   "sheen": {
+    "startSec": 0.9,
+    "durSec": 1.6,
+    "alpha": 0.32
+   },
+   "focus": {
+    "hero_number": [
+     46,
+     46
+    ],
+    "percent_ring": [
+     50,
+     46
+    ],
+    "annotation_callout": [
+     40,
+     48
+    ],
+    "line_chart": [
+     55,
+     50
+    ],
+    "bar_chart": [
+     52,
+     52
+    ],
+    "process_flow": [
+     50,
+     50
+    ],
+    "causal_diagram": [
+     50,
+     50
+    ],
+    "action_checklist": [
+     45,
+     50
+    ],
+    "risks_grid": [
+     50,
+     50
+    ]
    }
   }
  },

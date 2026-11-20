@@ -75,6 +75,19 @@ export function compilePlan({ script, voice, timings, design, pack, recipes, sce
     });
     outScenes.push({ id: s.sc.id, startFrame: sStart, endFrame: sEnd, beats: beats.filter(Boolean) });
   });
+  // no empty screens: when a beat's first visible element waits for a late spoken cue, the previous beat stays up and the cut moves to just before that element
+  const maxEmpty = Math.round((pack.scene?.life?.limits?.maxEmptySec ?? 0.6) * fps), flat = outScenes.flatMap((sc) => sc.beats.map((bt) => ({ sc, bt })));
+  for (let i = 1; i < flat.length; i++) {
+    const { sc, bt } = flat[i], prev = flat[i - 1], vis = bt.events.filter((e) => e.recipe !== "camera_push").map((e) => e.startFrame);
+    if (!vis.length) continue;
+    const first = Math.min(...vis), gap = first - bt.startFrame; if (gap <= maxEmpty) continue;
+    const ns = first - lead, old = bt.startFrame; if (ns <= prev.bt.startFrame + 2 * fps) { notes.push(`${bt.id}: ${(gap / fps).toFixed(1)} s empty lead cannot be covered (previous beat too short)`); continue; }
+    for (const e of prev.bt.events) { if (e.holdUntilFrame === old) e.holdUntilFrame = ns; if (e.exitFrame === old) e.exitFrame = ns; if (e.endFrame > ns) e.endFrame = ns; }
+    prev.bt.endFrame = ns; bt.startFrame = ns;
+    for (const e of bt.events) if (e.recipe === "camera_push" && e.startFrame < ns) e.startFrame = ns;
+    if (prev.sc !== sc) { prev.sc.endFrame = ns; sc.startFrame = ns; if (bt.transitionIn) { const d = bt.transitionIn.endFrame - bt.transitionIn.startFrame; bt.transitionIn = { ...bt.transitionIn, startFrame: ns, endFrame: ns + d }; } }
+    notes.push(`${bt.id}: first element waits ${(gap / fps).toFixed(1)} s for its cue, so the cut was moved ${((ns - old) / fps).toFixed(1)} s later and ${prev.bt.id} stays up`);
+  }
   if (errors.length) { const e = new Error(`planner: ${errors.length} problem(s):\n- ${errors.join("\n- ")}`); e.problems = errors; throw e; }
 
   function anchorOf(w, role) {

@@ -12,10 +12,10 @@ export function buildCameraKeys(plan, life) {
     const r = rng(hashStr(`${plan.style?.packId}|${plan.seed ?? ""}|${b.id}`)), mid = Math.round((b.startFrame + b.endFrame) / 2);
     const inward = push.has(b.mode), dir = i % 2 ? -1 : 1;
     keys.push({ f: mid, zoom: 1 + amp * (inward ? life.zoomMax * (0.65 + 0.35 * r()) : life.zoomMax * 0.2 * r()),
-      x: dir * amp * life.panPx * (0.5 + 0.5 * r()), y: (r() - 0.5) * 2 * amp * life.panPx * 0.45, roll: (r() - 0.5) * 2 * amp * life.rollDeg });
+      x: dir * amp * life.panPx * (0.5 + 0.5 * r()), y: (r() - 0.5) * 2 * amp * life.panPx * 0.45, roll: (r() - 0.5) * 2 * amp * life.rollDeg, ox: life.focus?.[b.mode]?.[0] ?? 50, oy: life.focus?.[b.mode]?.[1] ?? 50 });
   });
-  if (!keys.length) return [{ f: 0, zoom: 1, x: 0, y: 0, roll: 0 }, { f: total, zoom: 1, x: 0, y: 0, roll: 0 }];
-  const first = { ...keys[0], f: 0, zoom: 1 + (keys[0].zoom - 1) * 0.3, x: -keys[0].x * 0.5, y: 0 }, last = { ...keys[keys.length - 1], f: Math.max(total, keys[keys.length - 1].f + 1) };
+  if (!keys.length) return [{ f: 0, zoom: 1, x: 0, y: 0, roll: 0, ox: 50, oy: 50 }, { f: total, zoom: 1, x: 0, y: 0, roll: 0, ox: 50, oy: 50 }];
+  const first = { ...keys[0], f: 0, zoom: 1 + (keys[0].zoom - 1) * 0.3, x: -keys[0].x * 0.5, y: 0, ox: 50, oy: 50 }, last = { ...keys[keys.length - 1], f: Math.max(total, keys[keys.length - 1].f + 1) };
   return limitKeys([first, ...keys, last], life, plan.fps ?? 30);
 }
 
@@ -25,7 +25,7 @@ function limitKeys(keys, life, fps) {
   const rate = (get) => { let m = 0, p = get(0); for (let f = 1; f <= end; f++) { const v = get(f); m = Math.max(m, Math.abs(v - p) * fps); p = v; } return m; };
   const ch = (k) => (f) => hermite(keys, k, f);
   const pan = Math.max(rate(ch("x")), rate(ch("y"))), zoom = rate(ch("zoom")), roll = rate(ch("roll"));
-  const sp = Math.min(1, (L.maxPxPerSec * 0.8 - hh * 0.5) / Math.max(pan, 1e-6)), sz = Math.min(1, (L.maxZoomPerSec * 0.8) / Math.max(zoom, 1e-9)), sr = Math.min(1, (L.maxRollDegPerSec * 0.8) / Math.max(roll, 1e-9));
+  const sp = Math.min(1, (L.maxPxPerSec * 0.8 - hh * 2.5) / Math.max(pan, 1e-6)), sz = Math.min(1, (L.maxZoomPerSec * 0.8) / Math.max(zoom, 1e-9)), sr = Math.min(1, (L.maxRollDegPerSec * 0.8) / Math.max(roll, 1e-9));
   return keys.map((k) => ({ ...k, x: k.x * sp, y: k.y * sp, zoom: 1 + (k.zoom - 1) * sz, roll: k.roll * sr }));
 }
 
@@ -44,10 +44,12 @@ export function cameraAt(frame, keys, life, fps = 30, seed = "") {
   const t = frame / fps, amp = life.amp ?? 1, ph = rng(hashStr(`hh|${seed}`));
   const wob = (period, p) => Math.sin((2 * Math.PI * t) / period + p * 6.2832);
   const hx = life.handheldPx * amp * (wob(7.3, ph()) + 0.6 * wob(3.1, ph())) / 1.6, hy = life.handheldPx * amp * (wob(9.1, ph()) + 0.6 * wob(4.3, ph())) / 1.6, hr = life.handheldRollDeg * amp * wob(11.7, ph());
-  return { x: hermite(keys, "x", frame) + hx, y: hermite(keys, "y", frame) + hy, zoom: hermite(keys, "zoom", frame), roll: hermite(keys, "roll", frame) + hr };
+  return { x: hermite(keys, "x", frame) + hx, y: hermite(keys, "y", frame) + hy, zoom: hermite(keys, "zoom", frame), roll: hermite(keys, "roll", frame) + hr, ox: hermite(keys, "ox", frame), oy: hermite(keys, "oy", frame) };
 }
 
 /** CSS transform for the beat layer (foreground, moves with the camera). */
+/** transform-origin for the camera layer: the camera pushes toward the beat's main item (origin follows the focus table, interpolated between beats). */
+export const cameraOrigin = (c) => `${c.ox.toFixed(2)}% ${c.oy.toFixed(2)}%`;
 export const cameraTransform = (c) => `translate3d(${c.x.toFixed(2)}px, ${c.y.toFixed(2)}px, 0) scale(${c.zoom.toFixed(5)}) rotate(${c.roll.toFixed(4)}deg)`;
 
 /** Background layer: follows the camera at a fraction (depth), plus a slow drift; over-scaled so edges never show. */
@@ -78,4 +80,15 @@ export function motionReport(plan, life) {
   for (let s = 0; s + win <= speeds.length; s += Math.round(fps / 2)) { let m = 0; for (let k = s; k < s + win; k++) m += speeds[k]; worst = Math.min(worst, m / win); }
   if (speeds.length >= win && worst < L.minPxPerSec) problems.push(`dead motion: average ${worst.toFixed(1)} px/s over ${L.deadWindowSec} s (minimum ${L.minPxPerSec})`);
   return { problems, stats: { maxPxPerSec: +maxV.toFixed(1), maxZoomPerSec: +maxZ.toFixed(4), maxRollDegPerSec: +maxR.toFixed(3), minWindowPxPerSec: speeds.length >= win ? +worst.toFixed(1) : null } };
+}
+
+/** Float of a card layer (px). Back plates move against the front card (opposite sign, smaller), so the layers slide over each other. */
+export function floatAt(frame, life, fps = 30, layer = "front") {
+  const t = frame / fps, a = life.floatPx * (life.amp ?? 1) * (layer === "back" ? -0.6 : 1), ph = layer === "back" ? 1.7 : 0;
+  return a * Math.sin((2 * Math.PI * t) / life.floatPeriodSec + ph);
+}
+/** Glass sheen: position (percent of a 250% wide gradient) sweeping once per beat after `startSec`; null outside the sweep. */
+export function sheenAt(frame, life, fps = 30) {
+  const sh = life.sheen, t = frame / fps - sh.startSec; if (t < 0 || t > sh.durSec) return null;
+  const u = t / sh.durSec, e = u * u * (3 - 2 * u); return { pos: 100 - 100 * e, alpha: sh.alpha * Math.sin(Math.PI * u) };
 }

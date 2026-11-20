@@ -3,7 +3,7 @@ import { AbsoluteFill, Sequence, useCurrentFrame } from "remotion";
 import { StyleProvider } from "./style/StyleContext";
 import { BeatView } from "./components/BeatView";
 import { eased } from "./motion/math.mjs";
-import { buildCameraKeys, cameraAt, cameraTransform, backgroundAt, backgroundTransform } from "./motion/life.mjs";
+import { buildCameraKeys, cameraAt, cameraTransform, cameraOrigin, backgroundAt, backgroundTransform } from "./motion/life.mjs";
 import { extendBeat, transitionStyles } from "./motion/transition.mjs";
 
 export interface VideoProps { plan: any; pack: any; backgrounds: Record<string, string> }
@@ -32,7 +32,7 @@ export const Video: React.FC<VideoProps> = ({ plan, pack, backgrounds }) => {
     <StyleProvider pack={pack} fps={plan.fps} width={plan.width}>
       <AbsoluteFill style={{ backgroundColor: pack.color.canvas, overflow: "hidden" }}>
         <AbsoluteFill style={{ backgroundImage: `url(${bgFor(plan.style.background)})`, backgroundSize: "cover", transform: backgroundTransform(bg) }} />
-        <AbsoluteFill style={{ transform: cameraTransform(cam) }}>
+        <AbsoluteFill style={{ transform: cameraTransform(cam), transformOrigin: cameraOrigin(cam) }}>
         {beats.map((b, i) => {
           const next = beats[i + 1], tin = tr(b), tout = next ? tr(next) : undefined;
           const view = tout ? extendBeat(b, tout.endFrame) : b;

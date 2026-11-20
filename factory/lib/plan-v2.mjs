@@ -23,6 +23,11 @@ export function lintPlanV2(plan, ctx) {
   if (plan.style.packId !== pack.id) E(`plan uses style pack "${plan.style.packId}" but the loaded pack is "${pack.id}"`);
   if (!bgIds.has(plan.style.background)) E(`unknown background "${plan.style.background}"`);
 
+  const maxEmpty = Math.round((pack.scene?.life?.limits?.maxEmptySec ?? 0.6) * fps);
+  for (const bt of plan.scenes.flatMap((x) => x.beats)) {
+    const vis = bt.events.filter((e) => e.recipe !== "camera_push").map((e) => e.startFrame);
+    if (vis.length && Math.min(...vis) - bt.startFrame > maxEmpty) E(`${bt.id}: empty screen for ${((Math.min(...vis) - bt.startFrame) / fps).toFixed(1)} s at the start of the beat (limit ${(maxEmpty / fps).toFixed(1)} s); the first visible element must appear within it`);
+  }
   const scenes = plan.scenes, beatIds = [];
   const allBeats = [];
   scenes.forEach((s, i) => {

@@ -1,15 +1,21 @@
 import React from "react";
 import { useLook, withAlpha } from "../style/StyleContext";
+import { useCurrentFrame } from "remotion";
 import { eased, lerp } from "../motion/math.mjs";
+import { floatAt, sheenAt } from "../motion/life.mjs";
 import { strongestSeries } from "../motion/color.mjs";
 
 /** Shared premium stage for scenes built after the charts: parallax glow layers, perspective wrapper with settle tilt and camera push, glass style. All values come from the pack's `scene` section. */
+const isDark = (hex: string) => { const n = parseInt(hex.slice(1), 16), f = (v: number) => { v /= 255; return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }; return 0.2126 * f(n >> 16) + 0.7152 * f((n >> 8) & 255) + 0.0722 * f(n & 255) < 0.3; };
 export function useGlass() {
   const l = useLook(), sc = l.pack.scene, c = l.color, S = c.series;
   const shadow = sc.glass.shadow.map(([x, y, b, o]: number[]) => `${x}px ${y}px ${b}px ${withAlpha(strongestSeries(c).fill, o)}`).join(",") + `, inset 0 1px 0 ${c.surface}`;
-  const glass: React.CSSProperties = { background: `linear-gradient(145deg, ${withAlpha(c.surface, 0.94)}, ${withAlpha(c.surface, 0.7)})`, border: `${sc.glass.borderPx}px solid ${withAlpha(c.surface, 0.95)}`, borderRadius: l.px(sc.glass.radiusAtReference), boxShadow: shadow };
+  const frame = useCurrentFrame(), life = sc.life, base = `linear-gradient(145deg, ${withAlpha(c.surface, 0.94)}, ${withAlpha(c.surface, 0.7)})`;
+  const sh = sheenAt(frame, life, l.fps), dark = isDark(c.canvas), sheenCol = dark ? c.ink : c.surface;
+  const sheen = sh ? `linear-gradient(105deg, transparent 42%, ${withAlpha(sheenCol, sh.alpha * (dark ? 0.35 : 1))} 50%, transparent 58%) ${sh.pos}% 0 / 250% 100% no-repeat, ` : "";
+  const glass: React.CSSProperties = { translate: `0 ${floatAt(frame, life, l.fps, "back").toFixed(2)}px`, background: `${sheen}${base}`, border: `${sc.glass.borderPx}px solid ${withAlpha(c.surface, 0.95)}`, borderRadius: l.px(sc.glass.radiusAtReference), boxShadow: shadow };
   /** front cards: nearly opaque so the back plate behind them never shows through */
-  const solid: React.CSSProperties = { ...glass, boxSizing: "border-box", background: `linear-gradient(145deg, ${withAlpha(c.surface, 0.99)}, ${withAlpha(c.surface, 0.95)})` };
+  const solid: React.CSSProperties = { ...glass, translate: `0 ${floatAt(frame, life, l.fps, "front").toFixed(2)}px`, boxSizing: "border-box", background: `${sheen}linear-gradient(145deg, ${withAlpha(c.surface, 0.99)}, ${withAlpha(c.surface, 0.95)})` };
   return { glass, solid, shadow };
 }
 

@@ -56,6 +56,8 @@ export function validateStylePack(pack, dir) {
       if (!(lf.amp > 0 && lf.amp <= Lm.maxAmp)) f.push("scene.life.amp out of range");
       if (!(lf.zoomMax >= 0 && lf.zoomMax <= L.maxPushScale)) f.push("scene.life.zoomMax exceeds the push limit");
       if (!(lf.panPx <= 90 && lf.rollDeg <= 1.2 && lf.handheldPx <= 8 && lf.handheldRollDeg <= 0.3)) f.push("scene.life moves exceed safe size (pan 90 px, roll 1.2 deg, handheld 8 px / 0.3 deg)");
+      if (!(lf.floatPx >= 0 && lf.floatPx * (lf.amp ?? 1) <= Lm.maxFloatPx)) f.push("scene.life.floatPx exceeds the float limit");
+      if (!(lf.floatPeriodSec >= 3 && lf.sheen && lf.sheen.alpha <= 0.5 && lf.sheen.durSec >= 1)) f.push("scene.life float period (>= 3 s) or sheen (alpha <= 0.5, sweep >= 1 s) out of range");
       if (!(lf.bgScale >= 1 + (lf.bgDriftPx * (lf.amp ?? 1) + lf.panPx * lf.bgFollow * (lf.amp ?? 1)) / 960)) f.push("scene.life.bgScale too small: background edges would show");
     }
     if (!["on", "off"].includes(sn.sourceTag)) f.push("scene.sourceTag must be \"on\" or \"off\"");

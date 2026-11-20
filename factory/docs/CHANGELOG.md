@@ -150,3 +150,14 @@
 - `src/Video.tsx`: background layer + camera layer wrap all beats; transitions unchanged.
 - Motion gate: `ffx motion-check <plan>` and inside `lint-plan` (too fast, or dead stretch under the minimum average speed over 3 s).
 - Tests: `tests/life.test.mjs` (determinism, continuity at beat cuts, every kit passes, gate catches dead and too-fast, bad life section rejected). 241 JS tests.
+
+## Patch 39 - no empty screens
+- Found in the real GitHub clip (patch 38): a beat whose first visible element waits for a late spoken cue left about 0.9 s of blank background. Planner now keeps the previous beat up and moves the cut to just before that element (events, holds and scene/transition frames updated, beats stay contiguous); a note says what moved.
+- New lint error in `lint-plan`: a beat may not start empty for more than `scene.life.limits.maxEmptySec` (0.6 s in the pack).
+- Camera speed limiter budgets more for the handheld wobble (a kit at amp 1.25 measured 39 px/s against the 38 limit).
+- Test added to `tests/life.test.mjs`. 242 JS tests.
+
+## Patch 40 - life inside the scene
+- Cards float: `useGlass` (stage.tsx) adds the CSS `translate` property per layer, so no scene component changed; back plates move against the front card for depth. Glass sheen sweeps once per beat (`scene.life.sheen`), colour from the surface (light kits) or ink (dark kits).
+- Camera pushes toward the beat's main item: key origin from `scene.life.focus` per mode, interpolated so it never jumps.
+- Pack gates: float size/period and sheen limits; kits scale float with `amp`. New test for origin range, float within limits, sheen window. 243 JS tests.

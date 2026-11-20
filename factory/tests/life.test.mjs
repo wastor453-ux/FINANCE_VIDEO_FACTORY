@@ -46,3 +46,21 @@ test("a bad life section is rejected by the pack gates", () => {
   assert.ok(probs.some((p) => p.includes("scene.life")));
 });
 import * as awaitedStyle from "../lib/style.mjs";
+
+test("no empty screens: a late first cue moves the cut, and the lint rejects a plan that leaves a blank gap", () => {
+  const plan = planFor("pale-glass"), fps = plan.fps;
+  for (const bt of plan.scenes.flatMap((s) => s.beats)) { const vis = bt.events.filter((e) => e.recipe !== "camera_push").map((e) => e.startFrame); assert.ok(Math.min(...vis) - bt.startFrame <= 0.6 * fps + 1, `${bt.id} starts empty`); }
+  const beats = plan.scenes.flatMap((s) => s.beats); for (let i = 1; i < beats.length; i++) assert.equal(beats[i].startFrame, beats[i - 1].endFrame, "beats must stay contiguous");
+  const bad = structuredClone(plan), b2 = bad.scenes[0].beats[1]; for (const e of b2.events) if (e.recipe !== "camera_push") { e.startFrame += 40; e.endFrame += 40; }
+  const f = path.join(D, "gap.json"); fs.writeFileSync(f, JSON.stringify(bad));
+  const r = ffx("lint-plan", f); assert.match(r.stderr, /empty screen/);
+});
+
+test("camera origin follows the focus table and stays inside the frame; float and sheen stay within pack limits", async () => {
+  const { floatAt, sheenAt, cameraOrigin } = await import("../../src/motion/life.mjs");
+  const { pack } = loadPackById(ROOT, "pale-glass"), life = pack.scene.life, plan = planFor("pale-glass"), keys = buildCameraKeys(plan, life);
+  for (let f = 0; f < plan.totalFrames; f += 11) { const c = cameraAt(f, keys, life, 30, "s"); assert.ok(c.ox >= 30 && c.ox <= 70 && c.oy >= 30 && c.oy <= 70, cameraOrigin(c)); }
+  let moved = 0; for (let f = 0; f < 600; f++) { const a = floatAt(f, life, 30, "front"); assert.ok(Math.abs(a) <= life.floatPx + 1e-9); moved += Math.abs(floatAt(f + 1, life, 30) - a); }
+  assert.ok(moved > 3, "cards must actually float");
+  assert.equal(sheenAt(0, life, 30), null); assert.ok(sheenAt(Math.round(1.4 * 30), life, 30).alpha > 0);
+});

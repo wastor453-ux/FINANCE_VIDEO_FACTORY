@@ -12,12 +12,12 @@
     {
       "id": "S01",
       "startFrame": 0,
-      "endFrame": 1026,
+      "endFrame": 1087,
       "beats": [
         {
           "id": "S01B1",
           "startFrame": 0,
-          "endFrame": 186,
+          "endFrame": 210,
           "mode": "annotation_callout",
           "purpose": "Hook: a surprise repair",
           "usesCharacter": false,
@@ -30,8 +30,8 @@
               "role": "secondary",
               "startFrame": 0,
               "endFrame": 9,
-              "holdUntilFrame": 186,
-              "exitFrame": 186,
+              "holdUntilFrame": 210,
+              "exitFrame": 210,
               "ease": "ease-out"
             },
             {
@@ -41,7 +41,7 @@
               "startFrame": 4,
               "endFrame": 19,
               "holdUntilFrame": 79,
-              "exitFrame": 186,
+              "exitFrame": 210,
               "ease": "ease-out",
               "params": {
                 "words": 5
@@ -59,8 +59,8 @@
               "role": "secondary",
               "startFrame": 123,
               "endFrame": 141,
-              "holdUntilFrame": 186,
-              "exitFrame": 186,
+              "holdUntilFrame": 210,
+              "exitFrame": 210,
               "ease": "ease-out",
               "anchor": {
                 "wordIndex": 12,
@@ -76,7 +76,7 @@
               "startFrame": 0,
               "endFrame": 180,
               "holdUntilFrame": 180,
-              "exitFrame": 186,
+              "exitFrame": 210,
               "ease": "ease-in-out"
             }
           ],
@@ -92,8 +92,8 @@
         },
         {
           "id": "S01B2",
-          "startFrame": 186,
-          "endFrame": 364,
+          "startFrame": 210,
+          "endFrame": 395,
           "mode": "hero_number",
           "purpose": "Repair cost",
           "usesCharacter": false,
@@ -117,8 +117,8 @@
               "role": "primary",
               "startFrame": 214,
               "endFrame": 238,
-              "holdUntilFrame": 364,
-              "exitFrame": 364,
+              "holdUntilFrame": 395,
+              "exitFrame": 395,
               "ease": "ease-out",
               "anchor": {
                 "wordIndex": 19,
@@ -131,10 +131,10 @@
               "id": "e2",
               "recipe": "camera_push",
               "role": "secondary",
-              "startFrame": 186,
+              "startFrame": 210,
               "endFrame": 364,
-              "holdUntilFrame": 364,
-              "exitFrame": 364,
+              "holdUntilFrame": 395,
+              "exitFrame": 395,
               "ease": "ease-in-out"
             }
           ],
@@ -142,7 +142,7 @@
         },
         {
           "id": "S01B3",
-          "startFrame": 364,
+          "startFrame": 395,
           "endFrame": 481,
           "mode": "hero_number",
           "purpose": "Card rate",
@@ -181,7 +181,7 @@
               "id": "e2",
               "recipe": "camera_push",
               "role": "secondary",
-              "startFrame": 364,
+              "startFrame": 395,
               "endFrame": 481,
               "holdUntilFrame": 481,
               "exitFrame": 481,
@@ -193,7 +193,7 @@
         {
           "id": "S01B4",
           "startFrame": 481,
-          "endFrame": 694,
+          "endFrame": 813,
           "mode": "causal_diagram",
           "purpose": "No savings leads to growing debt",
           "usesCharacter": false,
@@ -208,8 +208,8 @@
               "role": "primary",
               "startFrame": 491,
               "endFrame": 521,
-              "holdUntilFrame": 694,
-              "exitFrame": 694,
+              "holdUntilFrame": 813,
+              "exitFrame": 813,
               "ease": "ease-in-out",
               "params": {
                 "item": 0
@@ -227,8 +227,8 @@
               "role": "primary",
               "startFrame": 521,
               "endFrame": 551,
-              "holdUntilFrame": 694,
-              "exitFrame": 694,
+              "holdUntilFrame": 813,
+              "exitFrame": 813,
               "ease": "ease-in-out",
               "params": {
                 "item": 1
@@ -247,8 +247,8 @@
               "role": "primary",
               "startFrame": 580,
               "endFrame": 610,
-              "holdUntilFrame": 694,
-              "exitFrame": 694,
+              "holdUntilFrame": 813,
+              "exitFrame": 813,
               "ease": "ease-in-out",
               "params": {
                 "item": 2
@@ -266,8 +266,8 @@
               "role": "primary",
               "startFrame": 634,
               "endFrame": 664,
-              "holdUntilFrame": 694,
-              "exitFrame": 694,
+              "holdUntilFrame": 813,
+              "exitFrame": 813,
               "ease": "ease-in-out",
               "params": {
                 "item": 3
@@ -287,7 +287,7 @@
               "startFrame": 481,
               "endFrame": 661,
               "holdUntilFrame": 661,
-              "exitFrame": 694,
+              "exitFrame": 813,
               "ease": "ease-in-out"
             }
           ],
@@ -310,7 +310,7 @@
         },
         {
           "id": "S01B5",
-          "startFrame": 694,
+          "startFrame": 813,
           "endFrame": 886,
           "mode": "hero_number",
           "purpose": "One year of interest",
@@ -350,7 +350,7 @@
               "id": "e2",
               "recipe": "camera_push",
               "role": "secondary",
-              "startFrame": 694,
+              "startFrame": 813,
               "endFrame": 874,
               "holdUntilFrame": 874,
               "exitFrame": 886,
@@ -362,7 +362,7 @@
         {
           "id": "S01B6",
           "startFrame": 886,
-          "endFrame": 1026,
+          "endFrame": 1087,
           "mode": "annotation_callout",
           "purpose": "Order matters",
           "usesCharacter": false,
@@ -375,8 +375,8 @@
               "role": "secondary",
               "startFrame": 886,
               "endFrame": 895,
-              "holdUntilFrame": 1026,
-              "exitFrame": 1026,
+              "holdUntilFrame": 1087,
+              "exitFrame": 1087,
               "ease": "ease-out"
             },
             {
@@ -386,7 +386,7 @@
               "startFrame": 886,
               "endFrame": 901,
               "holdUntilFrame": 979,
-              "exitFrame": 1026,
+              "exitFrame": 1087,
               "ease": "ease-out",
               "params": {
                 "words": 7
@@ -404,8 +404,8 @@
               "role": "secondary",
               "startFrame": 902,
               "endFrame": 920,
-              "holdUntilFrame": 1026,
-              "exitFrame": 1026,
+              "holdUntilFrame": 1087,
+              "exitFrame": 1087,
               "ease": "ease-out",
               "anchor": {
                 "wordIndex": 77,
@@ -420,8 +420,8 @@
               "role": "secondary",
               "startFrame": 886,
               "endFrame": 1026,
-              "holdUntilFrame": 1026,
-              "exitFrame": 1026,
+              "holdUntilFrame": 1087,
+              "exitFrame": 1087,
               "ease": "ease-in-out"
             }
           ],
@@ -439,12 +439,12 @@
     },
     {
       "id": "S02",
-      "startFrame": 1026,
+      "startFrame": 1087,
       "endFrame": 2463,
       "beats": [
         {
           "id": "S02B1",
-          "startFrame": 1026,
+          "startFrame": 1087,
           "endFrame": 1320,
           "mode": "process_flow",
           "purpose": "The order of steps",
@@ -513,7 +513,7 @@
               "id": "e4",
               "recipe": "camera_push",
               "role": "secondary",
-              "startFrame": 1026,
+              "startFrame": 1087,
               "endFrame": 1206,
               "holdUntilFrame": 1206,
               "exitFrame": 1320,
@@ -536,8 +536,8 @@
           },
           "transitionIn": {
             "type": "clean_wipe",
-            "startFrame": 1026,
-            "endFrame": 1041
+            "startFrame": 1087,
+            "endFrame": 1102
           }
         },
         {
@@ -670,7 +670,7 @@
         {
           "id": "S02B3",
           "startFrame": 1634,
-          "endFrame": 1848,
+          "endFrame": 1869,
           "mode": "line_chart",
           "purpose": "Balance falls month by month",
           "usesCharacter": false,
@@ -734,8 +734,8 @@
               "role": "secondary",
               "startFrame": 1636,
               "endFrame": 1648,
-              "holdUntilFrame": 1848,
-              "exitFrame": 1848,
+              "holdUntilFrame": 1869,
+              "exitFrame": 1869,
               "ease": "ease-out"
             },
             {
@@ -744,8 +744,8 @@
               "role": "primary",
               "startFrame": 1648,
               "endFrame": 1678,
-              "holdUntilFrame": 1848,
-              "exitFrame": 1848,
+              "holdUntilFrame": 1869,
+              "exitFrame": 1869,
               "ease": "ease-out",
               "anchor": {
                 "wordIndex": 45,
@@ -761,8 +761,8 @@
               "role": "secondary",
               "startFrame": 1678,
               "endFrame": 1687,
-              "holdUntilFrame": 1848,
-              "exitFrame": 1848,
+              "holdUntilFrame": 1869,
+              "exitFrame": 1869,
               "ease": "ease-out"
             },
             {
@@ -771,16 +771,16 @@
               "role": "secondary",
               "startFrame": 1678,
               "endFrame": 1848,
-              "holdUntilFrame": 1848,
-              "exitFrame": 1848,
+              "holdUntilFrame": 1869,
+              "exitFrame": 1869,
               "ease": "ease-in-out"
             }
           ]
         },
         {
           "id": "S02B4",
-          "startFrame": 1848,
-          "endFrame": 2116,
+          "startFrame": 1869,
+          "endFrame": 2167,
           "mode": "action_checklist",
           "purpose": "This week's actions",
           "usesCharacter": false,
@@ -795,8 +795,8 @@
               "role": "primary",
               "startFrame": 1873,
               "endFrame": 1894,
-              "holdUntilFrame": 2116,
-              "exitFrame": 2116,
+              "holdUntilFrame": 2167,
+              "exitFrame": 2167,
               "ease": "ease-out",
               "params": {
                 "item": 0,
@@ -815,8 +815,8 @@
               "role": "primary",
               "startFrame": 1949,
               "endFrame": 1970,
-              "holdUntilFrame": 2116,
-              "exitFrame": 2116,
+              "holdUntilFrame": 2167,
+              "exitFrame": 2167,
               "ease": "ease-out",
               "params": {
                 "item": 1,
@@ -835,8 +835,8 @@
               "role": "primary",
               "startFrame": 2029,
               "endFrame": 2050,
-              "holdUntilFrame": 2116,
-              "exitFrame": 2116,
+              "holdUntilFrame": 2167,
+              "exitFrame": 2167,
               "ease": "ease-out",
               "params": {
                 "item": 2,
@@ -853,10 +853,10 @@
               "id": "e4",
               "recipe": "camera_push",
               "role": "secondary",
-              "startFrame": 1848,
+              "startFrame": 1869,
               "endFrame": 2028,
               "holdUntilFrame": 2028,
-              "exitFrame": 2116,
+              "exitFrame": 2167,
               "ease": "ease-in-out"
             }
           ],
@@ -876,7 +876,7 @@
         },
         {
           "id": "S02B5",
-          "startFrame": 2116,
+          "startFrame": 2167,
           "endFrame": 2340,
           "mode": "risks_grid",
           "purpose": "Risks to watch",
@@ -951,7 +951,7 @@
               "id": "e4",
               "recipe": "camera_push",
               "role": "secondary",
-              "startFrame": 2116,
+              "startFrame": 2167,
               "endFrame": 2296,
               "holdUntilFrame": 2296,
               "exitFrame": 2340,
