@@ -273,7 +273,36 @@
   },
   "staggerSec": 0.08,
   "maxStaggerSec": 0.15,
-  "chartTiltScale": 0.5
+  "chartTiltScale": 0.5,
+  "sourceTag": "off",
+  "sourceTagNote": "on = a 'Source: ..., year' tile under charts and figures; off = no tile (sources go to the video description). Per data point: showSource true/false overrides.",
+  "life": {
+   "note": "AUTHORED continuous camera for the whole video; values are design choices inside the limits below, checked by the motion gate (ffx motion-check).",
+   "amp": 1,
+   "panPx": 46,
+   "zoomMax": 0.04,
+   "rollDeg": 0.55,
+   "handheldPx": 3.5,
+   "handheldRollDeg": 0.12,
+   "bgFollow": 0.35,
+   "bgDriftPx": 34,
+   "bgPeriodSec": 26,
+   "bgScale": 1.1,
+   "pushModes": [
+    "hero_number",
+    "annotation_callout",
+    "percent_ring",
+    "line_chart"
+   ],
+   "limits": {
+    "maxPxPerSec": 38,
+    "maxZoomPerSec": 0.012,
+    "maxRollDegPerSec": 0.35,
+    "minPxPerSec": 2.5,
+    "deadWindowSec": 3,
+    "maxAmp": 1.5
+   }
+  }
  },
  "trustRules": {
   "source": "Graph Atlas, Story System and Motion Grammar boards",

@@ -197,7 +197,12 @@
               "exitFrame": 360,
               "ease": "ease-in-out"
             }
-          ]
+          ],
+          "transitionIn": {
+            "type": "card_to_chart_zoom",
+            "startFrame": 180,
+            "endFrame": 204
+          }
         },
         {
           "id": "D3",
@@ -282,7 +287,12 @@
               "exitFrame": 540,
               "ease": "ease-in-out"
             }
-          ]
+          ],
+          "transitionIn": {
+            "type": "clean_wipe",
+            "startFrame": 360,
+            "endFrame": 375
+          }
         }
       ]
     }

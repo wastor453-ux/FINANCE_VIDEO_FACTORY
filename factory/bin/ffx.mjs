@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 // ffx — Finance Video Factory command line. Zero dependencies (Node >= 20).
+import { motionReport } from "../../src/motion/life.mjs";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -17,7 +18,10 @@ import { searchVoices } from "../lib/voices.mjs";
 import { localChecks, onlineChecks, liveChecks, summarize } from "../lib/doctor.mjs";
 import { generateTheme, validateTheme, seedFromString, seedWithLedger } from "../lib/theme.mjs";
 import { loadStylePack } from "../lib/style.mjs";
+import { compilePlan } from "../lib/planner.mjs";
 import { lintPlanV2 } from "../lib/plan-v2.mjs";
+import { loadRegistry, validateRegistry, coverage } from "../lib/registry.mjs";
+import { loadKits, loadPackById, chooseKit, validateKit } from "../lib/kits.mjs";
 import { makeRunId, newRunState, setStage, approveGate, revokeGate, isComplete, markArchived, isExpired } from "../lib/run.mjs";
 import { parseVtt, parseSrt, validateTranscript } from "../lib/transcript.mjs";
 import { scoreScript } from "../lib/script-quality.mjs";
@@ -46,6 +50,10 @@ const HELP = `ffx <command>
   discover --out <file>             fetch recent uploads of all channels (needs YouTube key in env)
   select --in <discovery.json> --out <selection.json> [--seen state/seen_videos.json] [--now ISO]
   mark-seen --selection <file> --seen <file>   record ALL evaluated videos as seen (after the winner is approved)
+  motion-check <scene_plan.json> [--kit id]   camera speed limits and "dead motion" gate (also part of lint-plan)
+  kit-check        validate every style kit (pack gates, tags, no two kits identical)
+  registry-check   validate the variant registry and print coverage per mode (modes under the target are reported, not failed)
+  plan-compile --script script.json --voice voice_manifest.json --design beat_design.json [--timings word_timings.json] [--scenes S01,S02] [--blocked blocked_words.json] [--kit id|auto | --style dir] --out scene_plan.json   compile script + word timing + per-beat design into a scene plan v2 (then run lint-plan)
   lint-plan <scene_plan.json> [--voice voice_manifest.json] [--script script.json] [--style dir] [--renderable]   schema + cross-checks (v1 and v2 plans; v2 = scenes > beats > typed events)
   lint-script <script.json>         schema + claim/source rules
   fit-score <script.json|analysis.json>   topic-fit: share of runtime shown by real charts/diagrams (exit 1 below the bar)
@@ -130,13 +138,72 @@ async function main() {
       console.log(`seen set now has ${all.length} videos`);
       break;
     }
+    case "motion-check": {
+      const plan = readJson(pos[0]), { pack } = loadPackById(ROOT, flags.kit ?? plan.style.packId), mr = motionReport(plan, pack.scene.life);
+      console.log(JSON.stringify(mr.stats)); mr.problems.forEach((p) => console.error(`MOTION ${p}`)); if (mr.problems.length) process.exit(1); console.log("MOTION OK");
+      break;
+    }
+    case "kit-check": {
+      const { kits, index } = loadKits(ROOT), errs = [], seen = new Map();
+      if (!kits.some((k) => k.id === index.default)) errs.push(`index default "${index.default}" is not a kit`);
+      for (const k of kits) {
+        const r = loadPackById(ROOT, k.id); r.problems.forEach((p) => errs.push(`${k.id}: ${p}`));
+        const { pack: base } = loadStylePack(path.join(ROOT, "config/styles", k.base)); validateKit(k, base).forEach((x) => errs.push(x));
+        const sig = JSON.stringify([r.pack.color.series[0].id, r.pack.backgrounds.default, r.pack.scene.settleTiltDeg, r.pack.scene.glass.radiusAtReference, r.pack.motion.durationSec.line_draw]);
+        if (seen.has(sig)) errs.push(`${k.id} looks identical to ${seen.get(sig)} (same lead colour, background, tilt, corners and motion)`); seen.set(sig, k.id);
+        console.log(`${r.problems.length ? "BAD " : "ok  "} ${k.id}: lead ${r.pack.color.series[0].id}, background ${r.pack.backgrounds.default}, tilt ${r.pack.scene.settleTiltDeg.x}/${r.pack.scene.settleTiltDeg.y}, corners ${r.pack.scene.glass.radiusAtReference}; mood ${k.mood.join("/")}`);
+      }
+      errs.forEach((e) => console.error(`ERROR ${e}`));
+      if (errs.length) process.exit(1);
+      console.log(`kits OK (${kits.length})`);
+      break;
+    }
+    case "registry-check": {
+      const reg = loadRegistry(), modes = readJson(path.join(ROOT, "config/visual_modes.json")), comp = readJson(path.join(ROOT, "config/components.json"));
+      const errs = validateRegistry(reg, { modeIds: new Set(modes.modes.map((m) => m.id)), renderable: comp.modes });
+      for (const m of Object.keys(comp.modes)) if (!reg.variants.some((v) => v.mode === m && v.status === "verified")) errs.push(`renderable mode ${m} has no verified variant in the registry`);
+      const cov = coverage(reg, Object.keys(comp.modes));
+      for (const c of cov) console.log(`${c.ready ? "ok  " : "LOW "} ${c.mode}: ${c.verified} verified${c.draft ? `, ${c.draft} draft` : ""} (target ${reg.minVerifiedPerMode ?? 3})`);
+      errs.forEach((e) => console.error(`ERROR ${e}`));
+      if (errs.length) process.exit(1);
+      console.log(`registry OK (${reg.variants.length} variants); ${cov.filter((c) => !c.ready).length} modes below target`);
+      break;
+    }
+    case "plan-compile": {
+      if (!flags.script || !flags.voice || !flags.design || !flags.out) { console.error("plan-compile needs --script --voice --design --out"); process.exit(2); }
+      const voice = readJson(flags.voice), script = readJson(flags.script), design = readJson(flags.design);
+      const timings = flags.timings ? readJson(flags.timings) : voice.wordTimings;
+      if (!timings) { console.error("no word timings: pass --timings or use a voice manifest that contains wordTimings"); process.exit(2); }
+      let pack, styleDecision = { kit: "owner-pale-glass", reason: "default style pack" };
+      try {
+        if (flags.style && flags.kit) throw new Error("use either --style (a pack directory) or --kit, not both");
+        if (flags.style) ({ pack } = loadStylePack(path.resolve(flags.style)));
+        else {
+          const want = flags.kit ?? design.kit ?? (design.brief ? "auto" : "owner-pale-glass");
+          if (want === "auto") { const k = loadKits(ROOT); styleDecision = chooseKit(k, design.brief ?? {}, { seed: design.seed ?? "", locked: design.kitLock, banned: design.kitBan ?? [], recent: design.recentKits ?? [] }); }
+          else styleDecision = { kit: want, reason: "set by --kit or the design file" };
+          const r = loadPackById(ROOT, styleDecision.kit); if (r.problems.length) throw new Error(`style ${styleDecision.kit} has problems: ${r.problems.join("; ")}`);
+          pack = r.pack;
+        }
+      } catch (e) { console.error(e.message); process.exit(1); }
+      try {
+        const { plan, notes, decisions } = compilePlan({ script, voice, timings, design, pack, recipes: readJson(path.join(ROOT, "config/motion_recipes.json")), scenes: flags.scenes ? String(flags.scenes).split(",") : undefined, blockedWords: flags.blocked ? readJson(flags.blocked) : [] });
+        writeJson(flags.out, plan);
+        writeJson(flags.out.replace(/\.json$/, "") + ".decisions.json", { schema_version: "1.0", style: styleDecision, decisions });
+        notes.forEach((n) => console.error(`NOTE ${n}`));
+        console.log(`wrote ${flags.out}: ${plan.scenes.length} scenes, ${plan.scenes.flatMap((x) => x.beats).length} beats, ${plan.totalFrames} frames (${(plan.totalFrames / plan.fps).toFixed(1)} s). Now run: ffx lint-plan ${flags.out} --script ${flags.script} --renderable`);
+      } catch (e) { console.error(e.message); process.exit(1); }
+      break;
+    }
     case "lint-plan": {
       const plan = readJson(pos[0]);
       if (plan.schema_version === "2.0") {
         const schemaErrs = validate(readJson(path.join(ROOT, "schemas/scene_plan_v2.schema.json")), plan);
         if (schemaErrs.length) { console.error(`PLAN SCHEMA PROBLEMS (${schemaErrs.length}):\n  - ${schemaErrs.join("\n  - ")}`); process.exit(1); }
-        const { pack } = loadStylePack(path.resolve(flags.style || path.join(ROOT, "config/styles", plan.style.packId)));
-        const res = lintPlanV2(plan, { recipes: readJson(path.join(ROOT, "config/motion_recipes.json")), modes: readJson(path.join(ROOT, "config/visual_modes.json")), pack, voice: flags.voice ? readJson(flags.voice) : null, script: flags.script ? readJson(flags.script) : null, renderable: flags.renderable ? readJson(path.join(ROOT, "config/components.json")).modes : null });
+        const { pack, problems: packProblems } = flags.style ? loadStylePack(path.resolve(flags.style)) : loadPackById(ROOT, plan.style.packId);
+        if (packProblems.length) { console.error(`STYLE PROBLEMS (${packProblems.length}):\n  - ${packProblems.join("\n  - ")}`); process.exit(1); }
+        const res = lintPlanV2(plan, { recipes: readJson(path.join(ROOT, "config/motion_recipes.json")), modes: readJson(path.join(ROOT, "config/visual_modes.json")), pack, voice: flags.voice ? readJson(flags.voice) : null, script: flags.script ? readJson(flags.script) : null, renderable: flags.renderable ? readJson(path.join(ROOT, "config/components.json")).modes : null, renderableTransitions: flags.renderable ? readJson(path.join(ROOT, "config/components.json")).transitions : null });
+        if (pack.scene?.life) { const mr = motionReport(plan, pack.scene.life); res.errors.push(...mr.problems.map((x) => `motion gate: ${x}`)); }
         if (res.warnings.length) console.error(`PLAN WARNINGS (${res.warnings.length}):\n  - ${res.warnings.join("\n  - ")}`);
         if (res.errors.length) { console.error(`PLAN PROBLEMS (${res.errors.length}):\n  - ${res.errors.join("\n  - ")}`); process.exit(1); }
         console.log("PLAN OK (v2)");

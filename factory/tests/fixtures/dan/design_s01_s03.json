@@ -1,0 +1,413 @@
+{
+ "schema_version": "1.0",
+ "run": "2026-W45-danmartell-SJywU4UQ",
+ "beats": {
+  "S01B1": {
+   "mode": "annotation_callout",
+   "purpose": "Hook: nine to noon spent on mail",
+   "content": {
+    "items": [
+     {
+      "label": "Nine to noon: three hours of mail",
+      "mark": "three hours of mail"
+     }
+    ]
+   },
+   "cues": [
+    "you open"
+   ],
+   "markCue": "three hours"
+  },
+  "S01B2": {
+   "mode": "annotation_callout",
+   "purpose": "Name the problem: this is the job now",
+   "content": {
+    "items": [
+     {
+      "label": "That's the job now.",
+      "mark": "the job now"
+     }
+    ]
+   },
+   "cues": [
+    "that's not"
+   ],
+   "markCue": "the job now"
+  },
+  "S01B3": {
+   "mode": "bar_chart",
+   "purpose": "Show 57% communicating versus 43% creating",
+   "title": "Time spent in work apps",
+   "cues": [
+    "fifty seven percent",
+    "forty three percent"
+   ],
+   "data": [
+    {
+     "label": "Communicating",
+     "value": 57,
+     "unit": "%",
+     "source": "Microsoft Work Trend Index",
+     "asOf": "2023",
+     "claimId": "C01"
+    },
+    {
+     "label": "Creating",
+     "value": 43,
+     "unit": "%",
+     "source": "Microsoft Work Trend Index",
+     "asOf": "2023",
+     "claimId": "C01"
+    }
+   ]
+  },
+  "S01B4": {
+   "mode": "annotation_callout",
+   "purpose": "More than half the week is work about work",
+   "content": {
+    "items": [
+     {
+      "label": "More than half your week isn't work.",
+      "mark": "isn't work"
+     }
+    ]
+   },
+   "cues": [
+    "so more"
+   ],
+   "markCue": "isn't work"
+  },
+  "S01B5": {
+   "mode": "process_flow",
+   "purpose": "Sort what only you can do from what a bot can do",
+   "content": {
+    "items": [
+     {
+      "label": "What only you could do"
+     },
+     {
+      "label": "What a bot could have done"
+     }
+    ]
+   },
+   "cues": [
+    "ask yourself",
+    "then ask what a bot"
+   ]
+  },
+  "S01B6": {
+   "mode": "process_flow",
+   "purpose": "Promise: bots take the half, you keep the decisions",
+   "content": {
+    "items": [
+     {
+      "label": "Hand that half to bots"
+     },
+     {
+      "label": "Keep the decisions"
+     }
+    ]
+   },
+   "cues": [
+    "hands that half",
+    "keeps the decisions"
+   ]
+  },
+  "S02B1": {
+   "mode": "annotation_callout",
+   "purpose": "Chatbot answers, agent does the job",
+   "content": {
+    "items": [
+     {
+      "label": "A chatbot answers. An agent does the job.",
+      "mark": "does the job"
+     }
+    ]
+   },
+   "cues": [
+    "first"
+   ],
+   "markCue": "does the job"
+  },
+  "S02B2": {
+   "mode": "process_flow",
+   "purpose": "What an agent does differently",
+   "title": "Agent versus chatbot",
+   "content": {
+    "items": [
+     {
+      "label": "You give it a job"
+     },
+     {
+      "label": "It signs into your tools"
+     },
+     {
+      "label": "It comes back for a decision"
+     }
+    ]
+   },
+   "cues": [
+    "you give it a job",
+    "it signs into",
+    "it comes back"
+   ]
+  },
+  "S02B3": {
+   "mode": "annotation_callout",
+   "purpose": "Each bot has its own cloud computer",
+   "title": "Grok Bot",
+   "content": {
+    "items": [
+     {
+      "label": "Each bot gets its own cloud computer",
+      "mark": "its own cloud computer"
+     }
+    ]
+   },
+   "cues": [
+    "the tool this"
+   ],
+   "markCue": "its own computer"
+  },
+  "S02B4": {
+   "mode": "process_flow",
+   "purpose": "Bots share one computer and pass work along",
+   "content": {
+    "items": [
+     {
+      "label": "One account"
+     },
+     {
+      "label": "One shared computer"
+     },
+     {
+      "label": "Bots pass work in one thread"
+     }
+    ]
+   },
+   "cues": [
+    "one account",
+    "one computer",
+    "the bots pass"
+   ]
+  },
+  "S02B5": {
+   "mode": "hero_number",
+   "purpose": "Price: thirty dollars a month",
+   "title": "Grok Bot Premium",
+   "cues": [
+    "thirty dollars"
+   ],
+   "data": [
+    {
+     "label": "Per month, check before you buy",
+     "value": 30,
+     "unit": "USD",
+     "source": "x.ai",
+     "asOf": "2026",
+     "claimId": "C03c"
+    }
+   ]
+  },
+  "S02B6": {
+   "mode": "process_flow",
+   "purpose": "Show it once, it runs it next time",
+   "content": {
+    "items": [
+     {
+      "label": "Show it a workflow once"
+     },
+     {
+      "label": "It saves the steps as a routine"
+     },
+     {
+      "label": "It runs on its own next time"
+     }
+    ]
+   },
+   "cues": [
+    "show it",
+    "it saves the steps",
+    "it runs on its own"
+   ]
+  },
+  "S02B7": {
+   "mode": "action_checklist",
+   "purpose": "Usage is a weekly pool: start small, watch the meter",
+   "title": "Usage",
+   "content": {
+    "items": [
+     {
+      "label": "A weekly pool"
+     },
+     {
+      "label": "All day costs more"
+     },
+     {
+      "label": "Start small, watch the meter"
+     }
+    ]
+   },
+   "cues": [
+    "usage comes",
+    "a bot that runs all day",
+    "start small"
+   ]
+  },
+  "S02B8": {
+   "mode": "process_flow",
+   "purpose": "The setup: three moves, not thirty",
+   "content": {
+    "items": [
+     {
+      "label": "One bot in charge"
+     },
+     {
+      "label": "A few bots, one job each"
+     },
+     {
+      "label": "The handoff rule"
+     }
+    ]
+   },
+   "cues": [
+    "one bot in charge",
+    "a few bots",
+    "the handoff rule"
+   ]
+  },
+  "S03B1": {
+   "mode": "hero_number",
+   "purpose": "28% of each day went to email",
+   "title": "Time on email",
+   "cues": [
+    "twenty eight percent"
+   ],
+   "data": [
+    {
+     "label": "Of each day on email",
+     "value": 28,
+     "unit": "%",
+     "source": "McKinsey Global Institute",
+     "asOf": "2012",
+     "claimId": "C02"
+    }
+   ]
+  },
+  "S03B2": {
+   "mode": "bar_chart",
+   "purpose": "Where the rest of the day goes",
+   "title": "Where the day goes",
+   "cues": [
+    "searching for information",
+    "talking inside",
+    "the actual job"
+   ],
+   "data": [
+    {
+     "label": "Searching",
+     "value": 19,
+     "unit": "%",
+     "source": "McKinsey Global Institute",
+     "asOf": "2012",
+     "claimId": "C02b"
+    },
+    {
+     "label": "Talking inside",
+     "value": 14,
+     "unit": "%",
+     "source": "McKinsey Global Institute",
+     "asOf": "2012",
+     "claimId": "C02b"
+    },
+    {
+     "label": "The actual job",
+     "value": 39,
+     "unit": "%",
+     "source": "McKinsey Global Institute",
+     "asOf": "2012",
+     "claimId": "C02b"
+    }
+   ]
+  },
+  "S03B3": {
+   "mode": "hero_number",
+   "purpose": "64% lack time and energy to get work done",
+   "title": "Not enough time and energy",
+   "cues": [
+    "sixty four percent"
+   ],
+   "data": [
+    {
+     "label": "Not enough time and energy",
+     "value": 64,
+     "unit": "%",
+     "source": "Microsoft Work Trend Index",
+     "asOf": "2023",
+     "claimId": "C01b"
+    }
+   ]
+  },
+  "S03B4": {
+   "mode": "annotation_callout",
+   "purpose": "The inbox is a list of what other people want",
+   "content": {
+    "items": [
+     {
+      "label": "What other people want from your day",
+      "mark": "What other people want"
+     }
+    ]
+   },
+   "cues": [
+    "so the inbox"
+   ],
+   "markCue": "what other people want"
+  },
+  "S03B5": {
+   "mode": "process_flow",
+   "purpose": "It never stops refilling",
+   "content": {
+    "items": [
+     {
+      "label": "It refills while you sleep"
+     },
+     {
+      "label": "While you eat"
+     },
+     {
+      "label": "While you work"
+     }
+    ]
+   },
+   "cues": [
+    "it refills",
+    "while you eat",
+    "while you work"
+   ]
+  },
+  "S03B6": {
+   "mode": "action_checklist",
+   "purpose": "What to hand over first",
+   "title": "Hand over first",
+   "content": {
+    "items": [
+     {
+      "label": "The sorting"
+     },
+     {
+      "label": "The filing"
+     },
+     {
+      "label": "The first draft"
+     }
+    ]
+   },
+   "cues": [
+    "the sorting",
+    "the filing",
+    "the first draft"
+   ]
+  }
+ }
+}

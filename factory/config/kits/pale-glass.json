@@ -1,0 +1,21 @@
+{
+  "schema": "ffx-style-kit/1",
+  "id": "pale-glass",
+  "label": "Pale glass (the owner's original look)",
+  "base": "owner-pale-glass",
+  "mood": [
+    "friendly",
+    "bold",
+    "general"
+  ],
+  "topics": [
+    "general",
+    "ai",
+    "productivity",
+    "tools"
+  ],
+  "background": {
+    "default": "cool-blue-fog"
+  },
+  "note": "Identity kit: the base pack unchanged."
+}

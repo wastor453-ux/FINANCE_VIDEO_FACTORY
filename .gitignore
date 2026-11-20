@@ -10,3 +10,8 @@ state/
 *.transcript.json
 # LFS-style heavy media is delivered by the render job, not committed by default
 *.mp4
+
+# bundler and python caches
+build/
+__pycache__/
+*.pyc

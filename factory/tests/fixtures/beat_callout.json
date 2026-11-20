@@ -1,0 +1,63 @@
+{
+  "id": "S04B5",
+  "startFrame": 0,
+  "endFrame": 210,
+  "mode": "annotation_callout",
+  "purpose": "Land the rule: you decide, you do not discover",
+  "usesCharacter": false,
+  "onScreenText": [],
+  "data": [],
+  "content": {
+    "items": [
+      {
+        "label": "You decide. You don't discover.",
+        "mark": "You decide"
+      }
+    ]
+  },
+  "events": [
+    {
+      "id": "e1",
+      "recipe": "callout_in",
+      "role": "secondary",
+      "startFrame": 12,
+      "endFrame": 22,
+      "holdUntilFrame": 60,
+      "exitFrame": 210,
+      "ease": "ease-out"
+    },
+    {
+      "id": "e3",
+      "recipe": "text_reveal_line",
+      "role": "primary",
+      "startFrame": 24,
+      "endFrame": 38,
+      "holdUntilFrame": 100,
+      "exitFrame": 210,
+      "ease": "ease-out",
+      "params": {
+        "words": 5
+      }
+    },
+    {
+      "id": "e2",
+      "recipe": "highlight",
+      "role": "secondary",
+      "startFrame": 70,
+      "endFrame": 94,
+      "holdUntilFrame": 130,
+      "exitFrame": 210,
+      "ease": "ease-out"
+    },
+    {
+      "id": "e9",
+      "recipe": "camera_push",
+      "role": "secondary",
+      "startFrame": 20,
+      "endFrame": 170,
+      "holdUntilFrame": 170,
+      "exitFrame": 210,
+      "ease": "ease-in-out"
+    }
+  ]
+}

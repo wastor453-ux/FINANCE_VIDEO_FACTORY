@@ -1,0 +1,62 @@
+{
+  "schema": "ffx-style-kit/1",
+  "id": "crisp-blue",
+  "label": "Crisp blue",
+  "base": "owner-pale-glass",
+  "mood": [
+    "analytic",
+    "serious",
+    "urgent"
+  ],
+  "topics": [
+    "debt",
+    "tax",
+    "invest",
+    "market",
+    "interest",
+    "credit"
+  ],
+  "seriesOrder": [
+    "blue",
+    "deepBlue",
+    "lightBlue",
+    "teal",
+    "lavender",
+    "slate"
+  ],
+  "background": {
+    "default": "financial-data-atmosphere"
+  },
+  "overrides": {
+    "scene": {
+      "settleTiltDeg": {
+        "x": 5,
+        "y": -12
+      },
+      "staggerSec": 0.06,
+      "glass": {
+        "radiusAtReference": 18
+      },
+      "life": {
+        "amp": 1.25
+      }
+    },
+    "motion": {
+      "durationSec": {
+        "line_draw": [
+          0.5,
+          0.7
+        ],
+        "bar_rise": [
+          0.5,
+          0.6
+        ],
+        "count_up": [
+          0.6,
+          0.8
+        ]
+      }
+    }
+  },
+  "note": "Blue-led and sharper: tighter corners, stronger tilt, quicker motion, data atmosphere background."
+}

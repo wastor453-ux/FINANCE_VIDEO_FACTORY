@@ -1,0 +1,256 @@
+{
+  "schema": "ffx-style-kit/1",
+  "id": "warm-cream",
+  "label": "Warm cream",
+  "base": "owner-pale-glass",
+  "mood": [
+    "warm",
+    "reflective",
+    "calm",
+    "premium"
+  ],
+  "topics": [
+    "retirement",
+    "family",
+    "household",
+    "legacy",
+    "lifestyle",
+    "pension",
+    "home"
+  ],
+  "background": {
+    "default": "retirement-horizon",
+    "recipes": [
+      "family-warm",
+      "retirement-horizon",
+      "saving-calm",
+      "general-fog",
+      "tax-paper"
+    ],
+    "items": [
+      {
+        "id": "family-warm",
+        "file": "../../kits/assets/warm-cream__family-warm.png",
+        "note": "recipe family-warm on warm-cream palette",
+        "recipe": "family-warm",
+        "approximate": false
+      },
+      {
+        "id": "retirement-horizon",
+        "file": "../../kits/assets/warm-cream__retirement-horizon.png",
+        "note": "recipe retirement-horizon on warm-cream palette",
+        "recipe": "retirement-horizon",
+        "approximate": false
+      },
+      {
+        "id": "saving-calm",
+        "file": "../../kits/assets/warm-cream__saving-calm.png",
+        "note": "recipe saving-calm on warm-cream palette",
+        "recipe": "saving-calm",
+        "approximate": false
+      },
+      {
+        "id": "general-fog",
+        "file": "../../kits/assets/warm-cream__general-fog.png",
+        "note": "recipe general-fog on warm-cream palette",
+        "recipe": "general-fog",
+        "approximate": false
+      },
+      {
+        "id": "tax-paper",
+        "file": "../../kits/assets/warm-cream__tax-paper.png",
+        "note": "recipe tax-paper on warm-cream palette",
+        "recipe": "tax-paper",
+        "approximate": false
+      }
+    ]
+  },
+  "overrides": {
+    "color": {
+      "ink": "#061344",
+      "inkSecondary": "#4E3616",
+      "canvas": "#FBEEDD",
+      "surface": "#FDF7EF",
+      "border": "#F5DFBD",
+      "primary": "#9A7851",
+      "cyan": "#BD9564",
+      "shadow": "#9A7851",
+      "series": [
+        {
+          "slot": 1,
+          "id": "brown",
+          "fill": "#9A7851",
+          "stroke": "#9A7851",
+          "text": "#876947"
+        },
+        {
+          "slot": 2,
+          "id": "navy",
+          "fill": "#061344",
+          "stroke": "#061344",
+          "text": "#061344"
+        },
+        {
+          "slot": 3,
+          "id": "tan",
+          "fill": "#BD9564",
+          "stroke": "#AA865A",
+          "text": "#846846"
+        },
+        {
+          "slot": 4,
+          "id": "teal",
+          "fill": "#27BFC6",
+          "stroke": "#1F999E",
+          "text": "#197C81"
+        },
+        {
+          "slot": 5,
+          "id": "sand",
+          "fill": "#E1BD8A",
+          "stroke": "#A38964",
+          "text": "#816D4F"
+        },
+        {
+          "slot": 6,
+          "id": "slate",
+          "fill": "#A8B8D7",
+          "stroke": "#828FA7",
+          "text": "#656E81"
+        }
+      ],
+      "flow": {
+        "gain": {
+          "fill": "#27BFC6",
+          "stroke": "#1F999E",
+          "text": "#197C81"
+        },
+        "loss": {
+          "fill": "#9A7851",
+          "stroke": "#9A7851",
+          "text": "#876947"
+        },
+        "lossAlt": {
+          "fill": "#E1BD8A",
+          "stroke": "#A38964",
+          "text": "#816D4F"
+        }
+      }
+    },
+    "scene": {
+      "settleTiltDeg": {
+        "x": 3,
+        "y": -8
+      },
+      "glass": {
+        "radiusAtReference": 28
+      },
+      "life": {
+        "amp": 0.85
+      }
+    },
+    "provenance": {
+      "boards": {
+        "R1_colour_expansion.png": "d9d59cdb0891d671d2b5806cceea80e598dabf3415bab272c519df87800ff17a"
+      },
+      "values": {
+        "wc.ink": {
+          "used": "#061344",
+          "board": "R1_colour_expansion.png",
+          "region": [
+            1330,
+            722,
+            1480,
+            745
+          ],
+          "method": "median-dark",
+          "chose": "observed"
+        },
+        "wc.inkSecondary": {
+          "used": "#4E3616",
+          "board": "R1_colour_expansion.png",
+          "region": [
+            1760,
+            725,
+            1860,
+            760
+          ],
+          "method": "median-dark",
+          "chose": "observed"
+        },
+        "wc.canvas": {
+          "used": "#FBEEDD",
+          "board": "R1_colour_expansion.png",
+          "region": [
+            1300,
+            640,
+            1320,
+            660
+          ],
+          "method": "median",
+          "chose": "observed"
+        },
+        "wc.surface": {
+          "used": "#FDF7EF",
+          "board": "R1_colour_expansion.png",
+          "region": [
+            1330,
+            690,
+            1350,
+            702
+          ],
+          "method": "median",
+          "chose": "observed"
+        },
+        "wc.border": {
+          "used": "#F5DFBD",
+          "board": "R1_colour_expansion.png",
+          "region": [
+            1458,
+            955,
+            1465,
+            962
+          ],
+          "method": "median",
+          "chose": "observed"
+        },
+        "wc.brown": {
+          "used": "#9A7851",
+          "board": "R1_colour_expansion.png",
+          "region": [
+            1319,
+            955,
+            1326,
+            962
+          ],
+          "method": "median",
+          "chose": "observed"
+        },
+        "wc.tan": {
+          "used": "#BD9564",
+          "board": "R1_colour_expansion.png",
+          "region": [
+            1365,
+            955,
+            1372,
+            962
+          ],
+          "method": "median",
+          "chose": "observed"
+        },
+        "wc.sand": {
+          "used": "#E1BD8A",
+          "board": "R1_colour_expansion.png",
+          "region": [
+            1412,
+            955,
+            1419,
+            962
+          ],
+          "method": "median",
+          "chose": "observed"
+        }
+      }
+    }
+  }
+}

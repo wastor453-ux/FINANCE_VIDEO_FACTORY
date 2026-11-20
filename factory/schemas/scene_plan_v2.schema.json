@@ -248,6 +248,62 @@
                     },
                     "additionalProperties": false
                   }
+                },
+                "content": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "items"
+                  ],
+                  "properties": {
+                    "headline": {
+                      "type": "string",
+                      "maxLength": 60
+                    },
+                    "items": {
+                      "type": "array",
+                      "minItems": 1,
+                      "maxItems": 5,
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                          "label"
+                        ],
+                        "properties": {
+                          "label": {
+                            "type": "string",
+                            "minLength": 1,
+                            "maxLength": 60
+                          },
+                          "sub": {
+                            "type": "string",
+                            "maxLength": 70
+                          },
+                          "mark": {
+                            "type": "string",
+                            "maxLength": 40
+                          },
+                          "tone": {
+                            "enum": [
+                              "watch",
+                              "stop",
+                              "allow"
+                            ]
+                          }
+                        }
+                      }
+                    },
+                    "source": {
+                      "type": "string",
+                      "minLength": 3,
+                      "maxLength": 70
+                    }
+                  }
+                },
+                "variant": {
+                  "type": "string",
+                  "minLength": 1
                 }
               },
               "additionalProperties": false
@@ -327,6 +383,13 @@
           "items": {
             "type": "number"
           }
+        },
+        "claimId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "showSource": {
+          "type": "boolean"
         }
       },
       "anyOf": [

@@ -93,7 +93,9 @@ export function qaVideo(o) {
   for (const z of frz) needsHuman.push({ kind: "frozen_video", at: z.start, detail: `no pixel change for ${z.duration.toFixed(1)}s from ${z.start.toFixed(1)}s — intentional hold or stuck render?` });
 
   // 5. audio: silence + loudness + true peak
-  let audioReview;
+  // The report schema requires audioReview, so a run without an audio check records that explicitly (and asks a human to check audio later).
+  let audioReview = { skipped: true, reason: "audio not checked in this run (silent video or audio added after assembly)" };
+  if (o.audio === false) needsHuman.push({ kind: "audio_not_checked", detail: "This QA run skipped audio. Run QA on the final muxed file (voice and sound) before G5." });
   if (o.audio !== false) {
     const sil = parseSilence(ff(["-i", o.file, "-vn", "-af", `silencedetect=n=-50dB:d=${t.silenceReviewSec}`, "-f", "null", "-"]).out);
     const failSil = sil.filter((s) => s.duration >= t.silenceFailSec || (s.open && dur - s.start >= t.silenceFailSec));

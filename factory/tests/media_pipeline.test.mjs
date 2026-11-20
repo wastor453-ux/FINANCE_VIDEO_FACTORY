@@ -146,3 +146,14 @@ test("QA reports a wrong frame count rather than trusting the file exists", { sk
   assert.equal(qa.verdict, "fail");
   assert.ok(qa.technical.find((c) => c.name === "frame_count" && c.status === "fail"));
 });
+
+test("qa-video --no-audio (the render workflow's path) writes a report that passes its own schema", { skip: SKIP, timeout: 90000 }, () => {
+  const d = tmp(), f = path.join(d, "silent.mp4"), out = path.join(d, "qa");
+  ff(["-f", "lavfi", "-i", `testsrc2=size=${W}x${H}:rate=${FPS}`, "-frames:v", String(TOTAL), "-pix_fmt", "yuv420p", "-c:v", "libx264", f]);
+  const ffx = path.join(path.dirname(new URL(import.meta.url).pathname), "../bin/ffx.mjs");
+  const r = spawnSync("node", [ffx, "qa-video", f, "--frames", String(TOTAL), "--fps", String(FPS), "--width", String(W), "--height", String(H), "--out-dir", out, "--no-audio"], { encoding: "utf8" });
+  assert.equal(r.status, 0, r.stderr);
+  const rep = JSON.parse(fs.readFileSync(path.join(out, "qa_report.json"), "utf8"));
+  assert.equal(rep.audioReview.skipped, true);
+  assert.ok(rep.needsHuman.some((x) => x.kind === "audio_not_checked"));
+});

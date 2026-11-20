@@ -8,10 +8,11 @@ import { Video } from "./Video";
 // (see factory/docs/STATUS.md). Only the toolchain check is registered today.
 export const RemotionRoot: React.FC = () => (
   <>
-    <Composition id="BeatPreview" component={BeatPreview} durationInFrames={180} fps={30} width={1920} height={1080} defaultProps={{ pack: null as any, beat: null as any }} />
+    <Composition id="BeatPreview" component={BeatPreview} durationInFrames={180} fps={30} width={1920} height={1080} defaultProps={{ pack: null as any, beat: null as any }}
+      calculateMetadata={({ props }) => ({ durationInFrames: Math.max(1, props.beat?.endFrame ?? 180) })} />
     <Composition id="Video" component={Video} durationInFrames={30} fps={30} width={1920} height={1080}
       defaultProps={{ plan: null as any, pack: null as any, backgrounds: {} }}
-      calculateMetadata={({ props }) => ({ durationInFrames: props.plan.totalFrames, fps: props.plan.fps, width: props.plan.width, height: props.plan.height })} />
+      calculateMetadata={({ props }) => props.plan ? ({ durationInFrames: props.plan.totalFrames, fps: props.plan.fps, width: props.plan.width, height: props.plan.height }) : ({})} />
     <Composition id="SystemCheck" component={SystemCheck} durationInFrames={90} fps={30} width={1920} height={1080} />
   </>
 );

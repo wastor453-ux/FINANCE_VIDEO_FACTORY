@@ -268,7 +268,10 @@
     "lowConfidenceShareWarn": 0.15,
     "noThreeInARow": true,
     "transitionMaxShare": 0.3,
-    "transitionShareMinCount": 8
+    "transitionShareMinCount": 8,
+    "contentLabelMaxWords": 8,
+    "contentLabelMaxChars": 44,
+    "contentTraceMinShare": 0.6
   },
   "modes": {
     "hook_question": {
@@ -383,7 +386,11 @@
         "callout_in",
         "highlight"
       ],
-      "minData": 0
+      "minData": 0,
+      "content": {
+        "min": 1,
+        "max": 1
+      }
     },
     "worked_example": {
       "recipes": [
@@ -398,7 +405,11 @@
         "flow_arrows",
         "process_flow_build"
       ],
-      "minData": 0
+      "minData": 0,
+      "content": {
+        "min": 2,
+        "max": 5
+      }
     },
     "timeline": {
       "recipes": [
@@ -412,19 +423,31 @@
         "flow_arrows",
         "diagram_morph"
       ],
-      "minData": 0
+      "minData": 0,
+      "content": {
+        "min": 2,
+        "max": 5
+      }
     },
     "risks_grid": {
       "recipes": [
         "checklist_build"
       ],
-      "minData": 0
+      "minData": 0,
+      "content": {
+        "min": 2,
+        "max": 4
+      }
     },
     "action_checklist": {
       "recipes": [
         "checklist_build"
       ],
-      "minData": 0
+      "minData": 0,
+      "content": {
+        "min": 2,
+        "max": 5
+      }
     },
     "closing_composition": {
       "recipes": [

@@ -1,0 +1,63 @@
+{
+  "schema": "ffx-style-kit/1",
+  "id": "lavender-calm",
+  "label": "Lavender calm",
+  "base": "owner-pale-glass",
+  "mood": [
+    "reflective",
+    "calm",
+    "premium"
+  ],
+  "topics": [
+    "mindset",
+    "planning",
+    "retirement",
+    "insurance",
+    "wealth"
+  ],
+  "seriesOrder": [
+    "lavender",
+    "blue",
+    "teal",
+    "lightBlue",
+    "slate",
+    "deepBlue"
+  ],
+  "background": {
+    "default": "lavender-horizon"
+  },
+  "overrides": {
+    "color": {
+      "primary": "#8C7BFF"
+    },
+    "scene": {
+      "settleTiltDeg": {
+        "x": 3,
+        "y": -7
+      },
+      "glass": {
+        "radiusAtReference": 32
+      },
+      "life": {
+        "amp": 0.8
+      }
+    },
+    "motion": {
+      "durationSec": {
+        "line_draw": [
+          0.8,
+          1.0
+        ],
+        "bar_rise": [
+          0.7,
+          0.8
+        ],
+        "count_up": [
+          0.8,
+          1.0
+        ]
+      }
+    }
+  },
+  "note": "Lavender-led: airy lavender and blue background, the softest tilt, slow and unhurried motion."
+}

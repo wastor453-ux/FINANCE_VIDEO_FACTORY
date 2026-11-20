@@ -1,0 +1,44 @@
+{
+  "schema": "ffx-style-kit/1",
+  "id": "deep-focus",
+  "label": "Deep focus",
+  "base": "owner-pale-glass",
+  "mood": [
+    "serious",
+    "executive",
+    "focused"
+  ],
+  "topics": [
+    "business",
+    "career",
+    "management",
+    "strategy",
+    "salary"
+  ],
+  "seriesOrder": [
+    "deepBlue",
+    "blue",
+    "lightBlue",
+    "teal",
+    "lavender",
+    "slate"
+  ],
+  "background": {
+    "default": "calm-executive"
+  },
+  "overrides": {
+    "scene": {
+      "settleTiltDeg": {
+        "x": 4,
+        "y": -9
+      },
+      "glass": {
+        "radiusAtReference": 24
+      },
+      "life": {
+        "amp": 0.7
+      }
+    }
+  },
+  "note": "Deep-blue-led on the calm executive background, measured tilt and standard motion."
+}

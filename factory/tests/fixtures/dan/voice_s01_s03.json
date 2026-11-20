@@ -1,0 +1,43 @@
+{
+ "schema_version": "1.0",
+ "provider": "gemini-tts",
+ "model": "gemini-3.8-flash-tts",
+ "voice": "en-us-enzo",
+ "style": "Maintain the exact American male voice identity and pitch without variation. Deliver with the casual, authoritative realism of a native American financial podcaster speaking one-on-one with a client. Use natural American inflections, unhurried measured pacing, and grounded, controlled expression.",
+ "temperature": 0.8,
+ "temperatureSent": true,
+ "mode": "per_scene",
+ "sampleRateHz": 24000,
+ "totalMs": 628480,
+ "approved": true,
+ "approvedBy": "owner",
+ "approvedAt": "2026-11-05T10:20:19.430Z",
+ "approvalNote": null,
+ "wordTimingsSource": "patch17 word-timing tool (faster-whisper tiny), ~/workspace/word-timing-p17-2026-11-05/S01-S12_timing_tiny.json; times converted ms -> sec",
+ "scenes": [
+  {
+   "sceneId": "S01",
+   "file": "S01.wav",
+   "style": "Native American financial podcaster and documentary narrator. Engaged, clear, focused delivery, natural pauses.",
+   "durationMs": 39200,
+   "sha256": "532c3c368229d6e6eeb25f00eb7579b0aba06c325793dc59cf861a9816ef21d3",
+   "startMs": 0
+  },
+  {
+   "sceneId": "S02",
+   "file": "S02.wav",
+   "style": "Native American financial podcaster and documentary narrator. Calm, measured, analytical clarity, objective.",
+   "durationMs": 56880,
+   "sha256": "68c6eb32c2b3176701f2eb1a570c318d28ce719842e47e912e427997678b8fb2",
+   "startMs": 39400
+  },
+  {
+   "sceneId": "S03",
+   "file": "S03.wav",
+   "style": "Native American financial podcaster and documentary narrator. Calm, measured, analytical clarity, objective.",
+   "durationMs": 44200,
+   "sha256": "d30d8e12e286baf03cb44b42261aea6811fbcd5d7c4f392df828ed4f71fdad02",
+   "startMs": 96480
+  }
+ ]
+}

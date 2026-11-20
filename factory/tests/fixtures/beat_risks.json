@@ -1,0 +1,103 @@
+{
+  "id": "S09B4",
+  "startFrame": 0,
+  "endFrame": 210,
+  "mode": "risks_grid",
+  "purpose": "Money bot flags, never pays",
+  "usesCharacter": false,
+  "onScreenText": [
+    "Money gets its own rule"
+  ],
+  "data": [],
+  "content": {
+    "items": [
+      {
+        "label": "Bills due this week",
+        "sub": "It flags them",
+        "tone": "watch"
+      },
+      {
+        "label": "A strange charge",
+        "sub": "It flags it",
+        "tone": "watch"
+      },
+      {
+        "label": "A subscription you forgot",
+        "sub": "It flags it",
+        "tone": "watch"
+      },
+      {
+        "label": "It never pays them",
+        "tone": "stop"
+      }
+    ]
+  },
+  "events": [
+    {
+      "id": "e1",
+      "recipe": "checklist_build",
+      "role": "primary",
+      "startFrame": 12,
+      "endFrame": 38,
+      "holdUntilFrame": 95,
+      "exitFrame": 210,
+      "ease": "ease-out",
+      "params": {
+        "item": 0,
+        "words": 4
+      }
+    },
+    {
+      "id": "e2",
+      "recipe": "checklist_build",
+      "role": "primary",
+      "startFrame": 52,
+      "endFrame": 78,
+      "holdUntilFrame": 135,
+      "exitFrame": 210,
+      "ease": "ease-out",
+      "params": {
+        "item": 1,
+        "words": 3
+      }
+    },
+    {
+      "id": "e3",
+      "recipe": "checklist_build",
+      "role": "primary",
+      "startFrame": 90,
+      "endFrame": 116,
+      "holdUntilFrame": 175,
+      "exitFrame": 210,
+      "ease": "ease-out",
+      "params": {
+        "item": 2,
+        "words": 4
+      }
+    },
+    {
+      "id": "e4",
+      "recipe": "checklist_build",
+      "role": "primary",
+      "startFrame": 128,
+      "endFrame": 154,
+      "holdUntilFrame": 205,
+      "exitFrame": 210,
+      "ease": "ease-out",
+      "params": {
+        "item": 3,
+        "words": 4
+      }
+    },
+    {
+      "id": "e9",
+      "recipe": "camera_push",
+      "role": "secondary",
+      "startFrame": 20,
+      "endFrame": 170,
+      "holdUntilFrame": 170,
+      "exitFrame": 210,
+      "ease": "ease-in-out"
+    }
+  ]
+}

@@ -117,13 +117,13 @@ test("CLI end to end: run lifecycle (init -> set-stage -> approve -> archive ref
   assert.ok(archivedState.archived.at);
 
   // cleanup before the retention window: kept
-  r = run(["run-cleanup", "--archive-root", "archive", "--days", "15", "--now", "2026-11-05T00:00:00Z"], opts);
+  r = run(["run-cleanup", "--archive-root", "archive", "--days", "15", "--now", new Date(Date.now() + 1 * 86400000).toISOString()], opts);
   assert.equal(r.status, 0);
   assert.equal(JSON.parse(r.stdout).deleted.length, 0);
   assert.ok(fs.existsSync(path.join(dir, "archive", runId)));
 
   // cleanup after the retention window: deleted for real
-  r = run(["run-cleanup", "--archive-root", "archive", "--days", "15", "--now", "2026-11-25T00:00:00Z"], opts);
+  r = run(["run-cleanup", "--archive-root", "archive", "--days", "15", "--now", new Date(Date.now() + 40 * 86400000).toISOString()], opts);
   assert.equal(r.status, 0);
   assert.equal(JSON.parse(r.stdout).deleted.length, 1);
   assert.ok(!fs.existsSync(path.join(dir, "archive", runId)), "archived run should be deleted past retention");

@@ -1,0 +1,20 @@
+{
+ "schema_version": "1.0",
+ "_note": "TEST FIXTURE B: invented example numbers (hypothetical), synthetic word timing generated from word length. Not research, not real voice.",
+ "totalMs": 82110,
+ "approved": true,
+ "scenes": [
+  {
+   "sceneId": "S01",
+   "file": "S01.wav",
+   "durationMs": 34385,
+   "startMs": 0
+  },
+  {
+   "sceneId": "S02",
+   "file": "S02.wav",
+   "durationMs": 47525,
+   "startMs": 34585
+  }
+ ]
+}

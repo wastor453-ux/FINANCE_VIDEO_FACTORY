@@ -1,0 +1,1057 @@
+{
+  "schema_version": "2.0",
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "totalFrames": 2463,
+  "style": {
+    "packId": "owner-pale-glass",
+    "background": "cool-blue-fog"
+  },
+  "scenes": [
+    {
+      "id": "S01",
+      "startFrame": 0,
+      "endFrame": 1026,
+      "beats": [
+        {
+          "id": "S01B1",
+          "startFrame": 0,
+          "endFrame": 186,
+          "mode": "annotation_callout",
+          "purpose": "Hook: a surprise repair",
+          "usesCharacter": false,
+          "onScreenText": [],
+          "data": [],
+          "events": [
+            {
+              "id": "e1",
+              "recipe": "callout_in",
+              "role": "secondary",
+              "startFrame": 0,
+              "endFrame": 9,
+              "holdUntilFrame": 186,
+              "exitFrame": 186,
+              "ease": "ease-out"
+            },
+            {
+              "id": "e2",
+              "recipe": "text_reveal_line",
+              "role": "primary",
+              "startFrame": 4,
+              "endFrame": 19,
+              "holdUntilFrame": 79,
+              "exitFrame": 186,
+              "ease": "ease-out",
+              "params": {
+                "words": 5
+              },
+              "anchor": {
+                "wordIndex": 0,
+                "word": "Your",
+                "startMs": 260,
+                "confidence": "ok"
+              }
+            },
+            {
+              "id": "e3",
+              "recipe": "highlight",
+              "role": "secondary",
+              "startFrame": 123,
+              "endFrame": 141,
+              "holdUntilFrame": 186,
+              "exitFrame": 186,
+              "ease": "ease-out",
+              "anchor": {
+                "wordIndex": 12,
+                "word": "surprise",
+                "startMs": 4220,
+                "confidence": "ok"
+              }
+            },
+            {
+              "id": "e4",
+              "recipe": "camera_push",
+              "role": "secondary",
+              "startFrame": 0,
+              "endFrame": 180,
+              "holdUntilFrame": 180,
+              "exitFrame": 186,
+              "ease": "ease-in-out"
+            }
+          ],
+          "variant": "default",
+          "content": {
+            "items": [
+              {
+                "label": "A surprise repair nobody planned",
+                "mark": "surprise repair"
+              }
+            ]
+          }
+        },
+        {
+          "id": "S01B2",
+          "startFrame": 186,
+          "endFrame": 364,
+          "mode": "hero_number",
+          "purpose": "Repair cost",
+          "usesCharacter": false,
+          "onScreenText": [
+            "The repair bill"
+          ],
+          "data": [
+            {
+              "label": "Hypothetical repair",
+              "value": 900,
+              "unit": "USD",
+              "source": "Hypothetical example",
+              "asOf": "2026",
+              "claimId": "F1"
+            }
+          ],
+          "events": [
+            {
+              "id": "e1",
+              "recipe": "count_up",
+              "role": "primary",
+              "startFrame": 214,
+              "endFrame": 238,
+              "holdUntilFrame": 364,
+              "exitFrame": 364,
+              "ease": "ease-out",
+              "anchor": {
+                "wordIndex": 19,
+                "word": "nine",
+                "startMs": 7270,
+                "confidence": "ok"
+              }
+            },
+            {
+              "id": "e2",
+              "recipe": "camera_push",
+              "role": "secondary",
+              "startFrame": 186,
+              "endFrame": 364,
+              "holdUntilFrame": 364,
+              "exitFrame": 364,
+              "ease": "ease-in-out"
+            }
+          ],
+          "variant": "number"
+        },
+        {
+          "id": "S01B3",
+          "startFrame": 364,
+          "endFrame": 481,
+          "mode": "hero_number",
+          "purpose": "Card rate",
+          "usesCharacter": false,
+          "onScreenText": [
+            "Card interest rate"
+          ],
+          "data": [
+            {
+              "label": "Per year, hypothetical",
+              "value": 24,
+              "unit": "%",
+              "source": "Hypothetical example",
+              "asOf": "2026",
+              "claimId": "F2"
+            }
+          ],
+          "events": [
+            {
+              "id": "e1",
+              "recipe": "count_up",
+              "role": "primary",
+              "startFrame": 399,
+              "endFrame": 423,
+              "holdUntilFrame": 481,
+              "exitFrame": 481,
+              "ease": "ease-out",
+              "anchor": {
+                "wordIndex": 35,
+                "word": "twenty",
+                "startMs": 13440,
+                "confidence": "ok"
+              }
+            },
+            {
+              "id": "e2",
+              "recipe": "camera_push",
+              "role": "secondary",
+              "startFrame": 364,
+              "endFrame": 481,
+              "holdUntilFrame": 481,
+              "exitFrame": 481,
+              "ease": "ease-in-out"
+            }
+          ],
+          "variant": "waffle"
+        },
+        {
+          "id": "S01B4",
+          "startFrame": 481,
+          "endFrame": 694,
+          "mode": "causal_diagram",
+          "purpose": "No savings leads to growing debt",
+          "usesCharacter": false,
+          "onScreenText": [
+            "How it snowballs"
+          ],
+          "data": [],
+          "events": [
+            {
+              "id": "e1",
+              "recipe": "flow_arrows",
+              "role": "primary",
+              "startFrame": 491,
+              "endFrame": 521,
+              "holdUntilFrame": 694,
+              "exitFrame": 694,
+              "ease": "ease-in-out",
+              "params": {
+                "item": 0
+              },
+              "anchor": {
+                "wordIndex": 42,
+                "word": "no",
+                "startMs": 16490,
+                "confidence": "ok"
+              }
+            },
+            {
+              "id": "e2",
+              "recipe": "flow_arrows",
+              "role": "primary",
+              "startFrame": 521,
+              "endFrame": 551,
+              "holdUntilFrame": 694,
+              "exitFrame": 694,
+              "ease": "ease-in-out",
+              "params": {
+                "item": 1
+              },
+              "anchor": {
+                "wordIndex": 44,
+                "word": "the",
+                "startMs": 17360,
+                "confidence": "low",
+                "fallback": true
+              }
+            },
+            {
+              "id": "e3",
+              "recipe": "flow_arrows",
+              "role": "primary",
+              "startFrame": 580,
+              "endFrame": 610,
+              "holdUntilFrame": 694,
+              "exitFrame": 694,
+              "ease": "ease-in-out",
+              "params": {
+                "item": 2
+              },
+              "anchor": {
+                "wordIndex": 50,
+                "word": "the",
+                "startMs": 19460,
+                "confidence": "ok"
+              }
+            },
+            {
+              "id": "e4",
+              "recipe": "flow_arrows",
+              "role": "primary",
+              "startFrame": 634,
+              "endFrame": 664,
+              "holdUntilFrame": 694,
+              "exitFrame": 694,
+              "ease": "ease-in-out",
+              "params": {
+                "item": 3
+              },
+              "anchor": {
+                "wordIndex": 55,
+                "word": "the",
+                "startMs": 21360,
+                "confidence": "low",
+                "fallback": true
+              }
+            },
+            {
+              "id": "e5",
+              "recipe": "camera_push",
+              "role": "secondary",
+              "startFrame": 481,
+              "endFrame": 661,
+              "holdUntilFrame": 661,
+              "exitFrame": 694,
+              "ease": "ease-in-out"
+            }
+          ],
+          "content": {
+            "items": [
+              {
+                "label": "No savings"
+              },
+              {
+                "label": "Repair goes on the card"
+              },
+              {
+                "label": "Interest piles up"
+              },
+              {
+                "label": "Debt keeps growing"
+              }
+            ]
+          }
+        },
+        {
+          "id": "S01B5",
+          "startFrame": 694,
+          "endFrame": 886,
+          "mode": "hero_number",
+          "purpose": "One year of interest",
+          "usesCharacter": false,
+          "onScreenText": [
+            "One year of interest"
+          ],
+          "data": [
+            {
+              "label": "On a $900 balance",
+              "value": 216,
+              "unit": "USD",
+              "source": "Hypothetical example",
+              "asOf": "2026",
+              "claimId": "F3"
+            }
+          ],
+          "events": [
+            {
+              "id": "e1",
+              "recipe": "count_up",
+              "role": "primary",
+              "startFrame": 817,
+              "endFrame": 841,
+              "holdUntilFrame": 886,
+              "exitFrame": 886,
+              "ease": "ease-out",
+              "anchor": {
+                "wordIndex": 71,
+                "word": "two",
+                "startMs": 27530,
+                "confidence": "low",
+                "fallback": true
+              }
+            },
+            {
+              "id": "e2",
+              "recipe": "camera_push",
+              "role": "secondary",
+              "startFrame": 694,
+              "endFrame": 874,
+              "holdUntilFrame": 874,
+              "exitFrame": 886,
+              "ease": "ease-in-out"
+            }
+          ],
+          "variant": "number"
+        },
+        {
+          "id": "S01B6",
+          "startFrame": 886,
+          "endFrame": 1026,
+          "mode": "annotation_callout",
+          "purpose": "Order matters",
+          "usesCharacter": false,
+          "onScreenText": [],
+          "data": [],
+          "events": [
+            {
+              "id": "e1",
+              "recipe": "callout_in",
+              "role": "secondary",
+              "startFrame": 886,
+              "endFrame": 895,
+              "holdUntilFrame": 1026,
+              "exitFrame": 1026,
+              "ease": "ease-out"
+            },
+            {
+              "id": "e2",
+              "recipe": "text_reveal_line",
+              "role": "primary",
+              "startFrame": 886,
+              "endFrame": 901,
+              "holdUntilFrame": 979,
+              "exitFrame": 1026,
+              "ease": "ease-out",
+              "params": {
+                "words": 7
+              },
+              "anchor": {
+                "wordIndex": 75,
+                "word": "So",
+                "startMs": 29650,
+                "confidence": "ok"
+              }
+            },
+            {
+              "id": "e3",
+              "recipe": "highlight",
+              "role": "secondary",
+              "startFrame": 902,
+              "endFrame": 920,
+              "holdUntilFrame": 1026,
+              "exitFrame": 1026,
+              "ease": "ease-out",
+              "anchor": {
+                "wordIndex": 77,
+                "word": "order",
+                "startMs": 30200,
+                "confidence": "ok"
+              }
+            },
+            {
+              "id": "e4",
+              "recipe": "camera_push",
+              "role": "secondary",
+              "startFrame": 886,
+              "endFrame": 1026,
+              "holdUntilFrame": 1026,
+              "exitFrame": 1026,
+              "ease": "ease-in-out"
+            }
+          ],
+          "variant": "banner",
+          "content": {
+            "items": [
+              {
+                "label": "The order matters more than the amount",
+                "mark": "order matters"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "S02",
+      "startFrame": 1026,
+      "endFrame": 2463,
+      "beats": [
+        {
+          "id": "S02B1",
+          "startFrame": 1026,
+          "endFrame": 1320,
+          "mode": "process_flow",
+          "purpose": "The order of steps",
+          "usesCharacter": false,
+          "onScreenText": [],
+          "data": [],
+          "events": [
+            {
+              "id": "e1",
+              "recipe": "process_flow_build",
+              "role": "primary",
+              "startFrame": 1091,
+              "endFrame": 1121,
+              "holdUntilFrame": 1320,
+              "exitFrame": 1320,
+              "ease": "ease-in-out",
+              "params": {
+                "item": 0
+              },
+              "anchor": {
+                "wordIndex": 4,
+                "word": "First",
+                "startMs": 36515,
+                "confidence": "ok"
+              }
+            },
+            {
+              "id": "e2",
+              "recipe": "process_flow_build",
+              "role": "primary",
+              "startFrame": 1160,
+              "endFrame": 1190,
+              "holdUntilFrame": 1320,
+              "exitFrame": 1320,
+              "ease": "ease-in-out",
+              "params": {
+                "item": 1
+              },
+              "anchor": {
+                "wordIndex": 9,
+                "word": "Second",
+                "startMs": 38805,
+                "confidence": "ok"
+              }
+            },
+            {
+              "id": "e3",
+              "recipe": "process_flow_build",
+              "role": "primary",
+              "startFrame": 1251,
+              "endFrame": 1281,
+              "holdUntilFrame": 1320,
+              "exitFrame": 1320,
+              "ease": "ease-in-out",
+              "params": {
+                "item": 2
+              },
+              "anchor": {
+                "wordIndex": 16,
+                "word": "Third",
+                "startMs": 41825,
+                "confidence": "ok"
+              }
+            },
+            {
+              "id": "e4",
+              "recipe": "camera_push",
+              "role": "secondary",
+              "startFrame": 1026,
+              "endFrame": 1206,
+              "holdUntilFrame": 1206,
+              "exitFrame": 1320,
+              "ease": "ease-in-out"
+            }
+          ],
+          "variant": "default",
+          "content": {
+            "items": [
+              {
+                "label": "Save a small buffer"
+              },
+              {
+                "label": "Pay off the highest rate debt"
+              },
+              {
+                "label": "Invest what is left"
+              }
+            ]
+          },
+          "transitionIn": {
+            "type": "clean_wipe",
+            "startFrame": 1026,
+            "endFrame": 1041
+          }
+        },
+        {
+          "id": "S02B2",
+          "startFrame": 1320,
+          "endFrame": 1634,
+          "mode": "bar_chart",
+          "purpose": "Compare rates",
+          "usesCharacter": false,
+          "onScreenText": [
+            "What a dollar does"
+          ],
+          "data": [
+            {
+              "label": "Savings account",
+              "value": 4,
+              "unit": "%",
+              "source": "Hypothetical example",
+              "asOf": "2026",
+              "claimId": "F4"
+            },
+            {
+              "label": "Stock fund",
+              "value": 7,
+              "unit": "%",
+              "source": "Hypothetical example",
+              "asOf": "2026",
+              "claimId": "F4"
+            },
+            {
+              "label": "Credit card",
+              "value": 24,
+              "unit": "%",
+              "source": "Hypothetical example",
+              "asOf": "2026",
+              "claimId": "F4"
+            }
+          ],
+          "events": [
+            {
+              "id": "e1",
+              "recipe": "axes_in",
+              "role": "secondary",
+              "startFrame": 1322,
+              "endFrame": 1334,
+              "holdUntilFrame": 1634,
+              "exitFrame": 1634,
+              "ease": "ease-out"
+            },
+            {
+              "id": "e2",
+              "recipe": "bar_rise",
+              "role": "primary",
+              "startFrame": 1440,
+              "endFrame": 1455,
+              "holdUntilFrame": 1634,
+              "exitFrame": 1634,
+              "ease": "ease-out",
+              "params": {
+                "item": 0
+              },
+              "anchor": {
+                "wordIndex": 31,
+                "word": "four",
+                "startMs": 48145,
+                "confidence": "ok"
+              }
+            },
+            {
+              "id": "e3",
+              "recipe": "bar_rise",
+              "role": "primary",
+              "startFrame": 1531,
+              "endFrame": 1546,
+              "holdUntilFrame": 1634,
+              "exitFrame": 1634,
+              "ease": "ease-out",
+              "params": {
+                "item": 1
+              },
+              "anchor": {
+                "wordIndex": 38,
+                "word": "seven",
+                "startMs": 51155,
+                "confidence": "ok"
+              }
+            },
+            {
+              "id": "e4",
+              "recipe": "bar_rise",
+              "role": "primary",
+              "startFrame": 1589,
+              "endFrame": 1604,
+              "holdUntilFrame": 1634,
+              "exitFrame": 1634,
+              "ease": "ease-out",
+              "params": {
+                "item": 2
+              },
+              "anchor": {
+                "wordIndex": 43,
+                "word": "twenty",
+                "startMs": 53435,
+                "confidence": "low",
+                "fallback": true
+              }
+            },
+            {
+              "id": "e5",
+              "recipe": "legend_in",
+              "role": "secondary",
+              "startFrame": 1604,
+              "endFrame": 1616,
+              "holdUntilFrame": 1634,
+              "exitFrame": 1634,
+              "ease": "ease-out"
+            },
+            {
+              "id": "e6",
+              "recipe": "camera_push",
+              "role": "secondary",
+              "startFrame": 1320,
+              "endFrame": 1500,
+              "holdUntilFrame": 1500,
+              "exitFrame": 1634,
+              "ease": "ease-in-out"
+            }
+          ]
+        },
+        {
+          "id": "S02B3",
+          "startFrame": 1634,
+          "endFrame": 1848,
+          "mode": "line_chart",
+          "purpose": "Balance falls month by month",
+          "usesCharacter": false,
+          "onScreenText": [
+            "Balance month by month"
+          ],
+          "data": [
+            {
+              "label": "Start",
+              "value": 900,
+              "unit": "USD",
+              "illustrative": true
+            },
+            {
+              "label": "Month 1",
+              "value": 768,
+              "unit": "USD",
+              "illustrative": true
+            },
+            {
+              "label": "Month 2",
+              "value": 633,
+              "unit": "USD",
+              "illustrative": true
+            },
+            {
+              "label": "Month 3",
+              "value": 496,
+              "unit": "USD",
+              "illustrative": true
+            },
+            {
+              "label": "Month 4",
+              "value": 357,
+              "unit": "USD",
+              "illustrative": true
+            },
+            {
+              "label": "Month 5",
+              "value": 214,
+              "unit": "USD",
+              "illustrative": true
+            },
+            {
+              "label": "Month 6",
+              "value": 68,
+              "unit": "USD",
+              "illustrative": true
+            },
+            {
+              "label": "Month 7",
+              "value": 0,
+              "unit": "USD",
+              "illustrative": true
+            }
+          ],
+          "events": [
+            {
+              "id": "e1",
+              "recipe": "axes_in",
+              "role": "secondary",
+              "startFrame": 1636,
+              "endFrame": 1648,
+              "holdUntilFrame": 1848,
+              "exitFrame": 1848,
+              "ease": "ease-out"
+            },
+            {
+              "id": "e2",
+              "recipe": "line_draw",
+              "role": "primary",
+              "startFrame": 1648,
+              "endFrame": 1678,
+              "holdUntilFrame": 1848,
+              "exitFrame": 1848,
+              "ease": "ease-out",
+              "anchor": {
+                "wordIndex": 45,
+                "word": "Watch",
+                "startMs": 54605,
+                "confidence": "low",
+                "fallback": true
+              }
+            },
+            {
+              "id": "e3",
+              "recipe": "pill_in",
+              "role": "secondary",
+              "startFrame": 1678,
+              "endFrame": 1687,
+              "holdUntilFrame": 1848,
+              "exitFrame": 1848,
+              "ease": "ease-out"
+            },
+            {
+              "id": "e4",
+              "recipe": "camera_push",
+              "role": "secondary",
+              "startFrame": 1678,
+              "endFrame": 1848,
+              "holdUntilFrame": 1848,
+              "exitFrame": 1848,
+              "ease": "ease-in-out"
+            }
+          ]
+        },
+        {
+          "id": "S02B4",
+          "startFrame": 1848,
+          "endFrame": 2116,
+          "mode": "action_checklist",
+          "purpose": "This week's actions",
+          "usesCharacter": false,
+          "onScreenText": [
+            "This week"
+          ],
+          "data": [],
+          "events": [
+            {
+              "id": "e1",
+              "recipe": "checklist_build",
+              "role": "primary",
+              "startFrame": 1873,
+              "endFrame": 1894,
+              "holdUntilFrame": 2116,
+              "exitFrame": 2116,
+              "ease": "ease-out",
+              "params": {
+                "item": 0,
+                "words": 5
+              },
+              "anchor": {
+                "wordIndex": 64,
+                "word": "list",
+                "startMs": 62555,
+                "confidence": "ok"
+              }
+            },
+            {
+              "id": "e2",
+              "recipe": "checklist_build",
+              "role": "primary",
+              "startFrame": 1949,
+              "endFrame": 1970,
+              "holdUntilFrame": 2116,
+              "exitFrame": 2116,
+              "ease": "ease-out",
+              "params": {
+                "item": 1,
+                "words": 5
+              },
+              "anchor": {
+                "wordIndex": 70,
+                "word": "Set",
+                "startMs": 65085,
+                "confidence": "ok"
+              }
+            },
+            {
+              "id": "e3",
+              "recipe": "checklist_build",
+              "role": "primary",
+              "startFrame": 2029,
+              "endFrame": 2050,
+              "holdUntilFrame": 2116,
+              "exitFrame": 2116,
+              "ease": "ease-out",
+              "params": {
+                "item": 2,
+                "words": 5
+              },
+              "anchor": {
+                "wordIndex": 76,
+                "word": "pick",
+                "startMs": 67755,
+                "confidence": "ok"
+              }
+            },
+            {
+              "id": "e4",
+              "recipe": "camera_push",
+              "role": "secondary",
+              "startFrame": 1848,
+              "endFrame": 2028,
+              "holdUntilFrame": 2028,
+              "exitFrame": 2116,
+              "ease": "ease-in-out"
+            }
+          ],
+          "content": {
+            "items": [
+              {
+                "label": "List every balance and rate"
+              },
+              {
+                "label": "Set up one automatic transfer"
+              },
+              {
+                "label": "Attack the highest rate first"
+              }
+            ]
+          }
+        },
+        {
+          "id": "S02B5",
+          "startFrame": 2116,
+          "endFrame": 2340,
+          "mode": "risks_grid",
+          "purpose": "Risks to watch",
+          "usesCharacter": false,
+          "onScreenText": [
+            "Risks"
+          ],
+          "data": [],
+          "events": [
+            {
+              "id": "e1",
+              "recipe": "checklist_build",
+              "role": "primary",
+              "startFrame": 2171,
+              "endFrame": 2186,
+              "holdUntilFrame": 2340,
+              "exitFrame": 2340,
+              "ease": "ease-out",
+              "params": {
+                "item": 0,
+                "words": 3
+              },
+              "anchor": {
+                "wordIndex": 87,
+                "word": "A",
+                "startMs": 72515,
+                "confidence": "ok"
+              }
+            },
+            {
+              "id": "e2",
+              "recipe": "checklist_build",
+              "role": "primary",
+              "startFrame": 2232,
+              "endFrame": 2247,
+              "holdUntilFrame": 2340,
+              "exitFrame": 2340,
+              "ease": "ease-out",
+              "params": {
+                "item": 1,
+                "words": 3
+              },
+              "anchor": {
+                "wordIndex": 93,
+                "word": "a",
+                "startMs": 74525,
+                "confidence": "ok"
+              }
+            },
+            {
+              "id": "e3",
+              "recipe": "checklist_build",
+              "role": "primary",
+              "startFrame": 2283,
+              "endFrame": 2298,
+              "holdUntilFrame": 2340,
+              "exitFrame": 2340,
+              "ease": "ease-out",
+              "params": {
+                "item": 2,
+                "words": 3
+              },
+              "anchor": {
+                "wordIndex": 98,
+                "word": "a",
+                "startMs": 76335,
+                "confidence": "low",
+                "fallback": true
+              }
+            },
+            {
+              "id": "e4",
+              "recipe": "camera_push",
+              "role": "secondary",
+              "startFrame": 2116,
+              "endFrame": 2296,
+              "holdUntilFrame": 2296,
+              "exitFrame": 2340,
+              "ease": "ease-in-out"
+            }
+          ],
+          "content": {
+            "items": [
+              {
+                "label": "Buffer too thin",
+                "tone": "watch"
+              },
+              {
+                "label": "Rate that changes",
+                "tone": "watch"
+              },
+              {
+                "label": "Payment you forget",
+                "tone": "watch"
+              }
+            ]
+          }
+        },
+        {
+          "id": "S02B6",
+          "startFrame": 2340,
+          "endFrame": 2463,
+          "mode": "annotation_callout",
+          "purpose": "Closing line",
+          "usesCharacter": false,
+          "onScreenText": [],
+          "data": [],
+          "events": [
+            {
+              "id": "e1",
+              "recipe": "callout_in",
+              "role": "secondary",
+              "startFrame": 2340,
+              "endFrame": 2349,
+              "holdUntilFrame": 2463,
+              "exitFrame": 2463,
+              "ease": "ease-out"
+            },
+            {
+              "id": "e2",
+              "recipe": "text_reveal_line",
+              "role": "primary",
+              "startFrame": 2340,
+              "endFrame": 2355,
+              "holdUntilFrame": 2433,
+              "exitFrame": 2463,
+              "ease": "ease-out",
+              "params": {
+                "words": 7
+              },
+              "anchor": {
+                "wordIndex": 102,
+                "word": "Cover",
+                "startMs": 78135,
+                "confidence": "ok"
+              }
+            },
+            {
+              "id": "e3",
+              "recipe": "highlight",
+              "role": "secondary",
+              "startFrame": 2402,
+              "endFrame": 2420,
+              "holdUntilFrame": 2463,
+              "exitFrame": 2463,
+              "ease": "ease-out",
+              "anchor": {
+                "wordIndex": 107,
+                "word": "fight",
+                "startMs": 80215,
+                "confidence": "ok"
+              }
+            },
+            {
+              "id": "e4",
+              "recipe": "camera_push",
+              "role": "secondary",
+              "startFrame": 2340,
+              "endFrame": 2463,
+              "holdUntilFrame": 2463,
+              "exitFrame": 2463,
+              "ease": "ease-in-out"
+            }
+          ],
+          "variant": "spotlight",
+          "content": {
+            "items": [
+              {
+                "label": "Cover the surprise, then fight the interest",
+                "mark": "fight the interest"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

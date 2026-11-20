@@ -1,3 +1,5 @@
+import { numbersIn } from "./numwords.mjs";
+import { loadRegistry, variantsOf, fitError } from "./registry.mjs";
 // Scene plan v2 lint: scenes > beats > typed events, checked against the motion vocabulary
 // (config/motion_recipes.json), the visual modes, the active style pack and (optionally) the voice manifest and script.
 // Pure function: returns { errors, warnings }. Errors block G3; warnings are reported to the owner.
@@ -11,7 +13,7 @@ export function recipeRange(recipe, pack) {
 }
 
 export function lintPlanV2(plan, ctx) {
-  const { recipes: V, modes, pack, voice, script, renderable } = ctx;
+  const { recipes: V, modes, pack, voice, script, renderable, renderableTransitions } = ctx, reg = ctx.registry ?? loadRegistry();
   const errors = [], warnings = [];
   const E = (m) => errors.push(m), W = (m) => warnings.push(m);
   const fps = plan.fps, lim = V.limits, lead = pack.motion.leadFrames;
@@ -49,8 +51,56 @@ export function lintPlanV2(plan, ctx) {
     if (!modeV) E(at(`mode "${b.mode}" has no entry in motion_recipes.json`));
     if (b.background && !bgIds.has(b.background)) E(at(`unknown background "${b.background}"`));
     if (b.transitionIn && !V.transitions.includes(b.transitionIn.type)) E(at(`unknown transition "${b.transitionIn.type}"`));
+    if (b.transitionIn && b.transitionIn.type !== "none") {
+      const t = b.transitionIn, idx = allBeats.findIndex((x) => x.beat === b);
+      if (renderableTransitions && !renderableTransitions.includes(t.type)) E(at(`transition "${t.type}" has no verified renderer yet (config/components.json), so this plan cannot be rendered`));
+      if (idx === 0) E(at("the first beat has nothing to transition from"));
+      if (t.startFrame !== undefined && t.startFrame !== b.startFrame) E(at(`transition must start at the beat's startFrame ${b.startFrame}, not ${t.startFrame}`));
+      if (t.endFrame === undefined) E(at("transition needs endFrame"));
+      else {
+        if (t.endFrame <= b.startFrame) E(at("transition endFrame must be after the beat start"));
+        if (t.endFrame > b.endFrame) E(at("transition must end inside its own beat"));
+        const range = pack?.motion?.durationSec?.[V.transitions.includes(t.type) ? (V.recipes?.[t.type]?.packKey ?? t.type) : t.type];
+        if (range) { const d = (t.endFrame - b.startFrame) / plan.fps; const tol = 1 / plan.fps; if (d < range[0] - tol || d > range[1] + tol) E(at(`transition "${t.type}" lasts ${d.toFixed(2)} s, style allows ${range[0]}-${range[1]} s`)); }
+      }
+    }
     if (b.usesCharacter) E(at("the thumbnail character must never appear inside the video"));
     if (b.onScreenText.some((t) => t.length > 90)) E(at("on-screen text line over 90 characters"));
+    if (b.variant !== undefined) {
+      const vs = variantsOf(reg, b.mode, { includeDraft: true }), v = vs.find((x) => x.id === b.variant), d0 = b.data[0];
+      if (!vs.length) E(at(`mode ${b.mode} has no layout variants`));
+      else if (!v) E(at(`unknown variant "${b.variant}" for ${b.mode} (allowed: ${vs.map((x) => x.id).join(", ")})`));
+      else {
+        if (v.status !== "verified") E(at(`variant ${b.variant} is still a draft, so it cannot be used in a production plan`));
+        const fe = fitError(v, d0, b.content?.items?.length); if (fe) E(at(fe));
+      }
+    }
+    // diagram content: labels shown on screen; each must come from what the narrator says (no invented claims)
+    if (modeV?.content) {
+      const items = b.content?.items;
+      if (!items) E(at(`mode ${b.mode} needs content.items (${modeV.content.min}-${modeV.content.max})`));
+      else {
+        if (items.length < modeV.content.min || items.length > modeV.content.max) E(at(`mode ${b.mode} takes ${modeV.content.min}-${modeV.content.max} content items, has ${items.length}`));
+        items.forEach((it, i) => {
+          const w = it.label.trim().split(/\s+/).length;
+          if (w > V.limits.contentLabelMaxWords || it.label.length > V.limits.contentLabelMaxChars) E(at(`content item ${i}: label too long (${w} words, ${it.label.length} chars; limits ${V.limits.contentLabelMaxWords}/${V.limits.contentLabelMaxChars})`));
+          if (it.mark !== undefined && !it.label.includes(it.mark)) E(at(`content item ${i}: mark "${it.mark}" is not part of the label`));
+        });
+        const idx = b.events.filter((e) => typeof e.params?.item === "number").map((e) => e.params.item);
+        if (idx.length) {
+          const want = items.map((_, i) => i).join(","), got = [...idx].sort((x, y) => x - y).join(",");
+          if (want !== got) E(at(`per-item events must cover every item exactly once (items ${want}, events ${got})`));
+          const byItem = b.events.filter((e) => typeof e.params?.item === "number").sort((x, y) => x.params.item - y.params.item);
+          for (let i = 1; i < byItem.length; i++) if (byItem[i].startFrame < byItem[i - 1].startFrame) E(at(`item ${i} appears before item ${i - 1}`));
+        }
+      }
+    } else if (b.content) E(at(`mode ${b.mode} does not take content`));
+    else if (b.mode === "bar_chart" && b.events.some((e) => e.recipe === "bar_rise" && typeof e.params?.item === "number")) {
+      const got = b.events.filter((e) => e.recipe === "bar_rise").map((e) => e.params?.item).sort((x, y) => x - y).join(","), want = b.data.map((_, i) => i).join(",");
+      if (got !== want) E(at(`per-bar events must cover every bar exactly once (bars ${want}, events ${got})`));
+      const rs = b.events.filter((e) => e.recipe === "bar_rise").sort((x, y) => x.params.item - y.params.item);
+      for (let i = 1; i < rs.length; i++) if (rs[i].startFrame < rs[i - 1].startFrame) E(at(`bar ${i} rises before bar ${i - 1}`));
+    }
     if (modeV) {
       if (b.data.length < (modeV.minData ?? 0)) E(at(`mode ${b.mode} needs at least ${modeV.minData} data point(s), has ${b.data.length}`));
       if (modeV.maxData !== undefined && b.data.length > modeV.maxData) E(at(`mode ${b.mode} takes at most ${modeV.maxData} data points, has ${b.data.length}`));
@@ -136,6 +186,33 @@ export function lintPlanV2(plan, ctx) {
     for (const id of vIds) if (!scenes.some((s) => s.id === id)) E(`${id}: voiceover exists but the scene is missing in the plan`);
     const planMs = Math.round((plan.totalFrames / fps) * 1000);
     if (Math.abs(planMs - voice.totalMs) > (2 / fps) * 1000 + 500) E(`plan length ${planMs} ms differs from narration ${voice.totalMs} ms by more than a 0.5 s outro allowance`);
+  }
+  if (script) {
+    const claims = new Map(script.scenes.flatMap((sc) => (sc.claims || []).map((c) => [c.id, c])));
+    for (const { beat: b } of allBeats) for (const d of b.data) {
+      if (!d.claimId) continue;
+      const c = claims.get(d.claimId);
+      if (!c) { E(`${b.id}: data point "${d.label}" cites claim ${d.claimId}, which is not in the script`); continue; }
+      if (c.verified !== true) E(`${b.id}: data point "${d.label}" cites claim ${d.claimId}, which is not verified`);
+      const nums = numbersIn(`${c.text} ${c.sourceQuote ?? ""}`), v = Number(d.value);
+      if (!Number.isNaN(v) && !nums.has(v)) E(`${b.id}: value ${d.value} for "${d.label}" does not appear in claim ${d.claimId} ("${c.text.slice(0, 60)}...")`);
+      if (c.dataYear !== undefined && d.asOf && String(d.asOf).slice(0, 4) !== String(c.dataYear)) E(`${b.id}: data point "${d.label}" says as-of ${d.asOf} but claim ${d.claimId} is data from ${c.dataYear}`);
+    }
+  }
+  if (script) {
+    const STOP = new Set("a an the and or but of to in on at for from with by as is are was were be been it its it's this that these those you your yours we our i me my he she they them their his her not no so if then than too very just".split(" "));
+    const norm = (t) => t.toLowerCase().replace(/[’']/g, "").replace(/[^a-z0-9\s]/g, " ").split(/\s+/).filter((x) => x && !STOP.has(x));
+    const narr = new Map(script.scenes.flatMap((sc) => (sc.beats || []).map((sb) => [sb.id, norm(sb.narration + " " + (sb.onScreenText || []).join(" "))])));
+    for (const { beat: b } of allBeats) {
+      if (!b.content || !narr.has(b.id)) continue;
+      const have = narr.get(b.id);
+      const near = (w) => have.some((h) => h === w || (w.length >= 4 && h.length >= 4 && h.slice(0, 4) === w.slice(0, 4)));
+      b.content.items.forEach((it, i) => {
+        const ws = [...norm(it.label), ...norm(it.sub ?? "")]; if (!ws.length) return;
+        const share = ws.filter(near).length / ws.length;
+        if (share < V.limits.contentTraceMinShare) E(`${b.id}: content item ${i} "${it.label}" is not traceable to the narration (${Math.round(share * 100)}% of its words are spoken; need ${V.limits.contentTraceMinShare * 100}%)`);
+      });
+    }
   }
   if (script) {
     const sb = new Map(script.scenes.map((s) => [s.id, new Set((s.beats || []).map((b) => b.id))]));

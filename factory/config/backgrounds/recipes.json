@@ -1,0 +1,14 @@
+{"schema":"ffx-bg-recipes/1","rule":"soft blurred colour fields from palette tokens only; low contrast; empty centre for text; no objects",
+"recipes":{
+"debt-pressure":{"topics":["debt","loan","credit"],"blobs":[[0.85,0.15,0.55,"primary",0.35],[0.1,0.9,0.5,"lavender",0.25]]},
+"saving-calm":{"topics":["saving","budget"],"blobs":[[0.2,0.2,0.6,"teal",0.3],[0.9,0.85,0.5,"primary",0.2]]},
+"investing-growth":{"topics":["invest","market","stock"],"blobs":[[0.1,0.85,0.6,"primary",0.35],[0.9,0.2,0.5,"cyan",0.25]]},
+"tax-paper":{"topics":["tax"],"blobs":[[0.5,0.0,0.7,"lavender",0.2],[0.05,0.6,0.4,"primary",0.15]]},
+"retirement-horizon":{"topics":["retirement","pension"],"blobs":[[0.5,1.05,0.75,"primary",0.35],[0.9,0.1,0.4,"cyan",0.2]]},
+"business-focus":{"topics":["business","income"],"blobs":[[0.75,0.5,0.55,"primary",0.3],[0.05,0.1,0.4,"teal",0.2]]},
+"risk-watch":{"topics":["risk","crash","recession"],"blobs":[[0.15,0.2,0.55,"lavender",0.35],[0.85,0.9,0.5,"primary",0.25]]},
+"wealth-glow":{"topics":["wealth","portfolio"],"blobs":[[0.5,0.5,0.8,"cyan",0.18],[0.0,1.0,0.5,"primary",0.3]]},
+"family-warm":{"topics":["family","household","home"],"blobs":[[0.9,0.1,0.55,"cyan",0.3],[0.1,0.8,0.5,"primary",0.2]]},
+"tools-clean":{"topics":["ai","tools","app"],"blobs":[[0.2,0.5,0.5,"teal",0.22],[0.8,0.5,0.5,"lavender",0.22]]},
+"crypto-edge":{"topics":["crypto"],"blobs":[[0.0,0.0,0.6,"primary",0.35],[1.0,1.0,0.6,"cyan",0.25]]},
+"general-fog":{"topics":[],"blobs":[[0.15,0.1,0.65,"primary",0.3],[0.9,0.9,0.45,"lavender",0.2]]}}}

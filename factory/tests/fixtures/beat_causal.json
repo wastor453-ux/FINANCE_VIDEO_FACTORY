@@ -1,0 +1,93 @@
+{
+  "id": "S04B2",
+  "startFrame": 0,
+  "endFrame": 210,
+  "mode": "causal_diagram",
+  "purpose": "Everything routes through the chief of staff",
+  "usesCharacter": false,
+  "onScreenText": [
+    "The chief of staff"
+  ],
+  "data": [],
+  "content": {
+    "items": [
+      {
+        "label": "Your calendar"
+      },
+      {
+        "label": "Your priorities"
+      },
+      {
+        "label": "What you have decided"
+      },
+      {
+        "label": "The bot in charge",
+        "sub": "Chief of staff"
+      }
+    ]
+  },
+  "events": [
+    {
+      "id": "e1",
+      "recipe": "flow_arrows",
+      "role": "primary",
+      "startFrame": 14,
+      "endFrame": 44,
+      "holdUntilFrame": 74,
+      "exitFrame": 210,
+      "ease": "ease-in-out",
+      "params": {
+        "item": 0
+      }
+    },
+    {
+      "id": "e2",
+      "recipe": "flow_arrows",
+      "role": "primary",
+      "startFrame": 70,
+      "endFrame": 100,
+      "holdUntilFrame": 130,
+      "exitFrame": 210,
+      "ease": "ease-in-out",
+      "params": {
+        "item": 1
+      }
+    },
+    {
+      "id": "e3",
+      "recipe": "flow_arrows",
+      "role": "primary",
+      "startFrame": 100,
+      "endFrame": 130,
+      "holdUntilFrame": 160,
+      "exitFrame": 210,
+      "ease": "ease-in-out",
+      "params": {
+        "item": 2
+      }
+    },
+    {
+      "id": "e4",
+      "recipe": "flow_arrows",
+      "role": "primary",
+      "startFrame": 140,
+      "endFrame": 172,
+      "holdUntilFrame": 202,
+      "exitFrame": 210,
+      "ease": "ease-in-out",
+      "params": {
+        "item": 3
+      }
+    },
+    {
+      "id": "e9",
+      "recipe": "camera_push",
+      "role": "secondary",
+      "startFrame": 20,
+      "endFrame": 170,
+      "holdUntilFrame": 170,
+      "exitFrame": 210,
+      "ease": "ease-in-out"
+    }
+  ]
+}

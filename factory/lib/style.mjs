@@ -50,6 +50,15 @@ export function validateStylePack(pack, dir) {
     if (!(sn.cameraPushScale >= 0 && sn.cameraPushScale <= L.maxPushScale)) f.push("scene camera push exceeds limit");
     if (!(sn.staggerSec >= 0 && sn.staggerSec <= L.maxStaggerSec)) f.push("scene stagger out of range");
     if (!(sn.chartTiltScale >= 0 && sn.chartTiltScale <= L.maxChartTiltScale)) f.push("scene chart tilt scale out of range");
+    const lf = sn.life, Lm = lf?.limits;
+    if (!lf || !Lm) f.push("scene.life (continuous camera) missing");
+    else {
+      if (!(lf.amp > 0 && lf.amp <= Lm.maxAmp)) f.push("scene.life.amp out of range");
+      if (!(lf.zoomMax >= 0 && lf.zoomMax <= L.maxPushScale)) f.push("scene.life.zoomMax exceeds the push limit");
+      if (!(lf.panPx <= 90 && lf.rollDeg <= 1.2 && lf.handheldPx <= 8 && lf.handheldRollDeg <= 0.3)) f.push("scene.life moves exceed safe size (pan 90 px, roll 1.2 deg, handheld 8 px / 0.3 deg)");
+      if (!(lf.bgScale >= 1 + (lf.bgDriftPx * (lf.amp ?? 1) + lf.panPx * lf.bgFollow * (lf.amp ?? 1)) / 960)) f.push("scene.life.bgScale too small: background edges would show");
+    }
+    if (!["on", "off"].includes(sn.sourceTag)) f.push("scene.sourceTag must be \"on\" or \"off\"");
     if (!(sn.perspectivePx >= 1000)) f.push("scene perspective too strong (distortion)");
     if (!(sn.layerZ.back < 0 && sn.layerZ.main > sn.layerZ.back && sn.layerZ.near > sn.layerZ.main)) f.push("scene layers must be ordered back < main < near");
     if (!(sn.glass.radiusAtReference > 0 && sn.glass.shadow.length >= 2)) f.push("scene glass spec incomplete");

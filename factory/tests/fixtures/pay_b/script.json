@@ -1,0 +1,137 @@
+{
+ "schema_version": "1.0",
+ "title": "Cover the Surprise First, Then Fight the Interest",
+ "language": "en-US",
+ "_note": "TEST FIXTURE B: invented example numbers (hypothetical), synthetic word timing generated from word length. Not research, not real voice.",
+ "sources": [
+  {
+   "id": "fixture-b",
+   "title": "Test fixture, hypothetical numbers",
+   "url": "https://example.invalid/fixture-b",
+   "accessed": "2026-11-13"
+  }
+ ],
+ "scenes": [
+  {
+   "id": "S01",
+   "beat": "Hook: the surprise bill",
+   "narration": "Your car breaks down on a Tuesday, and the repair is a surprise nobody planned for. Say it costs nine hundred dollars, and the only money you have is a credit card. That card charges twenty four percent interest a year. With no savings, the repair goes on the card, the interest piles up, and the debt keeps growing. Leave the balance alone for a year, and the interest alone is two hundred sixteen dollars. So the order you do things in matters more than the amount.",
+   "delivery": "hook",
+   "claims": [
+    {
+     "id": "F1",
+     "text": "In this example the repair costs $900 (hypothetical).",
+     "sourceIds": [
+      "fixture-b"
+     ],
+     "verified": true,
+     "sourceKind": "primary",
+     "sourceQuote": "Hypothetical example: a $900 car repair."
+    },
+    {
+     "id": "F2",
+     "text": "In this example the card charges 24% interest a year (hypothetical).",
+     "sourceIds": [
+      "fixture-b"
+     ],
+     "verified": true,
+     "sourceKind": "primary",
+     "sourceQuote": "Hypothetical example: a card at 24% a year."
+    },
+    {
+     "id": "F3",
+     "text": "Interest on a $900 balance at 24% for one year is $216.",
+     "sourceIds": [
+      "fixture-b"
+     ],
+     "verified": true,
+     "sourceKind": "primary",
+     "sourceQuote": "900 x 0.24 = 216."
+    }
+   ],
+   "beats": [
+    {
+     "id": "S01B1",
+     "narration": "Your car breaks down on a Tuesday, and the repair is a surprise nobody planned for.",
+     "visualIntent": "x"
+    },
+    {
+     "id": "S01B2",
+     "narration": "Say it costs nine hundred dollars, and the only money you have is a credit card.",
+     "visualIntent": "x"
+    },
+    {
+     "id": "S01B3",
+     "narration": "That card charges twenty four percent interest a year.",
+     "visualIntent": "x"
+    },
+    {
+     "id": "S01B4",
+     "narration": "With no savings, the repair goes on the card, the interest piles up, and the debt keeps growing.",
+     "visualIntent": "x"
+    },
+    {
+     "id": "S01B5",
+     "narration": "Leave the balance alone for a year, and the interest alone is two hundred sixteen dollars.",
+     "visualIntent": "x"
+    },
+    {
+     "id": "S01B6",
+     "narration": "So the order you do things in matters more than the amount.",
+     "visualIntent": "x"
+    }
+   ]
+  },
+  {
+   "id": "S02",
+   "beat": "The order that works",
+   "narration": "Here is the order. First, save a small buffer. Second, pay off the highest rate debt. Third, invest what is left. Compare what a dollar does. A savings account might pay four percent. A stock fund might average seven percent. The card costs twenty four. Watch the balance. Paying one hundred fifty dollars a month clears the card in about seven months. This week, list every balance and its rate. Set up one automatic transfer. Then pick the highest rate to attack first. Watch for three risks. A buffer that is too thin, a rate that changes, and a payment you forget. Cover the surprise first, then fight the interest.",
+   "delivery": "teach",
+   "claims": [
+    {
+     "id": "F4",
+     "text": "Hypothetical example rates: savings account 4%, stock fund 7%, credit card 24% a year.",
+     "sourceIds": [
+      "fixture-b"
+     ],
+     "verified": true,
+     "sourceKind": "primary",
+     "sourceQuote": "Hypothetical example rates: 4%, 7%, 24%."
+    }
+   ],
+   "beats": [
+    {
+     "id": "S02B1",
+     "narration": "Here is the order. First, save a small buffer. Second, pay off the highest rate debt. Third, invest what is left.",
+     "visualIntent": "x"
+    },
+    {
+     "id": "S02B2",
+     "narration": "Compare what a dollar does. A savings account might pay four percent. A stock fund might average seven percent. The card costs twenty four.",
+     "visualIntent": "x"
+    },
+    {
+     "id": "S02B3",
+     "narration": "Watch the balance. Paying one hundred fifty dollars a month clears the card in about seven months.",
+     "visualIntent": "x"
+    },
+    {
+     "id": "S02B4",
+     "narration": "This week, list every balance and its rate. Set up one automatic transfer. Then pick the highest rate to attack first.",
+     "visualIntent": "x"
+    },
+    {
+     "id": "S02B5",
+     "narration": "Watch for three risks. A buffer that is too thin, a rate that changes, and a payment you forget.",
+     "visualIntent": "x"
+    },
+    {
+     "id": "S02B6",
+     "narration": "Cover the surprise first, then fight the interest.",
+     "visualIntent": "x"
+    }
+   ]
+  }
+ ],
+ "disclaimerIncluded": true
+}

@@ -3,10 +3,12 @@ import { Beat } from "./common";
 import { HeroScene } from "./HeroScene";
 import { LineScene } from "./LineScene";
 import { BarScene } from "./BarScene";
+import { DiagramScene } from "./DiagramScene";
+import { ListScene } from "./ListScene";
 import registry from "../../factory/config/components.json";
 
 // Component name (from factory/config/components.json) -> implementation. A mode appears in the JSON only when its component is verified.
-const IMPLEMENTATIONS: Record<string, React.FC<{ beat: Beat }>> = { HeroScene, LineScene, BarScene };
+const IMPLEMENTATIONS: Record<string, React.FC<{ beat: Beat }>> = { HeroScene, LineScene, BarScene, DiagramScene, ListScene };
 
 export const BeatView: React.FC<{ beat: Beat }> = ({ beat }) => {
   const name = (registry.modes as Record<string, string>)[beat.mode];

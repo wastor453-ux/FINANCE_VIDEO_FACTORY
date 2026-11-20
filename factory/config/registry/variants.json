@@ -1,0 +1,241 @@
+{
+  "schema_version": "1.0",
+  "_comment": "Layout variant registry. One entry per way a visual mode can look. The art director (lib/registry.mjs) chooses among entries with status \"verified\"; \"draft\" entries render in previews only. `fits` are hard limits (lint rejects a plan that breaks them); `auto` says when the art director may pick the variant on its own (a missing key means any). `component` + `renderer` say where it is drawn. `fixture` names a test beat that renders it. Add a variant here, then pass `ffx registry-check`; never hand-wire a look inside a component for one video.",
+  "minVerifiedPerMode": 3,
+  "variants": [
+    {
+      "id": "panel",
+      "mode": "hero_number",
+      "status": "verified",
+      "label": "Figure beside a chart panel",
+      "fits": {
+        "needsSeries": true
+      },
+      "auto": {
+        "series": true
+      },
+      "mood": [
+        "analytic",
+        "calm"
+      ],
+      "density": "high",
+      "cost": "low"
+    },
+    {
+      "id": "number",
+      "mode": "hero_number",
+      "status": "verified",
+      "label": "Figure alone, centred",
+      "fits": {},
+      "auto": {
+        "series": false,
+        "percent": false
+      },
+      "mood": [
+        "bold",
+        "calm"
+      ],
+      "density": "low",
+      "cost": "low"
+    },
+    {
+      "id": "waffle",
+      "mode": "hero_number",
+      "status": "verified",
+      "label": "10x10 icon array",
+      "fits": {
+        "needsPercent": true
+      },
+      "auto": {
+        "series": false,
+        "percent": true
+      },
+      "mood": [
+        "friendly",
+        "analytic"
+      ],
+      "density": "medium",
+      "cost": "medium"
+    },
+    {
+      "id": "ring",
+      "mode": "hero_number",
+      "status": "verified",
+      "label": "Progress ring",
+      "fits": {
+        "needsPercent": true
+      },
+      "auto": {
+        "series": false,
+        "percent": true
+      },
+      "mood": [
+        "calm",
+        "friendly"
+      ],
+      "density": "low",
+      "cost": "low"
+    },
+    {
+      "id": "bar",
+      "mode": "hero_number",
+      "status": "verified",
+      "label": "Single proportion bar",
+      "fits": {
+        "needsPercent": true
+      },
+      "auto": {
+        "series": false,
+        "percent": true
+      },
+      "mood": [
+        "analytic",
+        "serious"
+      ],
+      "density": "low",
+      "cost": "low"
+    },
+    {
+      "id": "default",
+      "mode": "line_chart",
+      "status": "verified",
+      "label": "Line chart on glass panel",
+      "fits": {},
+      "mood": [
+        "analytic"
+      ],
+      "density": "high",
+      "cost": "medium"
+    },
+    {
+      "id": "default",
+      "mode": "bar_chart",
+      "status": "verified",
+      "label": "Bar chart on glass panel",
+      "fits": {},
+      "mood": [
+        "analytic"
+      ],
+      "density": "high",
+      "cost": "medium"
+    },
+    {
+      "id": "default",
+      "mode": "process_flow",
+      "status": "verified",
+      "label": "Cards in a row with arrows",
+      "fits": {},
+      "mood": [
+        "calm"
+      ],
+      "density": "medium",
+      "cost": "medium"
+    },
+    {
+      "id": "vertical",
+      "mode": "process_flow",
+      "status": "verified",
+      "label": "Steps stacked on a numbered rail",
+      "fits": {
+        "minItems": 2,
+        "maxItems": 5
+      },
+      "mood": [
+        "calm",
+        "friendly"
+      ],
+      "density": "medium",
+      "cost": "medium"
+    },
+    {
+      "id": "chevron",
+      "mode": "process_flow",
+      "status": "verified",
+      "label": "Joined chevron strip",
+      "fits": {
+        "minItems": 3,
+        "maxItems": 5
+      },
+      "mood": [
+        "bold",
+        "analytic"
+      ],
+      "density": "medium",
+      "cost": "low"
+    },
+    {
+      "id": "default",
+      "mode": "causal_diagram",
+      "status": "verified",
+      "label": "Cause to effect chain",
+      "fits": {},
+      "mood": [
+        "serious"
+      ],
+      "density": "medium",
+      "cost": "medium"
+    },
+    {
+      "id": "default",
+      "mode": "annotation_callout",
+      "status": "verified",
+      "label": "Quote card with highlight",
+      "fits": {},
+      "mood": [
+        "bold"
+      ],
+      "density": "low",
+      "cost": "low"
+    },
+    {
+      "id": "banner",
+      "mode": "annotation_callout",
+      "status": "verified",
+      "label": "Full-width banner statement",
+      "fits": {},
+      "mood": [
+        "bold",
+        "serious"
+      ],
+      "density": "low",
+      "cost": "low"
+    },
+    {
+      "id": "spotlight",
+      "mode": "annotation_callout",
+      "status": "verified",
+      "label": "Accent block with quote card",
+      "fits": {},
+      "mood": [
+        "friendly",
+        "bold"
+      ],
+      "density": "low",
+      "cost": "low"
+    },
+    {
+      "id": "default",
+      "mode": "action_checklist",
+      "status": "verified",
+      "label": "Checklist rows",
+      "fits": {},
+      "mood": [
+        "friendly"
+      ],
+      "density": "medium",
+      "cost": "low"
+    },
+    {
+      "id": "default",
+      "mode": "risks_grid",
+      "status": "verified",
+      "label": "Risk cards grid",
+      "fits": {},
+      "mood": [
+        "serious"
+      ],
+      "density": "medium",
+      "cost": "low"
+    }
+  ]
+}

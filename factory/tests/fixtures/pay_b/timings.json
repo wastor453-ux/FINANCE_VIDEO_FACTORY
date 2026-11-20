@@ -1,0 +1,1196 @@
+[
+ {
+  "sceneId": "S01",
+  "audioSec": 34.38,
+  "words": [
+   {
+    "word": "Your",
+    "startSec": 0.26,
+    "endSec": 0.56,
+    "source": "synthetic"
+   },
+   {
+    "word": "car",
+    "startSec": 0.6,
+    "endSec": 0.85,
+    "source": "synthetic"
+   },
+   {
+    "word": "breaks",
+    "startSec": 0.9,
+    "endSec": 1.29,
+    "source": "synthetic"
+   },
+   {
+    "word": "down",
+    "startSec": 1.32,
+    "endSec": 1.62,
+    "source": "synthetic"
+   },
+   {
+    "word": "on",
+    "startSec": 1.67,
+    "endSec": 1.88,
+    "source": "synthetic"
+   },
+   {
+    "word": "a",
+    "startSec": 1.92,
+    "endSec": 2.08,
+    "source": "synthetic"
+   },
+   {
+    "word": "Tuesday,",
+    "startSec": 2.12,
+    "endSec": 2.56,
+    "source": "synthetic"
+   },
+   {
+    "word": "and",
+    "startSec": 2.75,
+    "endSec": 3.0,
+    "source": "synthetic"
+   },
+   {
+    "word": "the",
+    "startSec": 3.04,
+    "endSec": 3.29,
+    "source": "synthetic"
+   },
+   {
+    "word": "repair",
+    "startSec": 3.33,
+    "endSec": 3.73,
+    "source": "synthetic"
+   },
+   {
+    "word": "is",
+    "startSec": 3.77,
+    "endSec": 3.98,
+    "source": "synthetic"
+   },
+   {
+    "word": "a",
+    "startSec": 4.02,
+    "endSec": 4.18,
+    "source": "synthetic"
+   },
+   {
+    "word": "surprise",
+    "startSec": 4.22,
+    "endSec": 4.7,
+    "source": "synthetic"
+   },
+   {
+    "word": "nobody",
+    "startSec": 4.74,
+    "endSec": 5.13,
+    "source": "synthetic"
+   },
+   {
+    "word": "planned",
+    "startSec": 5.17,
+    "endSec": 5.6,
+    "source": "synthetic"
+   },
+   {
+    "word": "for.",
+    "startSec": 5.64,
+    "endSec": 5.9,
+    "source": "synthetic"
+   },
+   {
+    "word": "Say",
+    "startSec": 6.34,
+    "endSec": 6.59,
+    "source": "synthetic"
+   },
+   {
+    "word": "it",
+    "startSec": 6.63,
+    "endSec": 6.84,
+    "source": "synthetic"
+   },
+   {
+    "word": "costs",
+    "startSec": 6.88,
+    "endSec": 7.23,
+    "source": "synthetic"
+   },
+   {
+    "word": "nine",
+    "startSec": 7.27,
+    "endSec": 7.57,
+    "source": "synthetic"
+   },
+   {
+    "word": "hundred",
+    "startSec": 7.61,
+    "endSec": 8.04,
+    "source": "synthetic"
+   },
+   {
+    "word": "dollars,",
+    "startSec": 8.08,
+    "endSec": 8.52,
+    "source": "synthetic"
+   },
+   {
+    "word": "and",
+    "startSec": 8.71,
+    "endSec": 8.96,
+    "source": "synthetic"
+   },
+   {
+    "word": "the",
+    "startSec": 9.0,
+    "endSec": 9.26,
+    "source": "synthetic"
+   },
+   {
+    "word": "only",
+    "startSec": 9.3,
+    "endSec": 9.6,
+    "source": "synthetic"
+   },
+   {
+    "word": "money",
+    "startSec": 9.64,
+    "endSec": 9.98,
+    "source": "synthetic"
+   },
+   {
+    "word": "you",
+    "startSec": 10.02,
+    "endSec": 10.28,
+    "source": "synthetic"
+   },
+   {
+    "word": "have",
+    "startSec": 10.32,
+    "endSec": 10.62,
+    "source": "synthetic"
+   },
+   {
+    "word": "is",
+    "startSec": 10.66,
+    "endSec": 10.87,
+    "source": "synthetic"
+   },
+   {
+    "word": "a",
+    "startSec": 10.91,
+    "endSec": 11.07,
+    "source": "synthetic"
+   },
+   {
+    "word": "credit",
+    "startSec": 11.11,
+    "endSec": 11.5,
+    "source": "synthetic"
+   },
+   {
+    "word": "card.",
+    "startSec": 11.54,
+    "endSec": 11.84,
+    "source": "synthetic"
+   },
+   {
+    "word": "That",
+    "startSec": 12.28,
+    "endSec": 12.58,
+    "source": "synthetic"
+   },
+   {
+    "word": "card",
+    "startSec": 12.62,
+    "endSec": 12.92,
+    "source": "synthetic"
+   },
+   {
+    "word": "charges",
+    "startSec": 12.96,
+    "endSec": 13.4,
+    "source": "synthetic"
+   },
+   {
+    "word": "twenty",
+    "startSec": 13.44,
+    "endSec": 13.83,
+    "source": "synthetic"
+   },
+   {
+    "word": "four",
+    "startSec": 13.87,
+    "endSec": 14.17,
+    "source": "synthetic"
+   },
+   {
+    "word": "percent",
+    "startSec": 14.21,
+    "endSec": 14.64,
+    "source": "synthetic"
+   },
+   {
+    "word": "interest",
+    "startSec": 14.68,
+    "endSec": 15.16,
+    "source": "synthetic"
+   },
+   {
+    "word": "a",
+    "startSec": 15.2,
+    "endSec": 15.37,
+    "source": "synthetic"
+   },
+   {
+    "word": "year.",
+    "startSec": 15.41,
+    "endSec": 15.71,
+    "source": "synthetic"
+   },
+   {
+    "word": "With",
+    "startSec": 16.15,
+    "endSec": 16.45,
+    "source": "synthetic"
+   },
+   {
+    "word": "no",
+    "startSec": 16.49,
+    "endSec": 16.7,
+    "source": "synthetic"
+   },
+   {
+    "word": "savings,",
+    "startSec": 16.74,
+    "endSec": 17.17,
+    "source": "synthetic"
+   },
+   {
+    "word": "the",
+    "startSec": 17.36,
+    "endSec": 17.62,
+    "source": "synthetic"
+   },
+   {
+    "word": "repair",
+    "startSec": 17.66,
+    "endSec": 18.05,
+    "source": "synthetic"
+   },
+   {
+    "word": "goes",
+    "startSec": 18.09,
+    "endSec": 18.39,
+    "source": "synthetic"
+   },
+   {
+    "word": "on",
+    "startSec": 18.43,
+    "endSec": 18.64,
+    "source": "synthetic"
+   },
+   {
+    "word": "the",
+    "startSec": 18.68,
+    "endSec": 18.93,
+    "source": "synthetic"
+   },
+   {
+    "word": "card,",
+    "startSec": 18.97,
+    "endSec": 19.27,
+    "source": "synthetic"
+   },
+   {
+    "word": "the",
+    "startSec": 19.46,
+    "endSec": 19.72,
+    "source": "synthetic"
+   },
+   {
+    "word": "interest",
+    "startSec": 19.76,
+    "endSec": 20.24,
+    "source": "synthetic"
+   },
+   {
+    "word": "piles",
+    "startSec": 20.28,
+    "endSec": 20.62,
+    "source": "synthetic"
+   },
+   {
+    "word": "up,",
+    "startSec": 20.66,
+    "endSec": 20.88,
+    "source": "synthetic"
+   },
+   {
+    "word": "and",
+    "startSec": 21.06,
+    "endSec": 21.32,
+    "source": "synthetic"
+   },
+   {
+    "word": "the",
+    "startSec": 21.36,
+    "endSec": 21.61,
+    "source": "synthetic"
+   },
+   {
+    "word": "debt",
+    "startSec": 21.66,
+    "endSec": 21.96,
+    "source": "synthetic"
+   },
+   {
+    "word": "keeps",
+    "startSec": 22.0,
+    "endSec": 22.34,
+    "source": "synthetic"
+   },
+   {
+    "word": "growing.",
+    "startSec": 22.38,
+    "endSec": 22.82,
+    "source": "synthetic"
+   },
+   {
+    "word": "Leave",
+    "startSec": 23.26,
+    "endSec": 23.6,
+    "source": "synthetic"
+   },
+   {
+    "word": "the",
+    "startSec": 23.64,
+    "endSec": 23.9,
+    "source": "synthetic"
+   },
+   {
+    "word": "balance",
+    "startSec": 23.94,
+    "endSec": 24.37,
+    "source": "synthetic"
+   },
+   {
+    "word": "alone",
+    "startSec": 24.41,
+    "endSec": 24.76,
+    "source": "synthetic"
+   },
+   {
+    "word": "for",
+    "startSec": 24.8,
+    "endSec": 25.05,
+    "source": "synthetic"
+   },
+   {
+    "word": "a",
+    "startSec": 25.09,
+    "endSec": 25.26,
+    "source": "synthetic"
+   },
+   {
+    "word": "year,",
+    "startSec": 25.3,
+    "endSec": 25.6,
+    "source": "synthetic"
+   },
+   {
+    "word": "and",
+    "startSec": 25.79,
+    "endSec": 26.04,
+    "source": "synthetic"
+   },
+   {
+    "word": "the",
+    "startSec": 26.08,
+    "endSec": 26.34,
+    "source": "synthetic"
+   },
+   {
+    "word": "interest",
+    "startSec": 26.38,
+    "endSec": 26.86,
+    "source": "synthetic"
+   },
+   {
+    "word": "alone",
+    "startSec": 26.9,
+    "endSec": 27.24,
+    "source": "synthetic"
+   },
+   {
+    "word": "is",
+    "startSec": 27.28,
+    "endSec": 27.49,
+    "source": "synthetic"
+   },
+   {
+    "word": "two",
+    "startSec": 27.53,
+    "endSec": 27.79,
+    "source": "synthetic"
+   },
+   {
+    "word": "hundred",
+    "startSec": 27.83,
+    "endSec": 28.26,
+    "source": "synthetic"
+   },
+   {
+    "word": "sixteen",
+    "startSec": 28.3,
+    "endSec": 28.74,
+    "source": "synthetic"
+   },
+   {
+    "word": "dollars.",
+    "startSec": 28.78,
+    "endSec": 29.21,
+    "source": "synthetic"
+   },
+   {
+    "word": "So",
+    "startSec": 29.65,
+    "endSec": 29.86,
+    "source": "synthetic"
+   },
+   {
+    "word": "the",
+    "startSec": 29.9,
+    "endSec": 30.16,
+    "source": "synthetic"
+   },
+   {
+    "word": "order",
+    "startSec": 30.2,
+    "endSec": 30.54,
+    "source": "synthetic"
+   },
+   {
+    "word": "you",
+    "startSec": 30.58,
+    "endSec": 30.84,
+    "source": "synthetic"
+   },
+   {
+    "word": "do",
+    "startSec": 30.88,
+    "endSec": 31.09,
+    "source": "synthetic"
+   },
+   {
+    "word": "things",
+    "startSec": 31.13,
+    "endSec": 31.52,
+    "source": "synthetic"
+   },
+   {
+    "word": "in",
+    "startSec": 31.56,
+    "endSec": 31.77,
+    "source": "synthetic"
+   },
+   {
+    "word": "matters",
+    "startSec": 31.81,
+    "endSec": 32.24,
+    "source": "synthetic"
+   },
+   {
+    "word": "more",
+    "startSec": 32.28,
+    "endSec": 32.58,
+    "source": "synthetic"
+   },
+   {
+    "word": "than",
+    "startSec": 32.62,
+    "endSec": 32.92,
+    "source": "synthetic"
+   },
+   {
+    "word": "the",
+    "startSec": 32.96,
+    "endSec": 33.22,
+    "source": "synthetic"
+   },
+   {
+    "word": "amount.",
+    "startSec": 33.26,
+    "endSec": 33.65,
+    "source": "synthetic"
+   }
+  ]
+ },
+ {
+  "sceneId": "S02",
+  "audioSec": 47.52,
+  "words": [
+   {
+    "word": "Here",
+    "startSec": 0.26,
+    "endSec": 0.56,
+    "source": "synthetic"
+   },
+   {
+    "word": "is",
+    "startSec": 0.6,
+    "endSec": 0.81,
+    "source": "synthetic"
+   },
+   {
+    "word": "the",
+    "startSec": 0.85,
+    "endSec": 1.1,
+    "source": "synthetic"
+   },
+   {
+    "word": "order.",
+    "startSec": 1.15,
+    "endSec": 1.49,
+    "source": "synthetic"
+   },
+   {
+    "word": "First,",
+    "startSec": 1.93,
+    "endSec": 2.28,
+    "source": "synthetic"
+   },
+   {
+    "word": "save",
+    "startSec": 2.46,
+    "endSec": 2.76,
+    "source": "synthetic"
+   },
+   {
+    "word": "a",
+    "startSec": 2.8,
+    "endSec": 2.97,
+    "source": "synthetic"
+   },
+   {
+    "word": "small",
+    "startSec": 3.01,
+    "endSec": 3.35,
+    "source": "synthetic"
+   },
+   {
+    "word": "buffer.",
+    "startSec": 3.39,
+    "endSec": 3.78,
+    "source": "synthetic"
+   },
+   {
+    "word": "Second,",
+    "startSec": 4.22,
+    "endSec": 4.61,
+    "source": "synthetic"
+   },
+   {
+    "word": "pay",
+    "startSec": 4.8,
+    "endSec": 5.06,
+    "source": "synthetic"
+   },
+   {
+    "word": "off",
+    "startSec": 5.1,
+    "endSec": 5.35,
+    "source": "synthetic"
+   },
+   {
+    "word": "the",
+    "startSec": 5.39,
+    "endSec": 5.65,
+    "source": "synthetic"
+   },
+   {
+    "word": "highest",
+    "startSec": 5.69,
+    "endSec": 6.12,
+    "source": "synthetic"
+   },
+   {
+    "word": "rate",
+    "startSec": 6.16,
+    "endSec": 6.46,
+    "source": "synthetic"
+   },
+   {
+    "word": "debt.",
+    "startSec": 6.5,
+    "endSec": 6.8,
+    "source": "synthetic"
+   },
+   {
+    "word": "Third,",
+    "startSec": 7.24,
+    "endSec": 7.59,
+    "source": "synthetic"
+   },
+   {
+    "word": "invest",
+    "startSec": 7.78,
+    "endSec": 8.17,
+    "source": "synthetic"
+   },
+   {
+    "word": "what",
+    "startSec": 8.21,
+    "endSec": 8.51,
+    "source": "synthetic"
+   },
+   {
+    "word": "is",
+    "startSec": 8.55,
+    "endSec": 8.76,
+    "source": "synthetic"
+   },
+   {
+    "word": "left.",
+    "startSec": 8.8,
+    "endSec": 9.1,
+    "source": "synthetic"
+   },
+   {
+    "word": "Compare",
+    "startSec": 9.54,
+    "endSec": 9.97,
+    "source": "synthetic"
+   },
+   {
+    "word": "what",
+    "startSec": 10.01,
+    "endSec": 10.31,
+    "source": "synthetic"
+   },
+   {
+    "word": "a",
+    "startSec": 10.35,
+    "endSec": 10.52,
+    "source": "synthetic"
+   },
+   {
+    "word": "dollar",
+    "startSec": 10.56,
+    "endSec": 10.95,
+    "source": "synthetic"
+   },
+   {
+    "word": "does.",
+    "startSec": 10.99,
+    "endSec": 11.29,
+    "source": "synthetic"
+   },
+   {
+    "word": "A",
+    "startSec": 11.73,
+    "endSec": 11.89,
+    "source": "synthetic"
+   },
+   {
+    "word": "savings",
+    "startSec": 11.93,
+    "endSec": 12.37,
+    "source": "synthetic"
+   },
+   {
+    "word": "account",
+    "startSec": 12.41,
+    "endSec": 12.84,
+    "source": "synthetic"
+   },
+   {
+    "word": "might",
+    "startSec": 12.88,
+    "endSec": 13.23,
+    "source": "synthetic"
+   },
+   {
+    "word": "pay",
+    "startSec": 13.27,
+    "endSec": 13.52,
+    "source": "synthetic"
+   },
+   {
+    "word": "four",
+    "startSec": 13.56,
+    "endSec": 13.86,
+    "source": "synthetic"
+   },
+   {
+    "word": "percent.",
+    "startSec": 13.9,
+    "endSec": 14.34,
+    "source": "synthetic"
+   },
+   {
+    "word": "A",
+    "startSec": 14.78,
+    "endSec": 14.94,
+    "source": "synthetic"
+   },
+   {
+    "word": "stock",
+    "startSec": 14.98,
+    "endSec": 15.33,
+    "source": "synthetic"
+   },
+   {
+    "word": "fund",
+    "startSec": 15.37,
+    "endSec": 15.67,
+    "source": "synthetic"
+   },
+   {
+    "word": "might",
+    "startSec": 15.71,
+    "endSec": 16.05,
+    "source": "synthetic"
+   },
+   {
+    "word": "average",
+    "startSec": 16.09,
+    "endSec": 16.53,
+    "source": "synthetic"
+   },
+   {
+    "word": "seven",
+    "startSec": 16.57,
+    "endSec": 16.91,
+    "source": "synthetic"
+   },
+   {
+    "word": "percent.",
+    "startSec": 16.96,
+    "endSec": 17.39,
+    "source": "synthetic"
+   },
+   {
+    "word": "The",
+    "startSec": 17.83,
+    "endSec": 18.09,
+    "source": "synthetic"
+   },
+   {
+    "word": "card",
+    "startSec": 18.13,
+    "endSec": 18.43,
+    "source": "synthetic"
+   },
+   {
+    "word": "costs",
+    "startSec": 18.47,
+    "endSec": 18.81,
+    "source": "synthetic"
+   },
+   {
+    "word": "twenty",
+    "startSec": 18.85,
+    "endSec": 19.24,
+    "source": "synthetic"
+   },
+   {
+    "word": "four.",
+    "startSec": 19.28,
+    "endSec": 19.58,
+    "source": "synthetic"
+   },
+   {
+    "word": "Watch",
+    "startSec": 20.02,
+    "endSec": 20.37,
+    "source": "synthetic"
+   },
+   {
+    "word": "the",
+    "startSec": 20.41,
+    "endSec": 20.66,
+    "source": "synthetic"
+   },
+   {
+    "word": "balance.",
+    "startSec": 20.7,
+    "endSec": 21.14,
+    "source": "synthetic"
+   },
+   {
+    "word": "Paying",
+    "startSec": 21.58,
+    "endSec": 21.97,
+    "source": "synthetic"
+   },
+   {
+    "word": "one",
+    "startSec": 22.01,
+    "endSec": 22.26,
+    "source": "synthetic"
+   },
+   {
+    "word": "hundred",
+    "startSec": 22.3,
+    "endSec": 22.74,
+    "source": "synthetic"
+   },
+   {
+    "word": "fifty",
+    "startSec": 22.78,
+    "endSec": 23.12,
+    "source": "synthetic"
+   },
+   {
+    "word": "dollars",
+    "startSec": 23.16,
+    "endSec": 23.6,
+    "source": "synthetic"
+   },
+   {
+    "word": "a",
+    "startSec": 23.64,
+    "endSec": 23.8,
+    "source": "synthetic"
+   },
+   {
+    "word": "month",
+    "startSec": 23.84,
+    "endSec": 24.19,
+    "source": "synthetic"
+   },
+   {
+    "word": "clears",
+    "startSec": 24.23,
+    "endSec": 24.62,
+    "source": "synthetic"
+   },
+   {
+    "word": "the",
+    "startSec": 24.66,
+    "endSec": 24.91,
+    "source": "synthetic"
+   },
+   {
+    "word": "card",
+    "startSec": 24.95,
+    "endSec": 25.25,
+    "source": "synthetic"
+   },
+   {
+    "word": "in",
+    "startSec": 25.29,
+    "endSec": 25.5,
+    "source": "synthetic"
+   },
+   {
+    "word": "about",
+    "startSec": 25.54,
+    "endSec": 25.89,
+    "source": "synthetic"
+   },
+   {
+    "word": "seven",
+    "startSec": 25.93,
+    "endSec": 26.27,
+    "source": "synthetic"
+   },
+   {
+    "word": "months.",
+    "startSec": 26.31,
+    "endSec": 26.7,
+    "source": "synthetic"
+   },
+   {
+    "word": "This",
+    "startSec": 27.14,
+    "endSec": 27.44,
+    "source": "synthetic"
+   },
+   {
+    "word": "week,",
+    "startSec": 27.48,
+    "endSec": 27.78,
+    "source": "synthetic"
+   },
+   {
+    "word": "list",
+    "startSec": 27.97,
+    "endSec": 28.27,
+    "source": "synthetic"
+   },
+   {
+    "word": "every",
+    "startSec": 28.31,
+    "endSec": 28.66,
+    "source": "synthetic"
+   },
+   {
+    "word": "balance",
+    "startSec": 28.7,
+    "endSec": 29.13,
+    "source": "synthetic"
+   },
+   {
+    "word": "and",
+    "startSec": 29.17,
+    "endSec": 29.43,
+    "source": "synthetic"
+   },
+   {
+    "word": "its",
+    "startSec": 29.47,
+    "endSec": 29.72,
+    "source": "synthetic"
+   },
+   {
+    "word": "rate.",
+    "startSec": 29.76,
+    "endSec": 30.06,
+    "source": "synthetic"
+   },
+   {
+    "word": "Set",
+    "startSec": 30.5,
+    "endSec": 30.76,
+    "source": "synthetic"
+   },
+   {
+    "word": "up",
+    "startSec": 30.8,
+    "endSec": 31.01,
+    "source": "synthetic"
+   },
+   {
+    "word": "one",
+    "startSec": 31.05,
+    "endSec": 31.3,
+    "source": "synthetic"
+   },
+   {
+    "word": "automatic",
+    "startSec": 31.34,
+    "endSec": 31.87,
+    "source": "synthetic"
+   },
+   {
+    "word": "transfer.",
+    "startSec": 31.91,
+    "endSec": 32.39,
+    "source": "synthetic"
+   },
+   {
+    "word": "Then",
+    "startSec": 32.83,
+    "endSec": 33.13,
+    "source": "synthetic"
+   },
+   {
+    "word": "pick",
+    "startSec": 33.17,
+    "endSec": 33.47,
+    "source": "synthetic"
+   },
+   {
+    "word": "the",
+    "startSec": 33.51,
+    "endSec": 33.76,
+    "source": "synthetic"
+   },
+   {
+    "word": "highest",
+    "startSec": 33.8,
+    "endSec": 34.24,
+    "source": "synthetic"
+   },
+   {
+    "word": "rate",
+    "startSec": 34.28,
+    "endSec": 34.58,
+    "source": "synthetic"
+   },
+   {
+    "word": "to",
+    "startSec": 34.62,
+    "endSec": 34.83,
+    "source": "synthetic"
+   },
+   {
+    "word": "attack",
+    "startSec": 34.87,
+    "endSec": 35.26,
+    "source": "synthetic"
+   },
+   {
+    "word": "first.",
+    "startSec": 35.3,
+    "endSec": 35.64,
+    "source": "synthetic"
+   },
+   {
+    "word": "Watch",
+    "startSec": 36.08,
+    "endSec": 36.43,
+    "source": "synthetic"
+   },
+   {
+    "word": "for",
+    "startSec": 36.47,
+    "endSec": 36.72,
+    "source": "synthetic"
+   },
+   {
+    "word": "three",
+    "startSec": 36.76,
+    "endSec": 37.11,
+    "source": "synthetic"
+   },
+   {
+    "word": "risks.",
+    "startSec": 37.15,
+    "endSec": 37.49,
+    "source": "synthetic"
+   },
+   {
+    "word": "A",
+    "startSec": 37.93,
+    "endSec": 38.1,
+    "source": "synthetic"
+   },
+   {
+    "word": "buffer",
+    "startSec": 38.14,
+    "endSec": 38.53,
+    "source": "synthetic"
+   },
+   {
+    "word": "that",
+    "startSec": 38.57,
+    "endSec": 38.87,
+    "source": "synthetic"
+   },
+   {
+    "word": "is",
+    "startSec": 38.91,
+    "endSec": 39.12,
+    "source": "synthetic"
+   },
+   {
+    "word": "too",
+    "startSec": 39.16,
+    "endSec": 39.41,
+    "source": "synthetic"
+   },
+   {
+    "word": "thin,",
+    "startSec": 39.45,
+    "endSec": 39.75,
+    "source": "synthetic"
+   },
+   {
+    "word": "a",
+    "startSec": 39.94,
+    "endSec": 40.11,
+    "source": "synthetic"
+   },
+   {
+    "word": "rate",
+    "startSec": 40.15,
+    "endSec": 40.45,
+    "source": "synthetic"
+   },
+   {
+    "word": "that",
+    "startSec": 40.49,
+    "endSec": 40.79,
+    "source": "synthetic"
+   },
+   {
+    "word": "changes,",
+    "startSec": 40.83,
+    "endSec": 41.26,
+    "source": "synthetic"
+   },
+   {
+    "word": "and",
+    "startSec": 41.45,
+    "endSec": 41.71,
+    "source": "synthetic"
+   },
+   {
+    "word": "a",
+    "startSec": 41.75,
+    "endSec": 41.91,
+    "source": "synthetic"
+   },
+   {
+    "word": "payment",
+    "startSec": 41.95,
+    "endSec": 42.39,
+    "source": "synthetic"
+   },
+   {
+    "word": "you",
+    "startSec": 42.43,
+    "endSec": 42.68,
+    "source": "synthetic"
+   },
+   {
+    "word": "forget.",
+    "startSec": 42.72,
+    "endSec": 43.11,
+    "source": "synthetic"
+   },
+   {
+    "word": "Cover",
+    "startSec": 43.55,
+    "endSec": 43.9,
+    "source": "synthetic"
+   },
+   {
+    "word": "the",
+    "startSec": 43.94,
+    "endSec": 44.19,
+    "source": "synthetic"
+   },
+   {
+    "word": "surprise",
+    "startSec": 44.23,
+    "endSec": 44.71,
+    "source": "synthetic"
+   },
+   {
+    "word": "first,",
+    "startSec": 44.75,
+    "endSec": 45.1,
+    "source": "synthetic"
+   },
+   {
+    "word": "then",
+    "startSec": 45.29,
+    "endSec": 45.59,
+    "source": "synthetic"
+   },
+   {
+    "word": "fight",
+    "startSec": 45.63,
+    "endSec": 45.97,
+    "source": "synthetic"
+   },
+   {
+    "word": "the",
+    "startSec": 46.01,
+    "endSec": 46.27,
+    "source": "synthetic"
+   },
+   {
+    "word": "interest.",
+    "startSec": 46.31,
+    "endSec": 46.79,
+    "source": "synthetic"
+   }
+  ]
+ }
+]

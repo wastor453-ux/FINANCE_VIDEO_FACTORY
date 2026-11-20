@@ -4,6 +4,7 @@ import { useLook, withAlpha } from "../style/StyleContext";
 import { Beat, appear, findEvent, unitParts } from "./common";
 import { eased, countValue, formatNumber, decimalsOf, lerp } from "../motion/math.mjs";
 import { smoothPath } from "./KpiCard";
+import { strongestSeries } from "../motion/color.mjs";
 
 /**
  * Mode hero_number, premium staged version: big figure on the left, a tilted glass panel with the chart on the right,
@@ -27,7 +28,7 @@ export const HeroScene: React.FC<{ beat: Beat }> = ({ beat }) => {
   const colW = 880, sizeFor = (n: number) => Math.min(l.size.megaNumber, Math.max(l.size.display, colW / (n * 0.62)));
   const numSize = sizeFor(full.length * 1.0);
 
-  const shadow = (a: number[][]) => a.map(([x, y, b, o]) => `${x}px ${y}px ${b}px ${withAlpha(S[5].fill, o)}`).join(",") + `, inset 0 1px 0 ${c.surface}`;
+  const shadow = (a: number[][]) => a.map(([x, y, b, o]) => `${x}px ${y}px ${b}px ${withAlpha(strongestSeries(c).fill, o)}`).join(",") + `, inset 0 1px 0 ${c.surface}`;
   const glass: React.CSSProperties = { background: `linear-gradient(145deg, ${withAlpha(c.surface, 0.94)}, ${withAlpha(c.surface, 0.7)})`, border: `${sc.glass.borderPx}px solid ${withAlpha(c.surface, 0.95)}`, borderRadius: l.px(sc.glass.radiusAtReference), boxShadow: shadow(sc.glass.shadow) };
   const layer = (i: number, extra: React.CSSProperties): React.CSSProperties => { const s = step(i); return { position: "absolute", opacity: s * exit, transformStyle: "preserve-3d", ...extra, transform: `${extra.transform ?? ""} translate3d(0, ${lerp(36, 0, s)}px, 0)` }; };
 
@@ -39,6 +40,12 @@ export const HeroScene: React.FC<{ beat: Beat }> = ({ beat }) => {
   }
   const drawn = eased(l.pack, up.ease, frame, up.startFrame + stagger, up.endFrame + stagger);
   const gid = `hs-${beat.id}`;
+  // no series and not a percentage: nothing honest to chart, so the figure stands alone, centred; percentages get a ring gauge of that same value
+  const variant: string = (beat as any).variant ?? (series ? "panel" : "number");
+  const pctOk = d.unit === "%" && Number(d.value) >= 0 && Number(d.value) <= 100;
+  if (["ring", "waffle", "bar"].includes(variant) && !pctOk) throw new Error(`${beat.id}: variant ${variant} needs a percentage between 0 and 100`);
+  if (variant === "panel" && !series) throw new Error(`${beat.id}: variant panel needs a series`);
+  const pctRing = variant === "ring", centered = variant === "number", showsLabelInPanel = variant === "panel";
   const px = (v: number) => v; // layout is authored in 1920x1080 video pixels; only radius/border use board-reference scaling
 
   return (
@@ -53,10 +60,10 @@ export const HeroScene: React.FC<{ beat: Beat }> = ({ beat }) => {
       ) : null}
 
       {/* headline block */}
-      <div style={{ position: "absolute", left: px(150), top: px(230), whiteSpace: "nowrap", opacity: step(0) * exit, transform: `translate3d(${lerp(-px(40), 0, step(0))}px, 0, 0) scale(${1 + sc.cameraPushScale * camP * 0.5})`, transformOrigin: "left center" }}>
+      <div style={{ position: "absolute", left: centered ? px(960) : px(150), top: centered ? px(330) : px(230), whiteSpace: "nowrap", textAlign: centered ? "center" : "left", opacity: step(0) * exit, transform: `${centered ? "translateX(-50%) " : ""}translate3d(${lerp(-px(40), 0, step(0))}px, 0, 0) scale(${1 + sc.cameraPushScale * camP * 0.5})`, transformOrigin: centered ? "center" : "left center" }}>
         <div style={{ fontFamily: l.font.body, fontWeight: 600, fontSize: l.size.label, letterSpacing: "0.16em", textTransform: "uppercase", color: c.inkSecondary }}>{d.label}</div>
-        <div style={{ fontFamily: l.font.display, fontWeight: 700, fontSize: numSize, lineHeight: 1, letterSpacing: "-0.035em", fontVariantNumeric: "tabular-nums", marginTop: px(10), background: `linear-gradient(180deg, ${c.ink} 40%, ${S[5].fill})`, WebkitBackgroundClip: "text", color: "transparent", filter: `drop-shadow(0 ${px(20)}px ${px(28)}px ${withAlpha(S[5].fill, 0.2)})` }}>{shown}</div>
-        <div style={{ display: "flex", gap: px(16), marginTop: px(32), alignItems: "center", opacity: pillP, transform: `translateY(${lerp(px(10), 0, pillP)}px)` }}>
+        <div style={{ fontFamily: l.font.display, fontWeight: 700, fontSize: numSize, lineHeight: 1, letterSpacing: "-0.035em", fontVariantNumeric: "tabular-nums", marginTop: px(10), background: `linear-gradient(180deg, ${c.ink} 40%, ${strongestSeries(c).fill})`, WebkitBackgroundClip: "text", color: "transparent", filter: `drop-shadow(0 ${px(20)}px ${px(28)}px ${withAlpha(strongestSeries(c).fill, 0.2)})` }}>{shown}</div>
+        <div style={{ display: "flex", gap: px(16), marginTop: px(32), alignItems: "center", justifyContent: centered ? "center" : "flex-start", opacity: pillP, transform: `translateY(${lerp(px(10), 0, pillP)}px)` }}>
           {d.delta ? <Chip look={l} tone="gain" d={d} /> : null}
           {d.illustrative ? <div style={{ ...glass, borderRadius: 999, padding: `${px(14)}px ${px(26)}px`, fontFamily: l.font.body, fontWeight: 500, fontSize: l.size.caption, color: c.inkSecondary, boxShadow: "none" }}>Illustrative example</div> : null}
         </div>
@@ -65,10 +72,10 @@ export const HeroScene: React.FC<{ beat: Beat }> = ({ beat }) => {
       {/* 3D stage */}
       <div style={{ position: "absolute", inset: 0, perspective: sc.perspectivePx, perspectiveOrigin: `${sc.perspectiveOriginPct[0]}% ${sc.perspectiveOriginPct[1]}%` }}>
         <div style={{ position: "absolute", inset: 0, transformStyle: "preserve-3d", transform: `scale(${1 + sc.cameraPushScale * camP}) rotateX(${sc.settleTiltDeg.x}deg) rotateY(${lerp(sc.entryTiltDegY, sc.settleTiltDeg.y, settle)}deg)` }}>
-          <div style={{ ...layer(1, { left: px(1040), top: px(250), width: px(640), height: px(470), transform: `translateZ(${sc.layerZ.back}px) rotateZ(3deg)` }), ...glass, opacity: 0.55 * step(1) * exit }} />
-          <div style={{ ...layer(2, { left: px(1000), top: px(300), width: px(700), height: px(500), padding: px(46), boxSizing: "border-box", transform: `translateZ(${sc.layerZ.main}px)` }), ...glass }}>
+          {centered ? null : <div style={{ ...layer(1, { left: px(1040), top: px(250), width: px(640), height: px(470), transform: `translateZ(${sc.layerZ.back}px) rotateZ(3deg)` }), ...glass, opacity: 0.55 * step(1) * exit }} />}
+          {centered ? null : <div style={{ ...layer(2, { left: px(1000), top: px(300), width: px(700), height: px(500), padding: px(46), boxSizing: "border-box", transform: `translateZ(${sc.layerZ.main}px)` }), ...glass }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontFamily: l.font.body }}>
-              <div style={{ fontWeight: 600, fontSize: l.size.label, color: c.ink }}>{d.label}</div>
+              <div style={{ fontWeight: 600, fontSize: l.size.label, color: c.ink }}>{showsLabelInPanel ? d.label : ""}</div>
               {d.delta?.window ? <div style={{ fontWeight: 600, fontSize: l.size.caption * 0.8, letterSpacing: "0.14em", textTransform: "uppercase", color: c.inkSecondary }}>{d.delta.window}</div> : null}
             </div>
             {series ? (
@@ -82,15 +89,31 @@ export const HeroScene: React.FC<{ beat: Beat }> = ({ beat }) => {
                 <path d={path} fill="none" stroke={S[0].stroke} strokeWidth={4.5} strokeLinecap="round" pathLength={1} strokeDasharray={1} strokeDashoffset={1 - drawn} />
                 <g opacity={drawn > 0.98 ? 1 : 0}><circle cx={last[0]} cy={last[1]} r={18} fill={S[0].fill} opacity={0.25} /><circle cx={last[0]} cy={last[1]} r={8} fill={S[0].stroke} stroke={c.surface} strokeWidth={3.5} /></g>
               </svg>
-            ) : (
-              <div style={{ position: "absolute", left: px(46), bottom: px(60), fontFamily: l.font.display }}>{d.delta ? <Chip look={l} tone="gain" d={d} big /> : null}</div>
-            )}
-          </div>
+            ) : variant === "ring" ? (
+              <svg style={{ position: "absolute", left: px(210), top: px(120), overflow: "visible" }} width={px(280)} height={px(280)} viewBox="0 0 100 100">
+                <circle cx={50} cy={50} r={40} fill="none" stroke={S[0].fill} strokeOpacity={0.16} strokeWidth={11} />
+                <circle cx={50} cy={50} r={40} fill="none" stroke={S[0].fill} strokeOpacity={0.3} strokeWidth={15} strokeLinecap="round" pathLength={1} strokeDasharray={1} strokeDashoffset={1 - t * Number(d.value) / 100} transform="rotate(-90 50 50)" style={{ filter: "blur(3px)" }} />
+                <circle cx={50} cy={50} r={40} fill="none" stroke={S[0].stroke} strokeWidth={11} strokeLinecap="round" pathLength={1} strokeDasharray={1} strokeDashoffset={1 - t * Number(d.value) / 100} transform="rotate(-90 50 50)" />
+              </svg>
+            ) : variant === "waffle" ? (
+              <svg style={{ position: "absolute", left: px(150), top: px(95), overflow: "visible" }} width={px(400)} height={px(340)} viewBox="0 0 400 340">
+                {Array.from({ length: 100 }, (_, k) => { const col = k % 10, row = Math.floor(k / 10), on = k < Math.round(Number(d.value)), fillP = on ? Math.min(1, Math.max(0, t * Math.round(Number(d.value)) - k + 1)) : 0; return (
+                  <g key={k}><rect x={col * 40} y={(9 - row) * 34} width={34} height={28} rx={8} fill={c.inkSecondary} opacity={0.12} />
+                    <rect x={col * 40} y={(9 - row) * 34} width={34} height={28} rx={8} fill={S[0].fill} opacity={fillP} /></g>); })}
+              </svg>
+            ) : variant === "bar" ? (
+              <svg style={{ position: "absolute", left: px(60), top: px(190), overflow: "visible" }} width={px(580)} height={px(160)} viewBox="0 0 580 160">
+                <rect x={0} y={20} width={580} height={64} rx={32} fill={c.inkSecondary} opacity={0.12} />
+                <rect x={0} y={20} width={Math.max(0.01, 580 * t * Number(d.value) / 100)} height={64} rx={32} fill={S[0].fill} />
+                {[0, 50, 100].map((v) => <text key={v} x={v === 0 ? 0 : v === 100 ? 580 : 290} y={140} textAnchor={v === 0 ? "start" : v === 100 ? "end" : "middle"} fontFamily={l.font.body} fontWeight={500} fontSize={l.size.caption} fill={c.inkSecondary}>{v}%</text>)}
+              </svg>
+            ) : null}
+          </div>}
           {series && d.callout ? (
             <div style={{ ...layer(3, { left: px(1500), top: px(250), padding: `${px(20)}px ${px(34)}px`, transform: `translateZ(${sc.layerZ.near}px)` }), ...glass, borderRadius: 999, fontFamily: l.font.display, fontWeight: 700, fontSize: l.size.subtitle * 0.8, color: c.ink, opacity: pillP * exit, whiteSpace: "nowrap" }}>{d.callout.text}</div>
           ) : null}
-          {d.source ? (
-            <div style={{ ...layer(4, { left: px(1010), top: px(830), padding: `${px(22)}px ${px(32)}px`, transform: `translateZ(${sc.layerZ.tile}px)` }), ...glass, borderRadius: px(26), fontFamily: l.font.body, fontWeight: 600, fontSize: l.size.caption, color: c.inkSecondary, opacity: pillP * exit, whiteSpace: "nowrap" }}>Source: {d.source} · {d.asOf}</div>
+          {(d.showSource ?? sc.sourceTag === "on") && d.source ? (
+            <div style={{ ...layer(4, { left: centered ? px(960) : px(1010), top: px(830), ...(centered ? { marginLeft: -px(260) } : {}), padding: `${px(22)}px ${px(32)}px`, transform: `translateZ(${sc.layerZ.tile}px)` }), ...glass, borderRadius: px(26), fontFamily: l.font.body, fontWeight: 600, fontSize: l.size.caption, color: c.inkSecondary, opacity: pillP * exit, whiteSpace: "nowrap" }}>Source: {d.source} · {d.asOf}</div>
           ) : null}
         </div>
       </div>

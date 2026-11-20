@@ -1,0 +1,60 @@
+{
+  "schema": "ffx-style-kit/1",
+  "id": "mint-fresh",
+  "label": "Mint fresh",
+  "base": "owner-pale-glass",
+  "mood": [
+    "friendly",
+    "fresh",
+    "calm"
+  ],
+  "topics": [
+    "saving",
+    "budget",
+    "habit",
+    "growth",
+    "emergency"
+  ],
+  "seriesOrder": [
+    "teal",
+    "blue",
+    "lightBlue",
+    "lavender",
+    "slate",
+    "deepBlue"
+  ],
+  "background": {
+    "default": "glass-aurora"
+  },
+  "overrides": {
+    "color": {
+      "primary": "#1BBFAE"
+    },
+    "scene": {
+      "settleTiltDeg": {
+        "x": 3,
+        "y": -8
+      },
+      "glass": {
+        "radiusAtReference": 30
+      }
+    },
+    "motion": {
+      "durationSec": {
+        "line_draw": [
+          0.7,
+          1.0
+        ],
+        "bar_rise": [
+          0.6,
+          0.8
+        ],
+        "count_up": [
+          0.8,
+          1.0
+        ]
+      }
+    }
+  },
+  "note": "Teal-led: the board's inflow colour leads, mint and blue background, softer tilt and slower motion."
+}

@@ -1,9 +1,10 @@
 import React from "react";
 import { useCurrentFrame } from "remotion";
 import { useLook, withAlpha } from "../style/StyleContext";
-import { Beat, appear, findEvent, unitParts } from "./common";
+import { Beat, appear, findEvent, local, unitParts } from "./common";
 import { eased, formatNumber, decimalsOf, lerp } from "../motion/math.mjs";
 import { barDomain, barSlots, roundedTopRect } from "../motion/chart.mjs";
+import { strongestSeries } from "../motion/color.mjs";
 
 /**
  * Modes bar_chart (and later stacked / scenario comparison): tilted glass panel, one rounded bar per data point, series colours by slot.
@@ -12,9 +13,14 @@ import { barDomain, barSlots, roundedTopRect } from "../motion/chart.mjs";
  */
 export const BarScene: React.FC<{ beat: Beat }> = ({ beat }) => {
   const l = useLook(), frame = useCurrentFrame(), sc = l.pack.scene, c = l.color, S = c.series, fps = l.fps;
-  const axes = findEvent(beat, "axes_in"), rise = findEvent(beat, "bar_rise")!, tile = findEvent(beat, "legend_in"), cam = findEvent(beat, "camera_push");
+  const riseEvs = beat.events.filter((e) => e.recipe === "bar_rise").map((e) => local(beat, e)), perBar = riseEvs.some((e) => typeof e.params?.item === "number");
+  const byItem: Record<number, any> = {}; if (perBar) for (const e of riseEvs) byItem[e.params.item] = e;
+  const rise = (perBar ? byItem[0] : riseEvs[0])!;
+  if (perBar) for (let i = 0; i < beat.data.length; i++) if (!byItem[i]) throw new Error(`${beat.id}: bar ${i} has no bar_rise event (params.item)`);
+  const axes = findEvent(beat, "axes_in"), tile = findEvent(beat, "legend_in"), cam = findEvent(beat, "camera_push");
   const stagger = Math.round(sc.staggerSec * fps);
-  const step = (i: number) => eased(l.pack, rise.ease, frame, rise.startFrame - Math.round(fps * 0.5) + i * stagger, rise.startFrame - Math.round(fps * 0.5) + Math.round(fps * 0.6) + i * stagger);
+  const t0 = Math.min(axes?.startFrame ?? Infinity, rise.startFrame);
+  const step = (i: number) => eased(l.pack, rise.ease, frame, t0 - Math.round(fps * 0.1) + i * stagger, t0 - Math.round(fps * 0.1) + Math.round(fps * 0.6) + i * stagger);
   const settle = step(0), axesP = axes ? appear(l, axes, frame) : 1, tileP = tile ? appear(l, tile, frame) : axesP;
   const camP = cam ? eased(l.pack, cam.ease, frame, cam.startFrame, cam.endFrame) : 0;
   const exit = rise.exitFrame === undefined ? 1 : 1 - eased(l.pack, "exit", frame, rise.exitFrame - Math.round(l.pack.motion.durationSec.clean_wipe[0] * fps), rise.exitFrame);
@@ -24,11 +30,11 @@ export const BarScene: React.FC<{ beat: Beat }> = ({ beat }) => {
   const panel = { x: 150, y: 235, w: 1620, h: 640 }, box = { x: 130, y: 110, w: 1380, h: 410 }, slots = barSlots(n, box);
   // each bar's own 0..1 progress: windows of 70% of the event, offset so the last bar finishes with the event
   const dur = rise.endFrame - rise.startFrame, win = dur * 0.7, off = n > 1 ? (dur - win) / (n - 1) : 0;
-  const prog = (i: number) => eased(l.pack, rise.ease, frame, rise.startFrame + i * off, rise.startFrame + i * off + win);
+  const prog = (i: number) => perBar ? eased(l.pack, byItem[i].ease, frame, byItem[i].startFrame, byItem[i].endFrame) : eased(l.pack, rise.ease, frame, rise.startFrame + i * off, rise.startFrame + i * off + win);
   const yOf = (v: number) => box.y + (1 - (v - domain.lo) / (domain.hi - domain.lo)) * box.h;
   const radius = Math.min(18, slots[0].w * 0.16);
 
-  const shadow = sc.glass.shadow.map(([x, y, b, o]: number[]) => `${x}px ${y}px ${b}px ${withAlpha(S[5].fill, o)}`).join(",") + `, inset 0 1px 0 ${c.surface}`;
+  const shadow = sc.glass.shadow.map(([x, y, b, o]: number[]) => `${x}px ${y}px ${b}px ${withAlpha(strongestSeries(c).fill, o)}`).join(",") + `, inset 0 1px 0 ${c.surface}`;
   const glass: React.CSSProperties = { background: `linear-gradient(145deg, ${withAlpha(c.surface, 0.94)}, ${withAlpha(c.surface, 0.7)})`, border: `${sc.glass.borderPx}px solid ${withAlpha(c.surface, 0.95)}`, borderRadius: l.px(sc.glass.radiusAtReference), boxShadow: shadow };
   const rr = (i: number): React.CSSProperties => { const s = step(i); return { opacity: s * exit, transform: `translate3d(0, ${lerp(36, 0, s)}px, 0)` }; };
   const tilt = sc.chartTiltScale, gid = `bs-${beat.id}`;
@@ -65,7 +71,7 @@ export const BarScene: React.FC<{ beat: Beat }> = ({ beat }) => {
               })}
             </svg>
           </div>
-          {d0.source || d0.illustrative ? (
+          {(d0.showSource ?? sc.sourceTag === "on") && (d0.source || d0.illustrative) ? (
             <div style={{ position: "absolute", left: panel.x + 20, top: panel.y + panel.h + 8, ...glass, borderRadius: 26, padding: "20px 30px", fontFamily: l.font.body, fontWeight: 600, fontSize: l.size.caption, color: c.inkSecondary, whiteSpace: "nowrap", opacity: tileP * exit, transform: `translateZ(${sc.layerZ.tile}px)` }}>{d0.illustrative ? "Illustrative example" : `Source: ${d0.source} · ${d0.asOf}`}</div>
           ) : null}
         </div>

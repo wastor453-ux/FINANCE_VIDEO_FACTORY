@@ -92,3 +92,34 @@ test("ffx lint-plan detects v2 and returns exit codes", () => {
   const tmp = path.join(ROOT, "tests/fixtures/_plan_v2_bad.json"); fs.writeFileSync(tmp, JSON.stringify(bad));
   try { const r = spawnSync("node", [path.join(ROOT, "bin/ffx.mjs"), "lint-plan", tmp], { encoding: "utf8" }); assert.equal(r.status, 1); assert.match(r.stderr, /unknown visual mode/); } finally { fs.unlinkSync(tmp); }
 });
+
+test("transition rules: window, first beat, duration, renderable list", () => {
+  const demo = () => rj("tests/fixtures/plan_v2_demo.json");
+  const bs = (p) => p.scenes.flatMap((s) => s.beats);
+  assert.deepEqual(lint(demo()).errors, []);
+  let p = demo(); bs(p)[1].transitionIn.startFrame = 170; expectErr(p, /must start at the beat's startFrame/);
+  p = demo(); bs(p)[1].transitionIn.endFrame = 400; expectErr(p, /must end inside its own beat/);
+  p = demo(); bs(p)[1].transitionIn.endFrame = 182; expectErr(p, /style allows/);
+  p = demo(); bs(p)[0].transitionIn = { type: "clean_wipe", endFrame: 15 }; expectErr(p, /first beat/);
+  p = demo(); bs(p)[1].transitionIn = { type: "diagram_morph", startFrame: 180, endFrame: 200 };
+  expectErr(p, /no verified renderer/, { renderable: rj("config/components.json").modes, renderableTransitions: rj("config/components.json").transitions });
+});
+
+test("diagram content rules: item counts, labels, marks, per-item events, traceability to the script", () => {
+  const wrap = (b) => ({ schema_version: "2.0", fps: 30, width: 1920, height: 1080, totalFrames: b.endFrame, style: { packId: pack.id, background: pack.backgrounds.default }, scenes: [{ id: "S02", startFrame: b.startFrame, endFrame: b.endFrame, beats: [b] }] });
+  const load = (n) => wrap(rj(`tests/fixtures/beat_${n}.json`));
+  const first = (p) => p.scenes[0].beats[0];
+  const script = { scenes: [{ id: "S02", beats: [
+    { id: "S02B2", narration: "You give it a job, it signs into your tools, and it comes back when it needs a decision." },
+    { id: "S04B2", narration: "The bot in charge is the chief of staff. It knows your calendar, your priorities, and what you have already decided." },
+    { id: "S04B5", narration: "By the time you see it, the work has a slot. You decide. You don't discover." }] }] };
+  for (const n of ["flow", "causal", "callout"]) assert.deepEqual(lint(load(n), { script: { scenes: [{ id: "S02", beats: script.scenes[0].beats }] } }).errors.filter((e) => !/not in the script|has no plan beat|not in script/.test(e)), [], n);
+  let p = load("flow"); delete first(p).content; expectErr(p, /needs content\.items/);
+  p = load("flow"); first(p).content.items = [first(p).content.items[0]]; expectErr(p, /takes 2-5 content items/);
+  p = load("flow"); first(p).content.items[0].label = "You give it a very long job that nobody can read in time"; expectErr(p, /label too long/);
+  p = load("callout"); first(p).content.items[0].mark = "nope"; expectErr(p, /is not part of the label/);
+  p = load("flow"); first(p).events.find((e) => e.params?.item === 1).params.item = 0; expectErr(p, /cover every item exactly once/);
+  p = load("flow"); first(p).events.find((e) => e.params?.item === 2).startFrame = 40; expectErr(p, /appears before item/);
+  p = load("flow"); first(p).content.items[1].label = "It guarantees fifty percent returns"; expectErr(p, /not traceable to the narration/, { script });
+  p = load("flow"); first(p).mode = "bar_chart"; expectErr(p, /does not take content/);
+});

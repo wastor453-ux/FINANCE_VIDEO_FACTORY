@@ -1,0 +1,326 @@
+{
+ "schema_version": "1.0",
+ "title": "Give the Bots the Clicks. Keep the Decisions.",
+ "language": "en-US",
+ "targetSeconds": 589,
+ "originalityNote": "Same topic and promise as the source (build AI agents for every part of life), rebuilt by the viewer's day instead of the source's product walkthrough: hook on measured time-use data, define the agent, the routing mechanism, a worked example with labelled hypothetical hours, life bots, team bots, Goldratt's constraint method, a money bot with a hard no-move rule, honest risks and a human line, and a first-week plan. All personal figures from the source are cut; every number is verified at Microsoft, McKinsey, xAI, or Goldratt, or labelled hypothetical. No creator is named, no video is cited.",
+ "sources": [
+  {
+   "id": "ms-wti-2023",
+   "title": "Microsoft, 2023 Work Trend Index: Will AI Fix Work?",
+   "url": "https://news.microsoft.com/en-cee/2023/05/10/introducing-the-microsoft-365-copilot-early-access-program-and-the-2023-work-trend-index/",
+   "accessed": "2026-11-04"
+  },
+  {
+   "id": "mckinsey-2012",
+   "title": "McKinsey Global Institute, Capturing business value with social technologies, November 2012",
+   "url": "https://www.mckinsey.com/~/media/McKinsey/Industries/Technology%20Media%20and%20Telecommunications/High%20Tech/Our%20Insights/Capturing%20business%20value%20with%20social%20technologies/Capturing%20business%20value%20with%20social%20technologies.pdf",
+   "accessed": "2026-11-04"
+  },
+  {
+   "id": "xai-grokbot-2026",
+   "title": "xAI, Grok Bot (x.ai/bot)",
+   "url": "https://x.ai/bot",
+   "accessed": "2026-11-04"
+  },
+  {
+   "id": "goldratt-1984",
+   "title": "Goldratt, The Goal (1984) - five focusing steps, as quoted in Reference for Business",
+   "url": "https://www.referenceforbusiness.com/management/Str-Ti/Theory-of-Constraints.html",
+   "accessed": "2026-11-04"
+  }
+ ],
+ "scenes": [
+  {
+   "id": "S01",
+   "beat": "Hook: the week that isn't work",
+   "narration": "You open your inbox at nine, and by noon you have answered mail for three hours and done nothing that was yours. That's not a bad morning. That's the job now, and it's been the job for years. In twenty twenty three, the average person spent fifty seven percent of the time inside their work apps just communicating. Forty three percent went to creating. So more than half your week isn't work. It's work about work. Ask yourself what you did yesterday that only you could do. Then ask what a bot could have done. This video hands that half to bots, and keeps the decisions with you.",
+   "delivery": "hook",
+   "claims": [
+    {
+     "id": "C01",
+     "text": "The average person spends 57% of time in Microsoft 365 communicating and only 43% creating.",
+     "sourceIds": [
+      "ms-wti-2023"
+     ],
+     "verified": true,
+     "dataYear": 2023,
+     "dataYearNarrated": true,
+     "sourceKind": "primary",
+     "sourceQuote": "Of time spent in Microsoft 365, the average person spends 57% communicating and only 43% creating."
+    }
+   ],
+   "beats": [
+    {
+     "id": "S01B1",
+     "narration": "You open your inbox at nine, and by noon you have answered mail for three hours and done nothing that was yours.",
+     "visualIntent": "hook_question"
+    },
+    {
+     "id": "S01B2",
+     "narration": "That's not a bad morning. That's the job now, and it's been the job for years.",
+     "visualIntent": "annotation_callout"
+    },
+    {
+     "id": "S01B3",
+     "narration": "In twenty twenty three, the average person spent fifty seven percent of the time inside their work apps just communicating. Forty three percent went to creating.",
+     "visualIntent": "bar_chart",
+     "onScreenText": [
+      "Source: Microsoft Work Trend Index, 2023"
+     ],
+     "data": {
+      "claimId": "C01"
+     }
+    },
+    {
+     "id": "S01B4",
+     "narration": "So more than half your week isn't work. It's work about work.",
+     "visualIntent": "compare_ab"
+    },
+    {
+     "id": "S01B5",
+     "narration": "Ask yourself what you did yesterday that only you could do. Then ask what a bot could have done.",
+     "visualIntent": "annotation_callout"
+    },
+    {
+     "id": "S01B6",
+     "narration": "This video hands that half to bots, and keeps the decisions with you.",
+     "visualIntent": "process_flow"
+    }
+   ]
+  },
+  {
+   "id": "S02",
+   "beat": "What an agent is",
+   "narration": "First, the difference. A chatbot answers your question. An agent does the job. You give it a job, it signs into your tools, and it comes back when it needs a decision. That's the whole difference. The tool this runs on is called Grok Bot. Each bot gets its own computer in the cloud, and it keeps working when your laptop is shut. One account shares one computer, so the bots pass work between themselves in the same thread. It starts at thirty dollars a month. Check it before you buy, because it changes. Show it a workflow once, and it saves the steps as a routine it runs on its own next time. Usage comes from a weekly pool, so a bot that runs all day costs more than a bot that checks in twice. Start small and watch the meter. That's why the setup below is three moves, not thirty. One bot in charge, and a few bots with one job each. The handoff rule ties them together.",
+   "delivery": "analysis",
+   "claims": [
+    {
+     "id": "C03a",
+     "text": "Bots have their own computer and run in parallel, 24/7, even when your laptop is closed.",
+     "sourceIds": [
+      "xai-grokbot-2026"
+     ],
+     "verified": true,
+     "dataYear": 2026,
+     "sourceKind": "primary",
+     "sourceQuote": "Bots have their own computer, so they can work inside your apps and tools. They also run in parallel, 24/7, even when your laptop is closed."
+    },
+    {
+     "id": "C03b",
+     "text": "Every Grok Bot shares one persistent cloud computer, and bots in the same thread pass work between themselves.",
+     "sourceIds": [
+      "xai-grokbot-2026"
+     ],
+     "verified": true,
+     "dataYear": 2026,
+     "sourceKind": "primary",
+     "sourceQuote": "Every Grok Bot shares one persistent cloud computer. Put a few Bots in the same thread and they pass work between themselves."
+    },
+    {
+     "id": "C03c",
+     "text": "Grok Bot Premium costs $30 per month and includes the bot's own computer, sign-in to tools, and routines on a schedule.",
+     "sourceIds": [
+      "xai-grokbot-2026"
+     ],
+     "verified": true,
+     "dataYear": 2026,
+     "sourceKind": "primary",
+     "sourceQuote": "Premium $30 / month. Includes: Grok Bot's own computer. Signs into your tools. Routines on a schedule."
+    },
+    {
+     "id": "C03d",
+     "text": "Ask a bot to follow along as you complete a workflow once, and it saves it as a routine and runs it on its own next time.",
+     "sourceIds": [
+      "xai-grokbot-2026"
+     ],
+     "verified": true,
+     "dataYear": 2026,
+     "sourceKind": "primary",
+     "sourceQuote": "Ask a Bot to follow along as you complete a workflow once. It saves it as a routine and runs it on its own next time."
+    },
+    {
+     "id": "C03f",
+     "text": "Grok Bot subscriptions come with weekly usage included, with additional usage billed based on token cost.",
+     "sourceIds": [
+      "xai-grokbot-2026"
+     ],
+     "verified": true,
+     "dataYear": 2026,
+     "sourceKind": "primary",
+     "sourceQuote": "Grok Bot subscriptions come with weekly usage included, with additional usage billed based on token cost."
+    }
+   ],
+   "beats": [
+    {
+     "id": "S02B1",
+     "narration": "First, the difference. A chatbot answers your question. An agent does the job.",
+     "visualIntent": "compare_ab"
+    },
+    {
+     "id": "S02B2",
+     "narration": "You give it a job, it signs into your tools, and it comes back when it needs a decision. That's the whole difference.",
+     "visualIntent": "process_flow"
+    },
+    {
+     "id": "S02B3",
+     "narration": "The tool this runs on is called Grok Bot. Each bot gets its own computer in the cloud, and it keeps working when your laptop is shut.",
+     "visualIntent": "annotation_callout",
+     "onScreenText": [
+      "Source: x.ai, 2026"
+     ]
+    },
+    {
+     "id": "S02B4",
+     "narration": "One account shares one computer, so the bots pass work between themselves in the same thread.",
+     "visualIntent": "process_flow"
+    },
+    {
+     "id": "S02B5",
+     "narration": "It starts at thirty dollars a month. Check it before you buy, because it changes.",
+     "visualIntent": "kpi_card",
+     "onScreenText": [
+      "Premium $30 a month, x.ai, 2026"
+     ],
+     "data": {
+      "claimId": "C03c"
+     }
+    },
+    {
+     "id": "S02B6",
+     "narration": "Show it a workflow once, and it saves the steps as a routine it runs on its own next time.",
+     "visualIntent": "process_flow"
+    },
+    {
+     "id": "S02B7",
+     "narration": "Usage comes from a weekly pool, so a bot that runs all day costs more than a bot that checks in twice. Start small and watch the meter.",
+     "visualIntent": "annotation_callout"
+    },
+    {
+     "id": "S02B8",
+     "narration": "That's why the setup below is three moves, not thirty. One bot in charge, and a few bots with one job each. The handoff rule ties them together.",
+     "visualIntent": "process_flow"
+    }
+   ]
+  },
+  {
+   "id": "S03",
+   "beat": "The day problem",
+   "narration": "Back in twenty twelve, knowledge workers spent twenty eight percent of each day on email. Thirteen hours a week. Searching for information takes nineteen percent. Talking inside the company takes fourteen. The actual job takes thirty nine. Sixty four percent of employees say they don't have enough time and energy to get their work done. So the inbox isn't a tool you open. It's a list of what other people want from your day. And it never stops. It refills while you sleep, while you eat, while you work on the thing that matters. That's the first thing to hand over. Not the thinking. The sorting, the filing, the first draft of the reply.",
+   "delivery": "analysis",
+   "claims": [
+    {
+     "id": "C02",
+     "text": "Interaction workers typically spend 28 percent of each day (13 hours a week) reading, writing, and responding to e-mails.",
+     "sourceIds": [
+      "mckinsey-2012"
+     ],
+     "verified": true,
+     "dataYear": 2012,
+     "dataYearNarrated": true,
+     "sourceKind": "primary",
+     "sourceQuote": "our research indicates that interaction workers typically spend 28 percent of each day (13 hours a week) reading, writing, and responding to e-mails."
+    },
+    {
+     "id": "C02b",
+     "text": "Reading and answering email 28, searching and gathering information 19, communicating and collaborating internally 14, role-specific tasks 39 (percent of the average workweek).",
+     "sourceIds": [
+      "mckinsey-2012"
+     ],
+     "verified": true,
+     "dataYear": 2012,
+     "dataYearNarrated": true,
+     "sourceKind": "primary",
+     "sourceQuote": "Reading and answering e-mail 28. Searching and gathering information 19. Communicating and collaborating internally 14. Role-specific tasks 39."
+    },
+    {
+     "id": "C01b",
+     "text": "Sixty-four percent of employees don't have enough time and energy to get their work done.",
+     "sourceIds": [
+      "ms-wti-2023"
+     ],
+     "verified": true,
+     "dataYear": 2023,
+     "dataYearNarrated": true,
+     "sourceKind": "primary",
+     "sourceQuote": "Sixty-four percent of employees don't have enough time and energy to get their work done and those employees are 3.5x more likely to say they struggle with being innovative or thinking strategically."
+    }
+   ],
+   "beats": [
+    {
+     "id": "S03B1",
+     "narration": "Back in twenty twelve, knowledge workers spent twenty eight percent of each day on email. Thirteen hours a week.",
+     "visualIntent": "bar_chart",
+     "onScreenText": [
+      "Source: McKinsey Global Institute, 2012"
+     ],
+     "data": {
+      "claimId": "C02"
+     }
+    },
+    {
+     "id": "S03B2",
+     "narration": "Searching for information takes nineteen percent. Talking inside the company takes fourteen. The actual job takes thirty nine.",
+     "visualIntent": "stacked_breakdown",
+     "onScreenText": [
+      "Source: McKinsey Global Institute, 2012"
+     ],
+     "data": {
+      "claimId": "C02b"
+     }
+    },
+    {
+     "id": "S03B3",
+     "narration": "Sixty four percent of employees say they don't have enough time and energy to get their work done.",
+     "visualIntent": "bar_chart",
+     "onScreenText": [
+      "Source: Microsoft Work Trend Index, 2023"
+     ],
+     "data": {
+      "claimId": "C01b"
+     }
+    },
+    {
+     "id": "S03B4",
+     "narration": "So the inbox isn't a tool you open. It's a list of what other people want from your day.",
+     "visualIntent": "causal_diagram"
+    },
+    {
+     "id": "S03B5",
+     "narration": "And it never stops. It refills while you sleep, while you eat, while you work on the thing that matters.",
+     "visualIntent": "process_flow"
+    },
+    {
+     "id": "S03B6",
+     "narration": "That's the first thing to hand over. Not the thinking. The sorting, the filing, the first draft of the reply.",
+     "visualIntent": "action_checklist"
+    }
+   ]
+  }
+ ],
+ "disclaimerIncluded": true,
+ "promises": [
+  {
+   "text": "How much of your week is communicating, not creating",
+   "paidOffIn": [
+    "S01",
+    "S03"
+   ]
+  },
+  {
+   "text": "How to hand that half to bots",
+   "paidOffIn": [
+    "S04",
+    "S05"
+   ]
+  },
+  {
+   "text": "How to keep the decisions with you",
+   "paidOffIn": [
+    "S10"
+   ]
+  }
+ ],
+ "hookType": "empathy_mirror",
+ "rehookBeat": "S06B1"
+}

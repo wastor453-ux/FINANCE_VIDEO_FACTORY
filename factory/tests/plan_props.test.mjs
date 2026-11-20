@@ -40,3 +40,9 @@ test("the 18 s demo plan (hero, line, bar) is lint-clean, renderable and builds 
   const r = ffx("lint-plan", f, "--renderable"); assert.equal(r.status, 0, r.stderr);
   const p = planProps(f, PACK); assert.equal(p.plan.totalFrames, 540); assert.equal(p.plan.scenes[0].beats.length, 3);
 });
+
+test("Root: compositions must not crash when listed without props, and BeatPreview length follows the beat", () => {
+  const src = fs.readFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)), "../../src/Root.tsx"), "utf8");
+  assert.match(src, /props\.plan \?/, "Video calculateMetadata must handle a null plan (remotion compositions lists with default props)");
+  assert.match(src, /props\.beat\?\.endFrame/, "BeatPreview duration must come from the beat");
+});

@@ -1,0 +1,4 @@
+{
+  "default": "pale-glass",
+  "_comment": "Kit index. `default` is used when a brief matches nothing. Kits are overlays on a base style pack (config/styles/<base>); every colour comes from the base pack, so provenance stays board-sourced."
+}

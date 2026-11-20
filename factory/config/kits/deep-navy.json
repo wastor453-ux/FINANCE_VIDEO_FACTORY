@@ -1,0 +1,290 @@
+{
+  "schema": "ffx-style-kit/1",
+  "id": "deep-navy",
+  "label": "Deep navy (dark mode)",
+  "base": "owner-pale-glass",
+  "mood": [
+    "serious",
+    "premium",
+    "dramatic"
+  ],
+  "topics": [
+    "market",
+    "wealth",
+    "invest",
+    "risk",
+    "crash",
+    "recession",
+    "portfolio"
+  ],
+  "background": {
+    "default": "general-fog",
+    "recipes": [
+      "general-fog",
+      "investing-growth",
+      "risk-watch",
+      "wealth-glow",
+      "crypto-edge"
+    ],
+    "items": [
+      {
+        "id": "general-fog",
+        "file": "../../kits/assets/deep-navy__general-fog.png",
+        "note": "recipe general-fog on deep-navy palette",
+        "recipe": "general-fog",
+        "approximate": false
+      },
+      {
+        "id": "investing-growth",
+        "file": "../../kits/assets/deep-navy__investing-growth.png",
+        "note": "recipe investing-growth on deep-navy palette",
+        "recipe": "investing-growth",
+        "approximate": false
+      },
+      {
+        "id": "risk-watch",
+        "file": "../../kits/assets/deep-navy__risk-watch.png",
+        "note": "recipe risk-watch on deep-navy palette",
+        "recipe": "risk-watch",
+        "approximate": false
+      },
+      {
+        "id": "wealth-glow",
+        "file": "../../kits/assets/deep-navy__wealth-glow.png",
+        "note": "recipe wealth-glow on deep-navy palette",
+        "recipe": "wealth-glow",
+        "approximate": false
+      },
+      {
+        "id": "crypto-edge",
+        "file": "../../kits/assets/deep-navy__crypto-edge.png",
+        "note": "recipe crypto-edge on deep-navy palette",
+        "recipe": "crypto-edge",
+        "approximate": false
+      }
+    ]
+  },
+  "overrides": {
+    "color": {
+      "ink": "#FCFDFE",
+      "inkSecondary": "#B2C7E5",
+      "canvas": "#01163E",
+      "surface": "#0E3773",
+      "border": "#203E66",
+      "primary": "#2B7AFD",
+      "cyan": "#00D6FB",
+      "teal": "#03D0CA",
+      "lavender": "#9777F2",
+      "shadow": "#01163E",
+      "series": [
+        {
+          "slot": 1,
+          "id": "blue",
+          "fill": "#2B7AFD",
+          "stroke": "#3681FD",
+          "text": "#70A5FE"
+        },
+        {
+          "slot": 2,
+          "id": "cyan",
+          "fill": "#00D6FB",
+          "stroke": "#00D6FB",
+          "text": "#00D6FB"
+        },
+        {
+          "slot": 3,
+          "id": "lavender",
+          "fill": "#9777F2",
+          "stroke": "#9777F2",
+          "text": "#AE96F5"
+        },
+        {
+          "slot": 4,
+          "id": "teal",
+          "fill": "#03D0CA",
+          "stroke": "#03D0CA",
+          "text": "#03D0CA"
+        },
+        {
+          "slot": 5,
+          "id": "lightBlue",
+          "fill": "#4D9BFD",
+          "stroke": "#4D9BFD",
+          "text": "#63A8FD"
+        },
+        {
+          "slot": 6,
+          "id": "slate",
+          "fill": "#5B83AE",
+          "stroke": "#6389B2",
+          "text": "#8CA8C6"
+        }
+      ],
+      "flow": {
+        "gain": {
+          "fill": "#03D0CA",
+          "stroke": "#03D0CA",
+          "text": "#03D0CA"
+        },
+        "loss": {
+          "fill": "#9777F2",
+          "stroke": "#9777F2",
+          "text": "#AE96F5"
+        },
+        "lossAlt": {
+          "fill": "#4D9BFD",
+          "stroke": "#4D9BFD",
+          "text": "#63A8FD"
+        }
+      }
+    },
+    "scene": {
+      "settleTiltDeg": {
+        "x": 4,
+        "y": -9
+      },
+      "glass": {
+        "radiusAtReference": 26
+      }
+    },
+    "provenance": {
+      "boards": {
+        "R1_colour_expansion.png": "d9d59cdb0891d671d2b5806cceea80e598dabf3415bab272c519df87800ff17a"
+      },
+      "values": {
+        "dn.ink": {
+          "used": "#FCFDFE",
+          "board": "R1_colour_expansion.png",
+          "region": [
+            695,
+            722,
+            830,
+            745
+          ],
+          "method": "median-light",
+          "chose": "observed"
+        },
+        "dn.inkSecondary": {
+          "used": "#B2C7E5",
+          "board": "R1_colour_expansion.png",
+          "region": [
+            695,
+            785,
+            830,
+            815
+          ],
+          "method": "median-light-mid",
+          "chose": "observed"
+        },
+        "dn.canvas": {
+          "used": "#01163E",
+          "board": "R1_colour_expansion.png",
+          "region": [
+            665,
+            620,
+            690,
+            640
+          ],
+          "method": "median",
+          "chose": "observed"
+        },
+        "dn.surface": {
+          "used": "#0E3773",
+          "board": "R1_colour_expansion.png",
+          "region": [
+            700,
+            700,
+            720,
+            712
+          ],
+          "method": "median",
+          "chose": "observed"
+        },
+        "dn.border": {
+          "used": "#203E66",
+          "board": "R1_colour_expansion.png",
+          "region": [
+            915,
+            956,
+            922,
+            963
+          ],
+          "method": "median",
+          "chose": "observed"
+        },
+        "dn.primary": {
+          "used": "#2B7AFD",
+          "board": "R1_colour_expansion.png",
+          "region": [
+            777,
+            956,
+            784,
+            963
+          ],
+          "method": "median",
+          "chose": "observed"
+        },
+        "dn.cyan": {
+          "used": "#00D6FB",
+          "board": "R1_colour_expansion.png",
+          "region": [
+            824,
+            956,
+            831,
+            963
+          ],
+          "method": "median",
+          "chose": "observed"
+        },
+        "dn.lavender": {
+          "used": "#9777F2",
+          "board": "R1_colour_expansion.png",
+          "region": [
+            1018,
+            730,
+            1040,
+            745
+          ],
+          "method": "median",
+          "chose": "observed"
+        },
+        "dn.teal": {
+          "used": "#03D0CA",
+          "board": "R1_colour_expansion.png",
+          "region": [
+            773,
+            468,
+            780,
+            475
+          ],
+          "method": "median",
+          "chose": "observed"
+        },
+        "dn.lightBlue": {
+          "used": "#4D9BFD",
+          "board": "R1_colour_expansion.png",
+          "region": [
+            182,
+            951,
+            189,
+            958
+          ],
+          "method": "median",
+          "chose": "observed"
+        },
+        "dn.slate": {
+          "used": "#5B83AE",
+          "board": "R1_colour_expansion.png",
+          "region": [
+            870,
+            956,
+            877,
+            963
+          ],
+          "method": "median",
+          "chose": "observed"
+        }
+      }
+    }
+  }
+}

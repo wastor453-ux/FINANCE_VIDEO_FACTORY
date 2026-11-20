@@ -1,0 +1,79 @@
+{
+  "id": "S11B5",
+  "startFrame": 0,
+  "endFrame": 210,
+  "mode": "action_checklist",
+  "purpose": "Write the rules down before the bot starts",
+  "usesCharacter": false,
+  "onScreenText": [
+    "Before it starts"
+  ],
+  "data": [],
+  "content": {
+    "items": [
+      {
+        "label": "Write the rules down"
+      },
+      {
+        "label": "What the bot may do"
+      },
+      {
+        "label": "What it never touches"
+      }
+    ]
+  },
+  "events": [
+    {
+      "id": "e1",
+      "recipe": "checklist_build",
+      "role": "primary",
+      "startFrame": 14,
+      "endFrame": 40,
+      "holdUntilFrame": 95,
+      "exitFrame": 210,
+      "ease": "ease-out",
+      "params": {
+        "item": 0,
+        "words": 4
+      }
+    },
+    {
+      "id": "e2",
+      "recipe": "checklist_build",
+      "role": "primary",
+      "startFrame": 70,
+      "endFrame": 96,
+      "holdUntilFrame": 160,
+      "exitFrame": 210,
+      "ease": "ease-out",
+      "params": {
+        "item": 1,
+        "words": 5
+      }
+    },
+    {
+      "id": "e3",
+      "recipe": "checklist_build",
+      "role": "primary",
+      "startFrame": 125,
+      "endFrame": 152,
+      "holdUntilFrame": 205,
+      "exitFrame": 210,
+      "ease": "ease-out",
+      "params": {
+        "item": 2,
+        "words": 4
+      }
+    },
+    {
+      "id": "e9",
+      "recipe": "camera_push",
+      "role": "secondary",
+      "startFrame": 20,
+      "endFrame": 170,
+      "holdUntilFrame": 170,
+      "exitFrame": 210,
+      "ease": "ease-in-out"
+    }
+  ]
+}

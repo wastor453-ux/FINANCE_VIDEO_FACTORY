@@ -3,6 +3,16 @@
   "modes": {
     "hero_number": "HeroScene",
     "line_chart": "LineScene",
-    "bar_chart": "BarScene"
-  }
+    "bar_chart": "BarScene",
+    "process_flow": "DiagramScene",
+    "causal_diagram": "DiagramScene",
+    "annotation_callout": "DiagramScene",
+    "action_checklist": "ListScene",
+    "risks_grid": "ListScene"
+  },
+  "transitions": [
+    "clean_wipe",
+    "card_to_chart_zoom",
+    "shape_mask"
+  ]
 }
